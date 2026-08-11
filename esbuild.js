@@ -1,0 +1,24 @@
+import * as esbuild from "esbuild";
+
+const watch = process.argv.includes("--watch");
+
+const options = {
+    entryPoints: ["src/extension.ts"],
+    bundle: true,
+    outfile: "dist/extension.cjs",
+    format: "cjs",
+    platform: "node",
+    target: "node20",
+    sourcemap: true,
+    external: ["vscode"],
+    minify: false,
+};
+
+if (watch) {
+    const context = await esbuild.context(options);
+    await context.watch();
+    console.log("Fidel: watching for changes...");
+} else {
+    await esbuild.build(options);
+    console.log("Fidel: build complete.");
+}

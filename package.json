@@ -1,0 +1,156 @@
+{
+  "name": "fidel-input",
+  "displayName": "Fidel Input — ፊደል",
+  "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
+  "version": "0.1.1",
+  "publisher": "yihun",
+  "icon": "media/fidel.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hailemichael121/fidel-input"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Keymaps",
+    "Languages"
+  ],
+  "keywords": [
+    "amharic",
+    "ethiopic",
+    "geez",
+    "fidel",
+    "keyboard",
+    "transliteration",
+    "ethiopia"
+  ],
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "fidel.toggleInput",
+        "title": "Fidel: Toggle Amharic Input",
+        "icon": "$(keyboard)"
+      },
+      {
+        "command": "fidel.enableInput",
+        "title": "Fidel: Enable Amharic Input"
+      },
+      {
+        "command": "fidel.disableInput",
+        "title": "Fidel: Disable Amharic Input"
+      },
+      {
+        "command": "fidel.convertSelection",
+        "title": "Fidel: Convert Selection to Ethiopic",
+        "icon": "$(symbol-string)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "fidel.toggleInput",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "fidel.convertSelection",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "fidel.convertSelection",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "fidel.disableInput",
+        "key": "escape",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "fidel.toggleInput"
+        },
+        {
+          "command": "fidel.enableInput"
+        },
+        {
+          "command": "fidel.disableInput"
+        },
+        {
+          "command": "fidel.convertSelection",
+          "when": "editorHasSelection"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "fidel.convertSelection",
+          "group": "modification",
+          "when": "editorHasSelection"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fidel",
+          "title": "Fidel",
+          "icon": "media/activity-bar.svg"
+        }
+      ]
+    },
+    "views": {
+      "fidel": [
+        {
+          "id": "fidelView",
+          "name": "Fidel Input",
+          "type": "tree"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Fidel Input",
+      "properties": {
+        "fidel.enableByDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Amharic input when VS Code starts."
+        },
+        "fidel.convertPunctuation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Convert supported Latin punctuation to Ethiopic punctuation."
+        },
+        "fidel.autoDisableOnEnter": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically disable Amharic input after pressing Enter."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc --noEmit && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "check": "tsc --noEmit",
+    "build": "bun run compile",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/vscode": "^1.125.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "type": "module"
+}
