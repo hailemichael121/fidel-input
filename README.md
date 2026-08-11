@@ -102,11 +102,26 @@ Amharic ejectives and glottalized roots are typed using a trailing apostrophe (`
 * `p'e` -> **ጰ**
 * `p'a` -> **ጳ**
 
-### 5. On-Demand Selection Conversion (`Ctrl + Alt + F`)
+### 5. Smart Phonetic Correction (`fidel.smartCorrection`)
+
+When `"fidel.smartCorrection": true` is enabled (default), Fidel automatically normalizes double-consonant typing variants and English digraph typos:
+
+* Double trailing consonants: `selamm` -> `ሰላም`, `yihunn` -> `ይሁን`
+* Double internal vowels/consonants: `beett` -> `ቤት`
+* Digraph substitutions: `amhariph` -> `አማሪፍ`
+
+### 6. Homophone Candidate Suggestions (`fidel.suggestions`)
+
+Fidel offers two UI models for inspecting and choosing homophone candidates (e.g. `haile` -> `ሀይለ`, `ኃይለ`, `ሐይለ`):
+
+* **IntelliSense Suggestion Box Below Text Cursor**: When `"fidel.suggestions": true` is enabled in settings, VS Code displays an IntelliSense candidate list directly beneath your active typing cursor as you type.
+* **Interactive QuickPick Command Palette**: Select any word or place your cursor on a word and run command `Fidel: Show Homophone Candidate Suggestions` (`fidel.showSuggestions`) to inspect and select homophone variants.
+
+### 7. On-Demand Selection Conversion (`Ctrl + Alt + F`)
 
 Highlight any Latin block of text in your editor and press **`Ctrl + Alt + F`** (or **`Cmd + Alt + F`** on macOS) to instantly convert it to Ethiopic script without enabling full live input mode.
 
-### 6. Atomic Undo / Redo Edit Stack
+### 8. Atomic Undo / Redo Edit Stack
 
 Typing a word creates an atomic edit session. Pressing **`Ctrl + Z`** (Undo) after typing a word reverts the entire word composition at once, rather than stepping backward letter-by-letter.
 

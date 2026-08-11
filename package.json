@@ -69,6 +69,11 @@
         "command": "fidel.toggleSmartCorrection",
         "title": "Fidel: Toggle Smart Phonetic Correction",
         "icon": "$(sparkle)"
+      },
+      {
+        "command": "fidel.showSuggestions",
+        "title": "Fidel: Show Homophone Candidate Suggestions",
+        "icon": "$(lightbulb)"
       }
     ],
     "keybindings": [
@@ -113,6 +118,12 @@
         },
         {
           "command": "fidel.openDictionary"
+        },
+        {
+          "command": "fidel.toggleSmartCorrection"
+        },
+        {
+          "command": "fidel.showSuggestions"
         }
       ],
       "editor/context": [

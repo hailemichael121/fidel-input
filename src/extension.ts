@@ -3,6 +3,7 @@ import { FidelStatusBar } from "./vscode/statusBar.js";
 import { InputInterceptor } from "./vscode/inputInterceptor.js";
 import { registerFidelCommands } from "./vscode/commands.js";
 import { FidelViewProvider } from "./vscode/activityBar.js";
+import { FidelCompletionProvider } from "./vscode/completionProvider.js";
 
 let enabled = false;
 
@@ -38,11 +39,18 @@ export function activate(context: vscode.ExtensionContext): void {
     showCollapseAll: false,
   });
 
+  const completionProvider = vscode.languages.registerCompletionItemProvider(
+    { scheme: "file" },
+    new FidelCompletionProvider(),
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+  );
+
   context.subscriptions.push(
     statusBar,
     interceptor,
     treeView,
-    viewProvider
+    viewProvider,
+    completionProvider
   );
 
   updateState(enabled);

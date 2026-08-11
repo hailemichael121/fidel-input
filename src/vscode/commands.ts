@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { transliterateText } from "../engine/transliterator.js";
+import { SuggestionEngine } from "../engine/suggestions.js";
 
 export function registerFidelCommands(
   context: vscode.ExtensionContext,
@@ -125,6 +126,57 @@ export function registerFidelCommands(
     );
   });
 
+  // Fidel: Show Homophone Suggestions
+  const showSuggestionsCommand = vscode.commands.registerCommand("fidel.showSuggestions", async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
+
+    const selection = editor.selection;
+    let targetRange: vscode.Range;
+    let text: string;
+
+    if (!selection.isEmpty) {
+      targetRange = selection;
+      text = editor.document.getText(selection);
+    } else {
+      const wordRange = editor.document.getWordRangeAtPosition(selection.active);
+      if (!wordRange) {
+        vscode.window.showInformationMessage("Fidel: Please select a word or place cursor on a word to see suggestions.");
+        return;
+      }
+      targetRange = wordRange;
+      text = editor.document.getText(wordRange);
+    }
+
+    const config = vscode.workspace.getConfiguration("fidel");
+    const convertPunctuation = config.get<boolean>("convertPunctuation", false);
+    const convertNumbers = config.get<boolean>("convertNumbers", false);
+
+    const primaryResult = transliterateText(text, { convertPunctuation, convertNumbers });
+    const suggestionEngine = new SuggestionEngine();
+    const candidates = suggestionEngine.getCandidateObjects(text, primaryResult);
+
+    if (candidates.length === 0) {
+      vscode.window.showInformationMessage("Fidel: No candidate suggestions found for selection.");
+      return;
+    }
+
+    const selected = await vscode.window.showQuickPick(
+      candidates.map((c) => ({
+        label: c.ethiopic,
+        description: c.description,
+        value: c.ethiopic,
+      })),
+      { placeHolder: `Select Ethiopic candidate for "${text}"` }
+    );
+
+    if (!selected) return;
+
+    await editor.edit((editBuilder) => {
+      editBuilder.replace(targetRange, selected.value);
+    });
+  });
+
   context.subscriptions.push(
     toggleCommand,
     enableCommand,
@@ -133,6 +185,7 @@ export function registerFidelCommands(
     addDictCommand,
     removeDictCommand,
     openDictCommand,
-    toggleSmartCorrectionCommand
+    toggleSmartCorrectionCommand,
+    showSuggestionsCommand
   );
 }
