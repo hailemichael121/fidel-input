@@ -47,8 +47,9 @@ export function registerFidelCommands(
 
       const config = vscode.workspace.getConfiguration("fidel");
       const convertPunctuation = config.get<boolean>("convertPunctuation", false);
+      const convertNumbers = config.get<boolean>("convertNumbers", false);
 
-      const converted = transliterateText(text, { convertPunctuation });
+      const converted = transliterateText(text, { convertPunctuation, convertNumbers });
 
       await editor.edit((editBuilder) => {
         editBuilder.replace(selection, converted);

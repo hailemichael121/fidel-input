@@ -60,12 +60,6 @@
       },
       {
         "command": "fidel.convertSelection",
-        "key": "ctrl+alt+e",
-        "mac": "cmd+alt+e",
-        "when": "editorHasSelection"
-      },
-      {
-        "command": "fidel.convertSelection",
         "key": "ctrl+alt+f",
         "mac": "cmd+alt+f",
         "when": "editorHasSelection"

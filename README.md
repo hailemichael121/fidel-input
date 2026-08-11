@@ -9,34 +9,24 @@
 </p>
 
 <p align="center">
-  <a href="#license">License</a> &bull;
   <a href="#quick-start">Quick Start</a> &bull;
   <a href="#keyboard-shortcuts--commands">Shortcuts</a> &bull;
+  <a href="#feature-guide--how-it-works">Feature Guide</a> &bull;
   <a href="#configuration">Configuration</a> &bull;
-  <a href="#development--testing">Development</a>
+  <a href="#license">License</a>
 </p>
 
 ---
 
 ## Overview
 
-**Fidel Input** is a native Visual Studio Code extension designed for inputting Amharic text using a standard QWERTY keyboard. Rather than performing static string conversions, Fidel operates as a live **Input Method Editor (IME)**. It intercepts typing inside the active editor, maintains an active composition buffer, and updates text dynamically as phonetic syllables are constructed.
-
-### Product Capabilities
-
-* **Live Phonetic Interception**: Converts Latin inputs directly into Ethiopic (Ge'ez) script in real time as keypresses occur.
-* **Composition Buffer Architecture**: Progressively recalculates the current word fragment without inserting extraneous characters or breaking backspace behavior.
-* **Selection Transliteration**: Converts pre-existing Latin selections into Ethiopic script on demand without toggling global input mode.
-* **Decoupled Core Engine**: Built on an independent TypeScript transliteration package that can be compiled for CLI, web, or editor targets.
+**Fidel Input** is a native Visual Studio Code extension designed for inputting Amharic text using a standard QWERTY keyboard. Rather than performing static string conversions, Fidel operates as a live **Input Method Editor (IME)**. It intercepts typing inside active editors, maintains an uncommitted composition buffer, and replaces characters dynamically as phonetic syllables are constructed.
 
 ---
 
-## Demonstration & Media
-
-### Video & Visual Preview
+## Visual Demonstration & Media
 
 <p align="center">
-  <!-- Product Demonstration Screenshot / Video -->
   <img src="media/fidel.png" alt="Fidel VS Code Extension Interface" width="700" />
 </p>
 
@@ -46,27 +36,6 @@
   Your browser does not support HTML5 video streaming.
 </video>
 ```
-
----
-
-## Architecture & Core Features
-
-### Real-Time Composition Engine
-
-As phonetic inputs are entered, Fidel maintains buffer state and replaces active composition bounds:
-
-```text
-User input:   s   ->   e   ->   l   ->   a   ->   m   ->   SPACE
-Buffer:      "s"      "se"     "sel"   "sela"   "selam"    ""
-Rendered:    "ስ"      "ሰ"      "ሰል"    "ሰላ"     "ሰላም"     "ሰላም "
-```
-
-### Syllabary & Rule Coverage
-
-* **33 Core Ethiopic Families**: Full mapping for all core base roots (ሀ through ፐ).
-* **7 Vowel Orders**: Complete support across 1st (ግዕዝ), 2nd (ካዕብ), 3rd (ሣልስ), 4th (ራብዕ), 5th (ኃምስ), 6th (ሳድስ), and 7th (ሣብዕ) orders.
-* **8th Order Labialized Forms (дикала / Diqala)**: Compound forms ending in `wa` or `oa` (e.g., `swa` -> `ሷ`, `lwa` -> `ሏ`, `gwa` -> `ጓ`).
-* **Ethiopic Punctuation**: Configurable mapping for standard punctuation (`።`, `፤`, `፦`, `፧`, `፠`).
 
 ---
 
@@ -80,7 +49,7 @@ Rendered:    "ስ"      "ሰ"      "ሰል"    "ሰላ"     "ሰላም"     "ሰ
    ->
    ሰላም ይሁን
    ```
-4. Highlight any existing Latin text and press **`Ctrl + Alt + E`** to convert the selection directly into Ethiopic script.
+4. Highlight any existing Latin text and press **`Ctrl + Alt + F`** (or **`Cmd + Alt + F`** on macOS) to convert the selection directly into Ethiopic script.
 
 ---
 
@@ -89,9 +58,57 @@ Rendered:    "ስ"      "ሰ"      "ሰል"    "ሰላ"     "ሰላም"     "ሰ
 | Command | Shortcut (Windows/Linux) | Shortcut (macOS) | Context | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `fidel.toggleInput` | **`Ctrl + Alt + A`** | **`Cmd + Alt + A`** | Editor Text Focus | Toggles Fidel Amharic input mode on or off |
-| `fidel.convertSelection` | **`Ctrl + Alt + E`** | **`Cmd + Alt + E`** | Has Selection | Transliterates selected Latin text to Ethiopic script |
+| `fidel.convertSelection` | **`Ctrl + Alt + F`** | **`Cmd + Alt + F`** | Has Selection | Transliterates selected Latin text to Ethiopic script |
 | `fidel.disableInput` | **`Escape`** | **`Escape`** | Fidel Input Active | Disables Fidel input mode instantly |
 | `fidel.enableInput` | Command Palette | Command Palette | Global | Enables Fidel Amharic input mode |
+
+---
+
+## Feature Guide & How It Works
+
+### 1. Live Composition Buffer Engine
+
+Fidel intercepts keystrokes continuously, calculating phonetic syllable matches and modifying the document transactionally without forcing manual backspacing.
+
+```text
+User types:   s   ->   e   ->   l   ->   a   ->   m   ->   SPACE
+Buffer:      "s"      "se"     "sel"   "sela"   "selam"    ""
+Rendered:    "ስ"      "ሰ"      "ሰል"    "ሰላ"     "ሰላም"     "ሰላም "
+```
+
+### 2. Automatic Word Boundary & Punctuation Commits
+
+Composition buffers commit automatically upon hitting whitespace or punctuation delimiters (`.`, `,`, `!`, `?`, `;`, `:`). When `fidel.convertPunctuation` is enabled, Latin punctuation marks convert into Ethiopic punctuation equivalents:
+
+* `selam,` -> `ሰላም፤`
+* `yihun.` -> `ይሁን።`
+* `bet?` -> `ቤት፧`
+
+### 3. Ethiopic Numeral System (`fidel.convertNumbers`)
+
+When `"fidel.convertNumbers": true` is enabled in settings, Arabic digits convert into traditional additive Ethiopic numerals:
+
+* Single Digits: `1` -> `፩`, `5` -> `፭`, `9` -> `፱`
+* Tens: `10` -> `፲`, `12` -> `፲፪`, `25` -> `፳፭`
+* Hundreds & Thousands: `100` -> `፻`, `200` -> `፪፻`, `2026` -> `፳፻፳፮`
+
+### 4. Glottal Stop & Ejective Apostrophe Parsing
+
+Amharic ejectives and glottalized roots are typed using a trailing apostrophe (`'`):
+
+* `k'a` -> **ቃ**
+* `t'a` -> **ጣ**
+* `c'a` -> **ጫ**
+* `p'e` -> **ጰ**
+* `p'a` -> **ጳ**
+
+### 5. On-Demand Selection Conversion (`Ctrl + Alt + F`)
+
+Highlight any Latin block of text in your editor and press **`Ctrl + Alt + F`** (or **`Cmd + Alt + F`** on macOS) to instantly convert it to Ethiopic script without enabling full live input mode.
+
+### 6. Atomic Undo / Redo Edit Stack
+
+Typing a word creates an atomic edit session. Pressing **`Ctrl + Z`** (Undo) after typing a word reverts the entire word composition at once, rather than stepping backward letter-by-letter.
 
 ---
 
@@ -114,25 +131,22 @@ Fidel maps Latin phonetic sequences onto the Ethiopic syllabary matrix:
 
 ## Configuration
 
-Extension settings can be configured via VS Code `settings.json`:
+Extension settings can be configured in VS Code `settings.json`:
 
 ```json
 {
   "fidel.enableByDefault": false,
-  "fidel.convertPunctuation": false,
+  "fidel.convertPunctuation": true,
+  "fidel.convertNumbers": true,
   "fidel.autoDisableOnEnter": false
 }
 ```
-
-* `fidel.enableByDefault`: Automatically enables Fidel Amharic input when VS Code starts.
-* `fidel.convertPunctuation`: Converts Latin punctuation symbols to Ethiopic punctuation equivalents (`.` -> `።`, `,` -> `፤`, `:` -> `፡`).
-* `fidel.autoDisableOnEnter`: Automatically turns off input mode after pressing Enter.
 
 ---
 
 ## Development & Testing
 
-Fidel is built with [Bun](https://bun.sh), TypeScript, and esbuild.
+Built with [Bun](https://bun.sh), TypeScript, and esbuild.
 
 ```bash
 # Type check TypeScript files
