@@ -158,11 +158,16 @@ Overrides VS Code `type` and `deleteLeft` commands:
 - Candidate suggestion generator ([`src/engine/suggestions.ts`](file:///home/yihun/Desktop/fidel/src/engine/suggestions.ts)) for homophones.
 - Phase 4 automated unit test suite (`test/phase4.test.ts`).
 
-### Phase 5 — Multi-Language Profiles (Planned)
-- Language profile support for Tigrinya, Oromo, and Ge'ez language variations.
+### Phase 5 — Multi-Language Profiles (Recommended Future Roadmap Expansion)
+- Architectural profile infrastructure ([`src/engine/profiles.ts`](file:///home/yihun/Desktop/fidel/src/engine/profiles.ts)) prepared for future Ethiopic language expansions (Tigrinya, Ethiopic Oromo, Ge'ez liturgy).
 
-### Phase 6 — Production Packaging (Planned)
-- Extension marketplace assets, documentation refinement, VSIX bundling, and CI release pipeline.
+### Phase 6 — Production Packaging and Marketplace Release (Completed)
+- Clean production build (`bun run build`) with zero compilation or bundling errors.
+- Comprehensive automated test suite (51 passing tests across 9 test files).
+- Official release notes in [`CHANGELOG.md`](../CHANGELOG.md).
+- High-contrast monochrome black-and-white extension branding iconography.
+- Complete user documentation, keybinding guide, and configuration reference in [`README.md`](../README.md).
+- Production package manifest configured for VS Code Marketplace publishing.
 
 ---
 
