@@ -113,6 +113,18 @@ export function registerFidelCommands(
     await vscode.commands.executeCommand("workbench.action.openSettings", "fidel.dictionary");
   });
 
+  // Fidel: Toggle Smart Correction
+  const toggleSmartCorrectionCommand = vscode.commands.registerCommand("fidel.toggleSmartCorrection", async () => {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const current = config.get<boolean>("smartCorrection", true);
+    const nextState = !current;
+    await config.update("smartCorrection", nextState, vscode.ConfigurationTarget.Global);
+    vscode.window.setStatusBarMessage(
+      nextState ? "Fidel ፊደል: Smart phonetic correction enabled" : "Fidel ፊደል: Smart phonetic correction disabled",
+      2500
+    );
+  });
+
   context.subscriptions.push(
     toggleCommand,
     enableCommand,
@@ -120,6 +132,7 @@ export function registerFidelCommands(
     convertSelectionCommand,
     addDictCommand,
     removeDictCommand,
-    openDictCommand
+    openDictCommand,
+    toggleSmartCorrectionCommand
   );
 }

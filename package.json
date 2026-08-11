@@ -64,6 +64,11 @@
         "command": "fidel.openDictionary",
         "title": "Fidel: Open Personal Dictionary Settings",
         "icon": "$(book)"
+      },
+      {
+        "command": "fidel.toggleSmartCorrection",
+        "title": "Fidel: Toggle Smart Phonetic Correction",
+        "icon": "$(sparkle)"
       }
     ],
     "keybindings": [

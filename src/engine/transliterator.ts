@@ -22,6 +22,7 @@ const DEFAULT_OPTIONS: Required<TransliterationOptions> = {
     dictionary: {},
     smartCorrection: false,
     suggestions: false,
+    language: "amharic",
 };
 
 export class Transliterator {

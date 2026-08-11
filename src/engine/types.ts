@@ -54,6 +54,7 @@ export interface TransliterationOptions {
   dictionary?: Record<string, string>;
   smartCorrection?: boolean;
   suggestions?: boolean;
+  language?: "amharic" | "tigrinya" | "oromo" | "geez";
 }
 
 export type FidelOptions = TransliterationOptions;
