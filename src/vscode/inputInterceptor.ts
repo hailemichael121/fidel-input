@@ -115,14 +115,14 @@ export class InputInterceptor implements vscode.Disposable {
       async () => {
         const editor = vscode.window.activeTextEditor;
 
-        if (!this.isEnabled() || !editor) {
+        if (!this.isEnabled() || !editor || !this.engine.raw) {
           this.resetCompositionState();
-          return this.performDefaultDeleteLeft(editor);
+          return this.executeDefaultDeleteLeft(editor);
         }
 
         if (editor.selections.length > 1) {
           this.resetCompositionState();
-          return this.performDefaultDeleteLeft(editor);
+          return this.executeDefaultDeleteLeft(editor);
         }
 
         const selection = editor.selection;
@@ -130,7 +130,7 @@ export class InputInterceptor implements vscode.Disposable {
         // If user has a text selection highlight, delete selection
         if (!selection.isEmpty) {
           this.resetCompositionState();
-          return this.performDefaultDeleteLeft(editor);
+          return this.executeDefaultDeleteLeft(editor);
         }
 
         // If user moved cursor away from last composition position, reset composition & perform default backspace
@@ -139,16 +139,10 @@ export class InputInterceptor implements vscode.Disposable {
           !selection.active.isEqual(this.lastCompositionPosition)
         ) {
           this.resetCompositionState();
-          return this.performDefaultDeleteLeft(editor);
+          return this.executeDefaultDeleteLeft(editor);
         }
 
-        // If no active composition buffer: perform default editor backspace deletion
-        if (!this.engine.raw) {
-          this.resetCompositionState();
-          return this.performDefaultDeleteLeft(editor);
-        }
-
-        // Pop 1 Latin char from active composition buffer
+        // Pop Latin chars from active composition buffer
         const state = this.engine.backspace();
 
         this.isProcessingEdit = true;
@@ -190,7 +184,18 @@ export class InputInterceptor implements vscode.Disposable {
   }
 
   /**
-   * Safe programmatic default backspace implementation since VS Code has no 'default:deleteLeft' command.
+   * Delegates backspace to default:deleteLeft with programmatic fallback.
+   */
+  private async executeDefaultDeleteLeft(editor?: vscode.TextEditor): Promise<void> {
+    try {
+      await vscode.commands.executeCommand("default:deleteLeft");
+    } catch {
+      await this.performDefaultDeleteLeft(editor);
+    }
+  }
+
+  /**
+   * Safe programmatic default backspace implementation fallback.
    */
   private async performDefaultDeleteLeft(editor?: vscode.TextEditor): Promise<void> {
     if (!editor) {
