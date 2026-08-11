@@ -4,6 +4,7 @@ import {
 } from "./mapping.js";
 
 import { FidelTrie } from "./trie.js";
+import { convertNumbersInText } from "./numbers.js";
 
 import type {
     FidelOptions,
@@ -31,6 +32,10 @@ export class Transliterator {
     transliterate(input: string): string {
         if (!input) {
             return "";
+        }
+
+        if (this.options.convertNumbers) {
+            input = convertNumbersInText(input, true);
         }
 
         const commonWord = this.lookupCommonWord(input);
@@ -87,10 +92,8 @@ export class Transliterator {
     }
 
     transliterateText(text: string, options?: FidelOptions): string {
-        if (options && typeof options.convertPunctuation !== "undefined") {
-            return new Transliterator(options).transliterate(text);
-        }
-        return this.transliterate(text);
+        const opts = { ...this.options, ...options };
+        return new Transliterator(opts).transliterate(text);
     }
 
     matchAt(

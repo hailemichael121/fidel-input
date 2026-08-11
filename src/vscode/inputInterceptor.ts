@@ -61,18 +61,25 @@ export class InputInterceptor implements vscode.Disposable {
           this.resetCompositionState();
         }
 
+        const isFirstChar = this.engine.raw.length === 0;
         const state = this.engine.feedChar(args.text);
 
         this.isProcessingEdit = true;
         try {
-          await editor.edit((editBuilder) => {
-            if (state.replaceLength > 0) {
-              const startPos = selection.active.translate(0, -state.replaceLength);
-              const deleteRange = new vscode.Range(startPos, selection.active);
-              editBuilder.delete(deleteRange);
+          await editor.edit(
+            (editBuilder) => {
+              if (state.replaceLength > 0) {
+                const startPos = selection.active.translate(0, -state.replaceLength);
+                const deleteRange = new vscode.Range(startPos, selection.active);
+                editBuilder.delete(deleteRange);
+              }
+              editBuilder.insert(selection.active, state.rendered);
+            },
+            {
+              undoStopBefore: isFirstChar,
+              undoStopAfter: state.committed,
             }
-            editBuilder.insert(selection.active, state.rendered);
-          });
+          );
 
           if (state.committed) {
             // Word is committed (space or boundary delimiter pressed). Reset composition session completely

@@ -39,8 +39,11 @@ export class CompositionEngine {
   }
 
   public feedChar(char: string): CompositionState {
-    if (/\s/.test(char)) {
-      const rendered = this.renderBuffer() + char;
+    const wordBoundaries = /[\s.,!?;:()"]/;
+
+    if (wordBoundaries.test(char)) {
+      const boundaryChar = this.transliterator.transliterate(char);
+      const rendered = this.renderBuffer() + boundaryChar;
 
       const state: CompositionState = {
         buffer: this.buffer,

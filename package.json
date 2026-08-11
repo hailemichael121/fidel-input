@@ -131,6 +131,11 @@
           "default": false,
           "description": "Convert supported Latin punctuation to Ethiopic punctuation."
         },
+        "fidel.convertNumbers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Convert Arabic digits (1, 2, 3, etc.) to Ethiopic numerals (፩, ፪, ፫, etc.)."
+        },
         "fidel.autoDisableOnEnter": {
           "type": "boolean",
           "default": false,
