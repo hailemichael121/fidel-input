@@ -1,0 +1,144 @@
+import { CompositionState, FidelOptions } from "./types.js";
+import { Transliterator } from "./transliterator.js";
+
+export class CompositionEngine {
+  private readonly transliterator: Transliterator;
+
+  private buffer = "";
+  private previousRendered = "";
+
+  constructor(options: FidelOptions = {}) {
+    this.transliterator = new Transliterator(options);
+  }
+
+  public getState(): CompositionState {
+    const rendered = this.renderBuffer();
+
+    return {
+      buffer: this.buffer,
+      rendered,
+      committed: false,
+      replaceLength: this.previousRendered.length,
+      raw: this.buffer,
+      output: rendered,
+    };
+  }
+
+  public state(): { raw: string; output: string } {
+    const rendered = this.renderBuffer();
+
+    return {
+      raw: this.buffer,
+      output: rendered,
+    };
+  }
+
+  public input(char: string): { raw: string; output: string } {
+    this.feedChar(char);
+    return this.state();
+  }
+
+  public feedChar(char: string): CompositionState {
+    if (/\s/.test(char)) {
+      const rendered = this.renderBuffer() + char;
+
+      const state: CompositionState = {
+        buffer: this.buffer,
+        rendered,
+        committed: true,
+        replaceLength: this.previousRendered.length,
+        raw: this.buffer,
+        output: rendered,
+      };
+
+      this.reset();
+      return state;
+    }
+
+    if (char.length !== 1) {
+      return this.getState();
+    }
+
+    this.buffer += char;
+
+    const rendered = this.renderBuffer();
+
+    const state: CompositionState = {
+      buffer: this.buffer,
+      rendered,
+      committed: false,
+      replaceLength: this.previousRendered.length,
+      raw: this.buffer,
+      output: rendered,
+    };
+
+    this.previousRendered = rendered;
+
+    return state;
+  }
+
+  public backspace(): CompositionState {
+    if (!this.buffer) {
+      return {
+        buffer: "",
+        rendered: "",
+        committed: false,
+        replaceLength: 0,
+        raw: "",
+        output: "",
+      };
+    }
+
+    const previousLength = this.previousRendered.length;
+
+    this.buffer = this.buffer.slice(0, -1);
+
+    const rendered = this.renderBuffer();
+
+    this.previousRendered = rendered;
+
+    return {
+      buffer: this.buffer,
+      rendered,
+      committed: false,
+      replaceLength: previousLength,
+      raw: this.buffer,
+      output: rendered,
+    };
+  }
+
+  public commit(): { raw: string; output: string } {
+    const state = this.state();
+    this.reset();
+    return state;
+  }
+
+  public commitComposition(): CompositionState {
+    const state = this.getState();
+    this.reset();
+    return state;
+  }
+
+  public reset(): void {
+    this.buffer = "";
+    this.previousRendered = "";
+  }
+
+  get raw(): string {
+    return this.buffer;
+  }
+
+  get output(): string {
+    return this.renderBuffer();
+  }
+
+  /**
+   * Render the current Latin composition.
+   *
+   * The important part here is that we transliterate the
+   * current buffer as a phonetic stream.
+   */
+  private renderBuffer(): string {
+    return this.transliterator.transliterateWord(this.buffer);
+  }
+}
