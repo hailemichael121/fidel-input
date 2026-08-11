@@ -93,6 +93,12 @@
         "command": "fidel.disableInput",
         "key": "escape",
         "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
+        "command": "fidel.deleteLeft",
+        "key": "backspace",
+        "mac": "backspace",
+        "when": "editorTextFocus && fidel.inputEnabled && fidel.hasComposition"
       }
     ],
     "menus": {

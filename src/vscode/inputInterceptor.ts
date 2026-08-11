@@ -15,6 +15,7 @@ export class InputInterceptor implements vscode.Disposable {
     this.engine = this.createEngine();
     this.isEnabled = isEnabled;
     this.register();
+    this.updateContext();
   }
 
   private createEngine(): CompositionEngine {
@@ -30,6 +31,11 @@ export class InputInterceptor implements vscode.Disposable {
       dictionary,
       smartCorrection,
     });
+  }
+
+  private updateContext(): void {
+    const hasComposition = this.isEnabled() && this.engine.raw.length > 0;
+    void vscode.commands.executeCommand("setContext", "fidel.hasComposition", hasComposition);
   }
 
   private register(): void {
@@ -54,7 +60,7 @@ export class InputInterceptor implements vscode.Disposable {
           return vscode.commands.executeCommand("default:type", args);
         }
 
-        // Ignore multi-cursor typing for MVP
+        // Ignore multi-cursor typing
         if (editor.selections.length > 1) {
           this.resetCompositionState();
           return vscode.commands.executeCommand("default:type", args);
@@ -78,6 +84,7 @@ export class InputInterceptor implements vscode.Disposable {
 
         const isFirstChar = this.engine.raw.length === 0;
         const state = this.engine.feedChar(args.text);
+        this.updateContext();
 
         this.isProcessingEdit = true;
         try {
@@ -97,7 +104,7 @@ export class InputInterceptor implements vscode.Disposable {
           );
 
           if (state.committed) {
-            // Word is committed (space or boundary delimiter pressed). Reset composition session completely
+            // Word committed (space or boundary delimiter pressed). Reset composition session completely
             this.resetCompositionState();
           } else {
             // Update last composition position to new cursor location
@@ -109,41 +116,40 @@ export class InputInterceptor implements vscode.Disposable {
       }
     );
 
-    // Backspace key interception
+    // Scoped Backspace key handler (triggered ONLY when editorTextFocus && fidel.inputEnabled && fidel.hasComposition)
     this.deleteLeftListener = vscode.commands.registerCommand(
-      "deleteLeft",
+      "fidel.deleteLeft",
       async () => {
         const editor = vscode.window.activeTextEditor;
 
         if (!this.isEnabled() || !editor || !this.engine.raw) {
           this.resetCompositionState();
-          return this.executeDefaultDeleteLeft(editor);
+          return;
         }
 
         if (editor.selections.length > 1) {
           this.resetCompositionState();
-          return this.executeDefaultDeleteLeft(editor);
+          return;
         }
 
         const selection = editor.selection;
 
-        // If user has a text selection highlight, delete selection
         if (!selection.isEmpty) {
           this.resetCompositionState();
-          return this.executeDefaultDeleteLeft(editor);
+          return;
         }
 
-        // If user moved cursor away from last composition position, reset composition & perform default backspace
         if (
           this.lastCompositionPosition &&
           !selection.active.isEqual(this.lastCompositionPosition)
         ) {
           this.resetCompositionState();
-          return this.executeDefaultDeleteLeft(editor);
+          return;
         }
 
         // Pop Latin chars from active composition buffer
         const state = this.engine.backspace();
+        this.updateContext();
 
         this.isProcessingEdit = true;
         try {
@@ -157,7 +163,6 @@ export class InputInterceptor implements vscode.Disposable {
               editBuilder.insert(selection.active, state.rendered);
             }
           });
-          // Update position tracker after backspace
           this.lastCompositionPosition = editor.selection.active;
         } finally {
           this.isProcessingEdit = false;
@@ -173,7 +178,6 @@ export class InputInterceptor implements vscode.Disposable {
 
       const currentPos = e.textEditor.selection.active;
 
-      // If cursor moved away from last active composition position (via arrow keys, mouse, etc.), reset composition
       if (
         this.lastCompositionPosition &&
         !currentPos.isEqual(this.lastCompositionPosition)
@@ -181,67 +185,6 @@ export class InputInterceptor implements vscode.Disposable {
         this.resetCompositionState();
       }
     });
-  }
-
-  /**
-   * Delegates backspace to default:deleteLeft with programmatic fallback.
-   */
-  private async executeDefaultDeleteLeft(editor?: vscode.TextEditor): Promise<void> {
-    try {
-      await vscode.commands.executeCommand("default:deleteLeft");
-    } catch {
-      await this.performDefaultDeleteLeft(editor);
-    }
-  }
-
-  /**
-   * Safe programmatic default backspace implementation fallback.
-   */
-  private async performDefaultDeleteLeft(editor?: vscode.TextEditor): Promise<void> {
-    if (!editor) {
-      return;
-    }
-
-    const selection = editor.selection;
-
-    // Highlighted selection deletion
-    if (!selection.isEmpty) {
-      this.isProcessingEdit = true;
-      try {
-        await editor.edit((editBuilder) => {
-          editBuilder.delete(selection);
-        });
-      } finally {
-        this.isProcessingEdit = false;
-      }
-      return;
-    }
-
-    const pos = selection.active;
-
-    // Top-left of document
-    if (pos.line === 0 && pos.character === 0) {
-      return;
-    }
-
-    let deleteRange: vscode.Range;
-    if (pos.character > 0) {
-      const prevPos = pos.translate(0, -1);
-      deleteRange = new vscode.Range(prevPos, pos);
-    } else {
-      const prevLine = editor.document.lineAt(pos.line - 1);
-      const prevPos = prevLine.range.end;
-      deleteRange = new vscode.Range(prevPos, pos);
-    }
-
-    this.isProcessingEdit = true;
-    try {
-      await editor.edit((editBuilder) => {
-        editBuilder.delete(deleteRange);
-      });
-    } finally {
-      this.isProcessingEdit = false;
-    }
   }
 
   public resetComposition(): void {
@@ -255,11 +198,13 @@ export class InputInterceptor implements vscode.Disposable {
   private resetCompositionState(): void {
     this.engine = this.createEngine();
     this.lastCompositionPosition = null;
+    this.updateContext();
   }
 
   public dispose(): void {
     this.typeListener?.dispose();
     this.deleteLeftListener?.dispose();
     this.selectionListener?.dispose();
+    void vscode.commands.executeCommand("setContext", "fidel.hasComposition", false);
   }
 }
