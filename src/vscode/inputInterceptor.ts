@@ -12,9 +12,24 @@ export class InputInterceptor implements vscode.Disposable {
   private selectionListener: vscode.Disposable | null = null;
 
   constructor(isEnabled: () => boolean = () => true) {
-    this.engine = new CompositionEngine();
+    this.engine = this.createEngine();
     this.isEnabled = isEnabled;
     this.register();
+  }
+
+  private createEngine(): CompositionEngine {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const convertPunctuation = config.get<boolean>("convertPunctuation", false);
+    const convertNumbers = config.get<boolean>("convertNumbers", false);
+    const dictionary = config.get<Record<string, string>>("dictionary", {});
+    const smartCorrection = config.get<boolean>("smartCorrection", true);
+
+    return new CompositionEngine({
+      convertPunctuation,
+      convertNumbers,
+      dictionary,
+      smartCorrection,
+    });
   }
 
   private register(): void {
@@ -233,7 +248,7 @@ export class InputInterceptor implements vscode.Disposable {
   }
 
   private resetCompositionState(): void {
-    this.engine.reset();
+    this.engine = this.createEngine();
     this.lastCompositionPosition = null;
   }
 

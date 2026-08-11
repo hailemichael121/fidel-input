@@ -59,10 +59,67 @@ export function registerFidelCommands(
     }
   );
 
+  // Fidel: Add Personal Dictionary Entry
+  const addDictCommand = vscode.commands.registerCommand("fidel.addDictionaryEntry", async () => {
+    const latin = await vscode.window.showInputBox({
+      prompt: "Enter phonetic Latin word (e.g. myword)",
+      placeHolder: "myword",
+    });
+
+    if (!latin) return;
+
+    const ethiopic = await vscode.window.showInputBox({
+      prompt: `Enter Ethiopic script for "${latin}" (e.g. ሚያቃልል)`,
+      placeHolder: "ሚያቃልል",
+    });
+
+    if (!ethiopic) return;
+
+    const config = vscode.workspace.getConfiguration("fidel");
+    const dict = { ...config.get<Record<string, string>>("dictionary", {}) };
+    dict[latin.trim().toLowerCase()] = ethiopic.trim();
+
+    await config.update("dictionary", dict, vscode.ConfigurationTarget.Global);
+    vscode.window.showInformationMessage(`Fidel: Added "${latin}" → "${ethiopic}" to personal dictionary.`);
+  });
+
+  // Fidel: Remove Personal Dictionary Entry
+  const removeDictCommand = vscode.commands.registerCommand("fidel.removeDictionaryEntry", async () => {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const dict = { ...config.get<Record<string, string>>("dictionary", {}) };
+    const keys = Object.keys(dict);
+
+    if (keys.length === 0) {
+      vscode.window.showInformationMessage("Fidel: Personal dictionary is empty.");
+      return;
+    }
+
+    const selected = await vscode.window.showQuickPick(
+      keys.map((k) => `${k} → ${dict[k]}`),
+      { placeHolder: "Select a dictionary entry to remove" }
+    );
+
+    if (!selected) return;
+
+    const keyToRemove = selected.split(" → ")[0].trim();
+    delete dict[keyToRemove];
+
+    await config.update("dictionary", dict, vscode.ConfigurationTarget.Global);
+    vscode.window.showInformationMessage(`Fidel: Removed "${keyToRemove}" from personal dictionary.`);
+  });
+
+  // Fidel: Open Personal Dictionary Settings
+  const openDictCommand = vscode.commands.registerCommand("fidel.openDictionary", async () => {
+    await vscode.commands.executeCommand("workbench.action.openSettings", "fidel.dictionary");
+  });
+
   context.subscriptions.push(
     toggleCommand,
     enableCommand,
     disableCommand,
-    convertSelectionCommand
+    convertSelectionCommand,
+    addDictCommand,
+    removeDictCommand,
+    openDictCommand
   );
 }

@@ -17,14 +17,14 @@ Fidel is a native Visual Studio Code extension designed for phonetic Amharic lan
                │                               │
         InputInterceptor                 Status Bar Widget
                │                         Sidebar Tree View Provider
-               │                         Command Handlers
+               │                         Dictionary Command Handlers
                ▼                               │
         CompositionEngine ◄────────────────────┘
                │
                ▼
-         Transliterator
-               │
-        ┌──────┴───────┐
+         Transliterator ───► PersonalDictionary
+               │          ───► SmartCorrector
+        ┌──────┴───────┐  ───► SuggestionEngine
         │              │
     FidelTrie     FIDEL_FAMILIES
         │              │
@@ -48,6 +48,9 @@ fidel-input/
 │   │   ├── types.ts             # Type definitions & match interfaces
 │   │   ├── mapping.ts           # 33 Ethiopic families, orders & diqala rules
 │   │   ├── numbers.ts           # Ethiopic numeral converter system
+│   │   ├── dictionary.ts        # Personal dictionary manager
+│   │   ├── corrector.ts         # Smart phonetic corrector
+│   │   ├── suggestions.ts       # Candidate suggestion generator
 │   │   ├── trie.ts              # Trie prefix data structure for O(K) lookup
 │   │   ├── transliterator.ts    # Tokenizer & stream transliteration logic
 │   │   └── composition.ts       # Live composition buffer state machine
@@ -56,7 +59,7 @@ fidel-input/
 │   │   ├── inputInterceptor.ts  # 'type' and 'deleteLeft' command interceptor
 │   │   ├── statusBar.ts         # Status bar state indicator widget
 │   │   ├── activityBar.ts       # Sidebar activity bar tree view provider
-│   │   └── commands.ts          # Command handlers (Toggle, Convert Selection)
+│   │   └── commands.ts          # Extension command handlers (Toggle, Convert Selection, Personal Dictionary)
 │   │
 │   └── extension.ts             # Extension lifecycle entry point
 │
@@ -66,7 +69,8 @@ fidel-input/
 │   ├── composition.test.ts      # State machine buffer tests
 │   ├── transliterator.test.ts   # Integration sentence tests
 │   ├── exhaustive.test.ts       # Syllabary matrix & backspace regression tests
-│   └── phase2_phase3.test.ts    # Phase 2 & Phase 3 feature verification tests
+│   ├── phase2_phase3.test.ts    # Phase 2 & Phase 3 feature verification tests
+│   └── phase4.test.ts           # Phase 4 dictionary, correction & suggestion tests
 │
 ├── media/
 │   ├── logo.png                 # Primary extension branding logo
@@ -95,11 +99,17 @@ Represents the complete Ethiopic script syllabary and numeric system:
 * **Ethiopic Numerals**: Positional numeral conversion (`፩`-`፺`, `፻`, `፼`).
 * **Static Overrides**: Exception dictionaries for common words (`bet`, `yihun`, `ethiopia`, `abebe`).
 
-### 3.2 Trie Lookup Engine ([`src/engine/trie.ts`](file:///home/yihun/Desktop/fidel/src/engine/trie.ts))
+### 3.2 Intelligence & Customization Layer ([`src/engine/dictionary.ts`](file:///home/yihun/Desktop/fidel/src/engine/dictionary.ts), [`src/engine/corrector.ts`](file:///home/yihun/Desktop/fidel/src/engine/corrector.ts), [`src/engine/suggestions.ts`](file:///home/yihun/Desktop/fidel/src/engine/suggestions.ts))
+
+* **Personal Dictionary**: [`PersonalDictionary`](file:///home/yihun/Desktop/fidel/src/engine/dictionary.ts) allows user-defined custom term mappings (e.g., `myword` -> `ሚያቃልል`, `haile` -> `ኃይለ`) persisted in VS Code configuration (`fidel.dictionary`). Takes top priority during transliteration.
+* **Smart Corrector**: [`SmartCorrector`](file:///home/yihun/Desktop/fidel/src/engine/corrector.ts) normalizes trailing repeated consonant spellings (e.g., `selamm` -> `ሰላም`).
+* **Candidate Suggestions**: [`SuggestionEngine`](file:///home/yihun/Desktop/fidel/src/engine/suggestions.ts) generates ranked homophone candidate alternatives.
+
+### 3.3 Trie Lookup Engine ([`src/engine/trie.ts`](file:///home/yihun/Desktop/fidel/src/engine/trie.ts))
 
 Indexes flattened phonetic mapping sequences into a prefix tree (`FidelTrie`) to achieve $O(K)$ matching performance, resolving phonetic ambiguities such as `s` versus `sh` versus `shw`.
 
-### 3.3 Composition Engine ([`src/engine/composition.ts`](file:///home/yihun/Desktop/fidel/src/engine/composition.ts))
+### 3.4 Composition Engine ([`src/engine/composition.ts`](file:///home/yihun/Desktop/fidel/src/engine/composition.ts))
 
 Manages live typing state:
 * Stores raw Latin input buffer and calculated rendered string.
@@ -107,7 +117,7 @@ Manages live typing state:
 * Executes character-by-character backspace recalculation.
 * Emits word boundary commit signals upon space or punctuation input (`/[\s.,!?;:()"]/`).
 
-### 3.4 VS Code Interceptor ([`src/vscode/inputInterceptor.ts`](file:///home/yihun/Desktop/fidel/src/vscode/inputInterceptor.ts))
+### 3.5 VS Code Interceptor ([`src/vscode/inputInterceptor.ts`](file:///home/yihun/Desktop/fidel/src/vscode/inputInterceptor.ts))
 
 Overrides VS Code `type` and `deleteLeft` commands:
 * Intercepts single-character inputs when input mode is enabled.
@@ -141,10 +151,12 @@ Overrides VS Code `type` and `deleteLeft` commands:
 - Multi-cursor safety handling.
 - Full configuration schema in `package.json`.
 
-### Phase 4 — Customization and Intelligence (Planned)
-- Personal dictionary support stored in VS Code configuration (`fidel.dictionary`).
-- Dictionary management commands (`Fidel: Add Dictionary Entry`, `Fidel: Open Dictionary`).
-- Smart phonetic spell-checking suggestions.
+### Phase 4 — Customization and Intelligence (Completed)
+- Personal dictionary manager ([`src/engine/dictionary.ts`](file:///home/yihun/Desktop/fidel/src/engine/dictionary.ts)) with `fidel.dictionary` settings integration.
+- Dictionary management commands (`Fidel: Add Personal Dictionary Entry`, `Fidel: Remove Personal Dictionary Entry`, `Fidel: Open Personal Dictionary Settings`).
+- Smart phonetic corrector engine ([`src/engine/corrector.ts`](file:///home/yihun/Desktop/fidel/src/engine/corrector.ts)) for double-consonant typos.
+- Candidate suggestion generator ([`src/engine/suggestions.ts`](file:///home/yihun/Desktop/fidel/src/engine/suggestions.ts)) for homophones.
+- Phase 4 automated unit test suite (`test/phase4.test.ts`).
 
 ### Phase 5 — Multi-Language Profiles (Planned)
 - Language profile support for Tigrinya, Oromo, and Ge'ez language variations.

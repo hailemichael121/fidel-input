@@ -49,6 +49,21 @@
         "command": "fidel.convertSelection",
         "title": "Fidel: Convert Selection to Ethiopic",
         "icon": "$(symbol-string)"
+      },
+      {
+        "command": "fidel.addDictionaryEntry",
+        "title": "Fidel: Add Personal Dictionary Entry",
+        "icon": "$(add)"
+      },
+      {
+        "command": "fidel.removeDictionaryEntry",
+        "title": "Fidel: Remove Personal Dictionary Entry",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "fidel.openDictionary",
+        "title": "Fidel: Open Personal Dictionary Settings",
+        "icon": "$(book)"
       }
     ],
     "keybindings": [
@@ -84,6 +99,15 @@
         {
           "command": "fidel.convertSelection",
           "when": "editorHasSelection"
+        },
+        {
+          "command": "fidel.addDictionaryEntry"
+        },
+        {
+          "command": "fidel.removeDictionaryEntry"
+        },
+        {
+          "command": "fidel.openDictionary"
         }
       ],
       "editor/context": [
@@ -134,6 +158,21 @@
           "type": "boolean",
           "default": false,
           "description": "Automatically disable Amharic input after pressing Enter."
+        },
+        "fidel.dictionary": {
+          "type": "object",
+          "default": {},
+          "description": "Personal dictionary mappings from Latin phonetic words to Ethiopic script (e.g. \"myword\": \"ሚያቃልል\")."
+        },
+        "fidel.smartCorrection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable smart phonetic normalization for non-standard or double-consonant spellings (e.g. \"selamm\" → \"ሰላም\")."
+        },
+        "fidel.suggestions": {
+          "type": "boolean",
+          "default": false,
+          "description": "Offer candidate suggestion overlays for homophones and alternative phonetic forms."
         }
       }
     }

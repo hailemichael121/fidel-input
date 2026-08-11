@@ -51,6 +51,9 @@ export interface TransliterationOptions {
   caseSensitive?: boolean;
   convertPunctuation?: boolean;
   convertNumbers?: boolean;
+  dictionary?: Record<string, string>;
+  smartCorrection?: boolean;
+  suggestions?: boolean;
 }
 
 export type FidelOptions = TransliterationOptions;
