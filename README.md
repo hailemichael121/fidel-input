@@ -1,77 +1,154 @@
-# Fidel Input — ፊደል 🇪🇹
+# Fidel Input (ፊደል)
 
-**Fidel Input** is a fast, intelligent, live Amharic phonetic input extension for Visual Studio Code. It converts Latin transliteration into Ethiopic (Ge'ez) script in real-time as you type, powered by a decoupled TypeScript phonetic composition engine.
+<p align="center">
+  <img src="media/logo.png" alt="Fidel Input Logo" width="160" />
+</p>
+
+<p align="center">
+  <strong>Fast, real-time Amharic phonetic input and Ethiopic transliteration engine for Visual Studio Code.</strong>
+</p>
+
+<p align="center">
+  <a href="#license">License</a> &bull;
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#keyboard-shortcuts--commands">Shortcuts</a> &bull;
+  <a href="#configuration">Configuration</a> &bull;
+  <a href="#development--testing">Development</a>
+</p>
 
 ---
 
-## 🌟 Features
+## Overview
 
-- **⚡ Real-Time Live Transliteration**: Type `selam yihun` → VS Code automatically renders `ሰላም ይሁን`.
-- **🎹 Live Composition Buffer**: Progressively updates characters as you type (`s` → `ስ` → `se` → `ሰ` → `sel` → `ሰል` → `sela` → `ሰላ` → `selam` → `ሰላም`).
-- **🔀 Selection Conversion Shortcuts**: Highlight any Latin text (e.g. `selam endemin`) and press **`Ctrl + Alt + E`** (or `Ctrl + Alt + F` / `Cmd + Alt + E` on macOS) to instantly convert it to Ethiopic script (`ሰላም እንደምን`).
-- **📊 Status Bar & Activity Bar Integration**: Clear visual indicator (`$(keyboard) ፊደል: ON / OFF`) with 1-click toggles and quick access.
-- **📚 Complete Amharic Ethiopic Syllabary**: Full support for all 33 core Ethiopic character families (ሀ-ፐ), 7 vowel orders (ግዕዝ-ሣብዕ), compound/labialized forms (ዲቃላ ፊደላት: ሏ, ሟ, ቋ, ዟ, etc.), and common word exceptions (`bet` → `ቤት`, `abebe` → `አበበ`, `ethiopia` → `ኢትዮጵያ`).
-- **⚙️ Configurable Punctuation**: Optional conversion of Latin punctuation to Ethiopic punctuation (`.` → `።`, `:` → `፡`, `,` → `፤`, `:-` → `፦`).
+**Fidel Input** is a native Visual Studio Code extension designed for inputting Amharic text using a standard QWERTY keyboard. Rather than performing static string conversions, Fidel operates as a live **Input Method Editor (IME)**. It intercepts typing inside the active editor, maintains an active composition buffer, and updates text dynamically as phonetic syllables are constructed.
+
+### Product Capabilities
+
+* **Live Phonetic Interception**: Converts Latin inputs directly into Ethiopic (Ge'ez) script in real time as keypresses occur.
+* **Composition Buffer Architecture**: Progressively recalculates the current word fragment without inserting extraneous characters or breaking backspace behavior.
+* **Selection Transliteration**: Converts pre-existing Latin selections into Ethiopic script on demand without toggling global input mode.
+* **Decoupled Core Engine**: Built on an independent TypeScript transliteration package that can be compiled for CLI, web, or editor targets.
 
 ---
 
-## 🚀 Quick Start
+## Demonstration & Media
 
-1. **Install extension** in VS Code.
-2. Press **`Ctrl + Alt + A`** (or `Cmd + Alt + A` on macOS) to enable **Fidel Amharic Input**.
+### Video & Visual Preview
+
+<p align="center">
+  <!-- Product Demonstration Screenshot / Video -->
+  <img src="media/fidel.png" alt="Fidel VS Code Extension Interface" width="700" />
+</p>
+
+```html
+<!-- Recommended syntax for embedding product video recordings in GitHub / VS Code Marketplace -->
+<video src="media/demo.mp4" controls="controls" width="100%">
+  Your browser does not support HTML5 video streaming.
+</video>
+```
+
+---
+
+## Architecture & Core Features
+
+### Real-Time Composition Engine
+
+As phonetic inputs are entered, Fidel maintains buffer state and replaces active composition bounds:
+
+```text
+User input:   s   ->   e   ->   l   ->   a   ->   m   ->   SPACE
+Buffer:      "s"      "se"     "sel"   "sela"   "selam"    ""
+Rendered:    "ስ"      "ሰ"      "ሰል"    "ሰላ"     "ሰላም"     "ሰላም "
+```
+
+### Syllabary & Rule Coverage
+
+* **33 Core Ethiopic Families**: Full mapping for all core base roots (ሀ through ፐ).
+* **7 Vowel Orders**: Complete support across 1st (ግዕዝ), 2nd (ካዕብ), 3rd (ሣልስ), 4th (ራብዕ), 5th (ኃምስ), 6th (ሳድስ), and 7th (ሣብዕ) orders.
+* **8th Order Labialized Forms (дикала / Diqala)**: Compound forms ending in `wa` or `oa` (e.g., `swa` -> `ሷ`, `lwa` -> `ሏ`, `gwa` -> `ጓ`).
+* **Ethiopic Punctuation**: Configurable mapping for standard punctuation (`።`, `፤`, `፦`, `፧`, `፠`).
+
+---
+
+## Quick Start
+
+1. Install the **Fidel Input** extension in Visual Studio Code.
+2. Press **`Ctrl + Alt + A`** (or **`Cmd + Alt + A`** on macOS) to enable Amharic input mode.
 3. Type phonetic Amharic:
    ```text
    selam yihun
-   ↓
+   ->
    ሰላም ይሁን
    ```
-4. Highlight any existing Latin text and press **`Ctrl + Alt + E`** (or `Ctrl + Alt + F`) to convert selection into Ethiopic script without changing modes.
+4. Highlight any existing Latin text and press **`Ctrl + Alt + E`** to convert the selection directly into Ethiopic script.
 
 ---
 
-## ⌨️ Keybindings & Commands
+## Keyboard Shortcuts & Commands
 
-| Command | Keybinding (Linux/Windows) | Keybinding (macOS) | Context | Description |
+| Command | Shortcut (Windows/Linux) | Shortcut (macOS) | Context | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `fidel.toggleInput` | **`Ctrl + Alt + A`** | **`Cmd + Alt + A`** | Editor Text Focus | Toggles live Fidel Amharic input ON/OFF |
-| `fidel.convertSelection` | **`Ctrl + Alt + E`** / **`Ctrl + Alt + F`** | **`Cmd + Alt + E`** / **`Cmd + Alt + F`** | Has Selection | Transliterates selected Latin text to Ethiopic script |
+| `fidel.toggleInput` | **`Ctrl + Alt + A`** | **`Cmd + Alt + A`** | Editor Text Focus | Toggles Fidel Amharic input mode on or off |
+| `fidel.convertSelection` | **`Ctrl + Alt + E`** | **`Cmd + Alt + E`** | Has Selection | Transliterates selected Latin text to Ethiopic script |
 | `fidel.disableInput` | **`Escape`** | **`Escape`** | Fidel Input Active | Disables Fidel input mode instantly |
 | `fidel.enableInput` | Command Palette | Command Palette | Global | Enables Fidel Amharic input mode |
 
 ---
 
-## 📖 Phonetic Mapping Reference
+## Phonetic Mapping Reference
 
-Fidel Input maps 7 vowel orders and 8th-order labialized forms across Latin sequences:
+Fidel maps Latin phonetic sequences onto the Ethiopic syllabary matrix:
 
-| Order | Vowel Symbol | Latin Example | `s` Family Example |
+| Order | Vowel Suffix | Example Input | `s` Family Output |
 | :--- | :--- | :--- | :--- |
-| **1st Order (ግዕዝ)** | ä / e | `se` | **ሰ** |
-| **2nd Order (ካዕብ)** | u | `su` | **ሱ** |
-| **3rd Order (ሣልስ)** | i | `si` | **ሲ** |
-| **4th Order (ራብዕ)** | a | `sa` / `saa` | **ሳ** |
-| **5th Order (ኃምስ)** | ē | `see` / `sie` | **ሴ** |
-| **6th Order (ሳድስ)** | ə / none | `s` | **ስ** |
-| **7th Order (ሣብዕ)** | o | `so` | **ሶ** |
-| **8th Order (ዲቃላ)** | wa | `swa` | **ሷ** |
+| **1st Order (ግዕዝ)** | `e` / `a` | `se` | **ሰ** |
+| **2nd Order (ካዕብ)** | `u` | `su` | **ሱ** |
+| **3rd Order (ሣልስ)** | `i` | `si` | **ሲ** |
+| **4th Order (ራብዕ)** | `a` / `aa` | `sa` | **ሳ** |
+| **5th Order (ኃምስ)** | `ee` / `ie` | `see` | **ሴ** |
+| **6th Order (ሳድስ)** | Bare consonant | `s` | **ስ** |
+| **7th Order (ሣብዕ)** | `o` | `so` | **ሶ** |
+| **8th Order (ዲቃላ)** | `wa` / `oa` | `swa` | **ሷ** |
 
 ---
 
-## 🛠️ Development & Testing
+## Configuration
 
-Built with [Bun](https://bun.sh), TypeScript, and esbuild.
+Extension settings can be configured via VS Code `settings.json`:
+
+```json
+{
+  "fidel.enableByDefault": false,
+  "fidel.convertPunctuation": false,
+  "fidel.autoDisableOnEnter": false
+}
+```
+
+* `fidel.enableByDefault`: Automatically enables Fidel Amharic input when VS Code starts.
+* `fidel.convertPunctuation`: Converts Latin punctuation symbols to Ethiopic punctuation equivalents (`.` -> `።`, `,` -> `፤`, `:` -> `፡`).
+* `fidel.autoDisableOnEnter`: Automatically turns off input mode after pressing Enter.
+
+---
+
+## Development & Testing
+
+Fidel is built with [Bun](https://bun.sh), TypeScript, and esbuild.
 
 ```bash
-# Type check & build
+# Type check TypeScript files
 bun run check
+
+# Bundle extension code
 bun run build
 
-# Run unit & integration test suite
+# Run unit and integration tests
 bun test
 ```
 
 ---
 
-## 📜 License
+## License
 
-[MIT License](LICENSE) © 2026 Yihun
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Yihun Hailemichael.
