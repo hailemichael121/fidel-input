@@ -36,6 +36,8 @@ export class FidelCompletionProvider implements vscode.CompletionItemProvider {
 
     return candidates.map((c, index) => {
       const item = new vscode.CompletionItem(c.ethiopic, vscode.CompletionItemKind.Text);
+      item.filterText = word;
+      item.insertText = c.ethiopic;
       item.detail = `Fidel Ethiopic: ${c.label}`;
       item.documentation = new vscode.MarkdownString(
         `**Phonetic Input**: \`${c.latin}\`  \n**Ethiopic**: ${c.ethiopic}  \n*${c.description}*`

@@ -29,6 +29,8 @@ const HOMOPHONE_GROUPS: Record<string, string[]> = {
   tz: ["tz", "ts", "Tz"],
 };
 
+import { transliterateText } from "./transliterator.js";
+
 export class SuggestionEngine {
   /**
    * Generates candidate Ethiopic suggestions for a given Latin phonetic input.
@@ -40,19 +42,16 @@ export class SuggestionEngine {
 
     const suggestions: string[] = primaryResult ? [primaryResult] : [];
 
-    // Find homophone alternatives for prefix consonant root
+    // Find homophone alternatives by swapping consonant root prefixes
     for (const [prefix, alternatives] of Object.entries(HOMOPHONE_GROUPS)) {
       if (input.toLowerCase().startsWith(prefix.toLowerCase())) {
-        const suffix = input.slice(prefix.length);
+        const restOfWord = input.slice(prefix.length);
         for (const alt of alternatives) {
-          if (alt === prefix) continue;
-          const family = FIDEL_FAMILIES[alt];
-          if (family) {
-            const vowelOrder = (suffix in family ? suffix : "") as keyof typeof family;
-            const ethChar = family[vowelOrder];
-            if (ethChar && !suggestions.includes(ethChar)) {
-              suggestions.push(ethChar);
-            }
+          if (alt.toLowerCase() === prefix.toLowerCase()) continue;
+          const altInput = alt + restOfWord;
+          const altResult = transliterateText(altInput);
+          if (altResult && !suggestions.includes(altResult)) {
+            suggestions.push(altResult);
           }
         }
       }

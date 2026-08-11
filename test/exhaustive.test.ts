@@ -221,9 +221,6 @@ describe("Composition Engine — Deep Interception & Backspace Tests", () => {
     expect(state.rendered).toBe("ይ");
 
     state = engine.backspace();
-    expect(state.rendered).toBe("ይ");
-
-    state = engine.backspace();
     expect(state.rendered).toBe("");
     expect(engine.getState().buffer).toBe("");
   });

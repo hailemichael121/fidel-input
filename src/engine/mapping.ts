@@ -115,6 +115,11 @@ export const COMMON_WORD_MAP: Record<string, string> = {
   ethiopia: "ኢትዮጵያ",
   abebe: "አበበ",
   endemin: "እንደምን",
+  selam: "ሰላም",
+  haile: "ኃይለ",
+  hayle: "ኃይለ",
+  hailemichael: "ኃይለሚካኤል",
+  haylemikael: "ኃይለሚካኤል",
 };
 
 /**

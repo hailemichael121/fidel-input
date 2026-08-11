@@ -93,20 +93,32 @@ export class CompositionEngine {
     }
 
     const previousLength = this.previousRendered.length;
+    const initialRendered = this.previousRendered;
 
-    this.buffer = this.buffer.slice(0, -1);
+    while (this.buffer.length > 0) {
+      this.buffer = this.buffer.slice(0, -1);
+      const newRendered = this.renderBuffer();
+      if (newRendered !== initialRendered || this.buffer.length === 0) {
+        this.previousRendered = newRendered;
+        return {
+          buffer: this.buffer,
+          rendered: newRendered,
+          committed: false,
+          replaceLength: previousLength,
+          raw: this.buffer,
+          output: newRendered,
+        };
+      }
+    }
 
-    const rendered = this.renderBuffer();
-
-    this.previousRendered = rendered;
-
+    this.previousRendered = "";
     return {
-      buffer: this.buffer,
-      rendered,
+      buffer: "",
+      rendered: "",
       committed: false,
       replaceLength: previousLength,
-      raw: this.buffer,
-      output: rendered,
+      raw: "",
+      output: "",
     };
   }
 
