@@ -31,6 +31,15 @@ export function activate(context: vscode.ExtensionContext): void {
     (newState) => {
       updateState(newState);
       interceptor.resetComposition();
+    },
+    () => {
+      // onRestart
+      interceptor.resetComposition();
+      updateState(enabled);
+    },
+    () => {
+      // onResetComposition
+      interceptor.resetComposition();
     }
   );
 
@@ -42,7 +51,9 @@ export function activate(context: vscode.ExtensionContext): void {
   const completionProvider = vscode.languages.registerCompletionItemProvider(
     { scheme: "file" },
     new FidelCompletionProvider(),
-    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "'", "-", " "
   );
 
   context.subscriptions.push(

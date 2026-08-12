@@ -5,7 +5,9 @@ import { SuggestionEngine } from "../engine/suggestions.js";
 export function registerFidelCommands(
   context: vscode.ExtensionContext,
   getState: () => boolean,
-  setState: (enabled: boolean) => void
+  setState: (enabled: boolean) => void,
+  onRestart: () => void,
+  onResetComposition: () => void
 ): void {
   // Fidel: Toggle Amharic Input
   const toggleCommand = vscode.commands.registerCommand("fidel.toggleInput", () => {
@@ -29,6 +31,27 @@ export function registerFidelCommands(
     vscode.window.setStatusBarMessage("Fidel ፊደል: Amharic input disabled", 2500);
   });
 
+  // Fidel: Restart Extension & Reload Engine
+  const restartEngineCommand = vscode.commands.registerCommand("fidel.restartEngine", async () => {
+    onRestart();
+    vscode.window.setStatusBarMessage("Fidel ፊደል: Engine restarted & composition buffer cleared!", 3000);
+
+    const selection = await vscode.window.showInformationMessage(
+      "Fidel ፊደል: Extension engine restarted successfully.",
+      "Reload VS Code Window"
+    );
+
+    if (selection === "Reload VS Code Window") {
+      await vscode.commands.executeCommand("workbench.action.reloadWindow");
+    }
+  });
+
+  // Fidel: Reset Composition Buffer
+  const resetCompositionCommand = vscode.commands.registerCommand("fidel.resetComposition", () => {
+    onResetComposition();
+    vscode.window.setStatusBarMessage("Fidel ፊደል: Composition buffer reset!", 2500);
+  });
+
   // Fidel: Convert Selection to Amharic
   const convertSelectionCommand = vscode.commands.registerCommand(
     "fidel.convertSelection",
@@ -47,8 +70,8 @@ export function registerFidelCommands(
       }
 
       const config = vscode.workspace.getConfiguration("fidel");
-      const convertPunctuation = config.get<boolean>("convertPunctuation", false);
-      const convertNumbers = config.get<boolean>("convertNumbers", false);
+      const convertPunctuation = config.get<boolean>("convertPunctuation", true);
+      const convertNumbers = config.get<boolean>("convertNumbers", true);
 
       const converted = transliterateText(text, { convertPunctuation, convertNumbers });
 
@@ -59,6 +82,45 @@ export function registerFidelCommands(
       vscode.window.setStatusBarMessage("Fidel ፊደል: Selection converted to Ethiopic script", 2500);
     }
   );
+
+  // Fidel: Toggle Punctuation Conversion
+  const togglePunctuationCommand = vscode.commands.registerCommand("fidel.togglePunctuation", async () => {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const current = config.get<boolean>("convertPunctuation", true);
+    const nextState = !current;
+    await config.update("convertPunctuation", nextState, vscode.ConfigurationTarget.Global);
+    onRestart();
+    vscode.window.setStatusBarMessage(
+      nextState ? "Fidel ፊደል: Ethiopic punctuation conversion enabled" : "Fidel ፊደል: Ethiopic punctuation conversion disabled",
+      2500
+    );
+  });
+
+  // Fidel: Toggle Ethiopic Numerals Conversion
+  const toggleNumbersCommand = vscode.commands.registerCommand("fidel.toggleNumbers", async () => {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const current = config.get<boolean>("convertNumbers", true);
+    const nextState = !current;
+    await config.update("convertNumbers", nextState, vscode.ConfigurationTarget.Global);
+    onRestart();
+    vscode.window.setStatusBarMessage(
+      nextState ? "Fidel ፊደል: Ethiopic numeral conversion enabled" : "Fidel ፊደል: Ethiopic numeral conversion disabled",
+      2500
+    );
+  });
+
+  // Fidel: Toggle Candidate Suggestions
+  const toggleSuggestionsCommand = vscode.commands.registerCommand("fidel.toggleSuggestions", async () => {
+    const config = vscode.workspace.getConfiguration("fidel");
+    const current = config.get<boolean>("suggestions", true);
+    const nextState = !current;
+    await config.update("suggestions", nextState, vscode.ConfigurationTarget.Global);
+    onRestart();
+    vscode.window.setStatusBarMessage(
+      nextState ? "Fidel ፊደል: Candidate suggestions overlay enabled" : "Fidel ፊደል: Candidate suggestions overlay disabled",
+      2500
+    );
+  });
 
   // Fidel: Add Personal Dictionary Entry
   const addDictCommand = vscode.commands.registerCommand("fidel.addDictionaryEntry", async () => {
@@ -181,7 +243,12 @@ export function registerFidelCommands(
     toggleCommand,
     enableCommand,
     disableCommand,
+    restartEngineCommand,
+    resetCompositionCommand,
     convertSelectionCommand,
+    togglePunctuationCommand,
+    toggleNumbersCommand,
+    toggleSuggestionsCommand,
     addDictCommand,
     removeDictCommand,
     openDictCommand,

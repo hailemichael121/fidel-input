@@ -20,8 +20,8 @@ export class InputInterceptor implements vscode.Disposable {
 
   private createEngine(): CompositionEngine {
     const config = vscode.workspace.getConfiguration("fidel");
-    const convertPunctuation = config.get<boolean>("convertPunctuation", false);
-    const convertNumbers = config.get<boolean>("convertNumbers", false);
+    const convertPunctuation = config.get<boolean>("convertPunctuation", true);
+    const convertNumbers = config.get<boolean>("convertNumbers", true);
     const dictionary = config.get<Record<string, string>>("dictionary", {});
     const smartCorrection = config.get<boolean>("smartCorrection", true);
 

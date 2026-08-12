@@ -4,14 +4,22 @@
   "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
   "version": "0.1.1",
   "publisher": "yihun",
+  "author": {
+    "name": "Yihun Shekuri",
+    "url": "https://github.com/Hailemichael121"
+  },
   "icon": "media/fidel.png",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hailemichael121/fidel-input"
+    "url": "https://github.com/Hailemichael121/fidel-input"
   },
+  "bugs": {
+    "url": "https://github.com/Hailemichael121/fidel-input/issues"
+  },
+  "homepage": "https://github.com/Hailemichael121/fidel-input#readme",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.125.0"
   },
   "categories": [
     "Keymaps",
@@ -74,6 +82,16 @@
         "command": "fidel.showSuggestions",
         "title": "Fidel: Show Homophone Candidate Suggestions",
         "icon": "$(lightbulb)"
+      },
+      {
+        "command": "fidel.restartEngine",
+        "title": "Fidel: Restart Extension & Reload Engine",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "fidel.resetComposition",
+        "title": "Fidel: Reset Composition Buffer",
+        "icon": "$(clear-all)"
       }
     ],
     "keybindings": [
@@ -113,6 +131,12 @@
           "command": "fidel.disableInput"
         },
         {
+          "command": "fidel.restartEngine"
+        },
+        {
+          "command": "fidel.resetComposition"
+        },
+        {
           "command": "fidel.convertSelection",
           "when": "editorHasSelection"
         },
@@ -137,6 +161,30 @@
           "command": "fidel.convertSelection",
           "group": "modification",
           "when": "editorHasSelection"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "fidel.restartEngine",
+          "group": "navigation@1",
+          "when": "view == fidelView"
+        },
+        {
+          "command": "fidel.toggleInput",
+          "group": "navigation@2",
+          "when": "view == fidelView"
+        },
+        {
+          "command": "fidel.openDictionary",
+          "group": "navigation@3",
+          "when": "view == fidelView"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "fidel.restartEngine",
+          "group": "navigation",
+          "when": "editorTextFocus"
         }
       ]
     },
@@ -168,12 +216,12 @@
         },
         "fidel.convertPunctuation": {
           "type": "boolean",
-          "default": false,
-          "description": "Convert supported Latin punctuation to Ethiopic punctuation."
+          "default": true,
+          "description": "Convert supported Latin punctuation to Ethiopic punctuation (e.g. \",\" → \"፤\", \".\" → \"።\")."
         },
         "fidel.convertNumbers": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Convert Arabic digits (1, 2, 3, etc.) to Ethiopic numerals (፩, ፪, ፫, etc.)."
         },
         "fidel.autoDisableOnEnter": {
@@ -193,8 +241,8 @@
         },
         "fidel.suggestions": {
           "type": "boolean",
-          "default": false,
-          "description": "Offer candidate suggestion overlays for homophones and alternative phonetic forms."
+          "default": true,
+          "description": "Offer candidate suggestion overlays for homophones and alternative phonetic forms directly under cursor."
         }
       }
     }
