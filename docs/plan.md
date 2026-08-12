@@ -171,8 +171,10 @@ Overrides VS Code `type` and `deleteLeft` commands:
 
 ---
 
-## 5. Software License
+## 5. Author, Ownership & Software License
 
-Fidel is licensed under the [MIT License](../LICENSE).
+Fidel is created, owned, and maintained by **Yihun Shekuri** ([@Hailemichael121](https://github.com/Hailemichael121)).
 
-Copyright (c) 2026 Yihun Hailemichael.
+It is licensed under the [MIT License](../LICENSE).
+
+Copyright (c) 2026 Yihun Shekuri.
