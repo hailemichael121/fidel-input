@@ -110,18 +110,110 @@ export const PUNCTUATION_MAP: Record<string, string> = {
 
 /** Special Word Exceptions for common transliterations */
 export const COMMON_WORD_MAP: Record<string, string> = {
+  // Common greetings & expressions
+  selam: "ሰላም",
+  endemin: "እንደምን",
+  tena: "ጤና",
+  tenayistillign: "ጤናይስጥልኝ",
+  tenayistilign: "ጤናይስጥልኝ",
+  tenayistilln: "ጤናይስጥልኝ",
+  ameseginalehu: "አመሰግናለሁ",
+  amesegenalehu: "አመሰግናለሁ",
+  dehna: "ደህና",
+  ishii: "እሺ",
+  ishi: "እሺ",
+  awo: "አዎ",
+  yellem: "የለም",
+  yelem: "የለም",
+
+  // Family & Relationships
+  enat: "እናት",
+  abat: "አባት",
+  wendim: "ወንድም",
+  ihit: "እህት",
+  lij: "ልጅ",
+  lijoch: "ልጆች",
+  wodaj: "ወዳጅ",
+  gwad: "ጓድ",
+
+  // Places & Country
+  ethiopia: "ኢትዮጵያ",
+  ityopya: "ኢትዮጵያ",
+  "ityop'ya": "ኢትዮጵያ",
+  ethiopian: "ኢትዮጵያዊ",
+  amharic: "አማርኛ",
+  amaric: "አማርኛ",
+  amharik: "አማርኛ",
+  fidel: "ፊደል",
+  addis: "አዲስ",
+  adis: "አዲስ",
+  ababa: "አበባ",
+  abeba: "አበባ",
+  addisababa: "አዲስ አበባ",
+  addisabeba: "አዲስ አበባ",
+  amhara: "አማራ",
+  oromia: "ኦሮሚያ",
+  tigray: "ትግራይ",
+  habesha: "ሀበሻ",
+
+  // Religious & Cultural Names / Terms
+  egziabher: "እግዚአብሔር",
+  igziabher: "እግዚአብሔር",
+  mariam: "ማሪያም",
+  maryam: "ማሪያም",
+  mikael: "ሚካኤል",
+  michael: "ሚካኤል",
+  gebriel: "ገብርኤል",
+  gabriel: "ገብርኤል",
+
+  // Common Amharic Personal Names
+  abebe: "አበበ",
   bet: "ቤት",
   beet: "ቤት",
   yihun: "ይሁን",
-  ethiopia: "ኢትዮጵያ",
-  abebe: "አበበ",
-  endemin: "እንደምን",
-  selam: "ሰላም",
   haile: "ኃይለ",
   hayle: "ኃይለ",
   hailemichael: "ኃይለሚካኤል",
   haylemikael: "ኃይለሚካኤል",
+  haileselassie: "ኃይለሥላሴ",
+  hayleselassie: "ኃይለሥላሴ",
   shekuri: "ሸኩሪ",
+  dawit: "ዳዊት",
+  dawiit: "ዳዊት",
+  solomon: "ሰለሞን",
+  yohannes: "ዮሐንስ",
+  tesfaye: "ተስፋዬ",
+  worku: "ወርቁ",
+  berhanu: "ብርሃኑ",
+  girma: "ግርማ",
+  getachew: "ጌታቸው",
+  tadesse: "ታደሰ",
+  tadese: "ታደሰ",
+  kebede: "ከበደ",
+  bekele: "በቀለ",
+  mulugeta: "ሙሉጌታ",
+  mulu: "ሙሉ",
+  almaz: "አልማዝ",
+  aster: "አስቴር",
+  genet: "ገነት",
+  tigist: "ትዕግሥት",
+  meseret: "መሠረት",
+  helen: "ሔለን",
+  amanuel: "አማኑኤል",
+  kifle: "ክፍሌ",
+
+  // Titles & Common Nouns
+  ato: "አቶ",
+  woizero: "ወይዘሮ",
+  weyzerit: "ወይዘሪት",
+  timhirt: "ትምህርት",
+  timhirtbet: "ትምህርት ቤት",
+  sira: "ሥራ",
+  wuha: "ውሃ",
+  wuhah: "ውሃ",
+  beso: "በሶ",
+  bela: "በላ",
+  mewad: "መዋድ",
 };
 
 /**
@@ -130,11 +222,13 @@ export const COMMON_WORD_MAP: Record<string, string> = {
 export function buildFlatMapping(): Record<string, string> {
   const map: Record<string, string> = {};
 
+  const FOURTH_ORDER_A_PREFIXES = new Set(["l", "y", "w", "k'", "t'", "c'", "p'"]);
+
   // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
     map[prefix] = family[""];
     map[prefix + "e"] = family.e;      // 1st order triggered by 'e' (e.g. he -> ሀ, de -> ደ, le -> ለ)
-    map[prefix + "a"] = family.e;      // 1st order triggered by 'a' (e.g. ha -> ሀ, da -> ደ, sa -> ሰ)
+    map[prefix + "a"] = FOURTH_ORDER_A_PREFIXES.has(prefix) ? family.a : family.e; // 4th order for l, y, w, glottal apostrophes; 1st order for others
     map[prefix + "u"] = family.u;      // 2nd order (e.g. hu -> ሁ)
     map[prefix + "i"] = family.i;      // 3rd order (e.g. hi -> ሂ)
     map[prefix + "aa"] = family.a;     // 4th order triggered by 'aa' (e.g. haa -> ሃ, daa -> ዳ, saa -> ሳ)
@@ -153,11 +247,12 @@ export function buildFlatMapping(): Record<string, string> {
     const titlePrefix = prefix.length > 0 ? prefix[0].toUpperCase() + prefix.slice(1).toLowerCase() : prefix;
     const upperPrefix = prefix.toUpperCase();
     const variants = [titlePrefix, upperPrefix];
+    const aTarget = FOURTH_ORDER_A_PREFIXES.has(prefix) ? family.a : family.e;
 
     const suffixEntries: [string, string | undefined][] = [
       ["", family[""]],
       ["e", family.e],   // 1st order 'e'
-      ["a", family.e],   // 1st order 'a'
+      ["a", aTarget],    // 4th or 1st order 'a'
       ["u", family.u],   // 2nd order
       ["i", family.i],   // 3rd order
       ["aa", family.a],  // 4th order 'aa'

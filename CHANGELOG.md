@@ -18,8 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Smart Phonetic Correction**: Normalizes trailing double consonants and English digraph typos (`selamm` -> `ሰላም`, `yihunn` -> `ይሁን`, `amhariph` -> `አማሪፍ`).
 - **Homophone Candidate Suggestions**: Dual UI modes for inspecting candidate spellings—IntelliSense completion dropdown directly beneath the cursor (`fidel.suggestions`) and interactive QuickPick command palette (`fidel.showSuggestions`).
 - **Selection Transliteration Shortcut**: Dedicated `Ctrl + Alt + F` (`Cmd + Alt + F` on macOS) shortcut to convert highlighted Latin text into Ethiopic script.
-- **High-Contrast Branding**: Monochrome black and white extension logo and sidebar activity bar iconography.
-- **Automated Test Suite**: 51 unit and integration tests passing cleanly across 9 test files.
+- **High-Contrast Branding & Media Showcase**: Integrated high-definition video demonstration (`media/demo.mp4`), interface screenshot (`media/screenshot.png`), and extension detail page preview assets.
+- **Automated Test Suite**: 52 unit and integration tests passing cleanly across 9 test files.
 
 ---
 

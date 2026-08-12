@@ -11,7 +11,10 @@ export interface CandidateSuggestion {
   description?: string;
 }
 
-/** Map of phonetic consonant homophone families */
+import { COMMON_WORD_MAP } from "./mapping.js";
+import { transliterateText } from "./transliterator.js";
+
+/** Map of phonetic consonant homophone families and spelling variants */
 const HOMOPHONE_GROUPS: Record<string, string[]> = {
   h: ["h", "H", "hh", "h'"],
   H: ["H", "h", "hh", "h'"],
@@ -25,11 +28,21 @@ const HOMOPHONE_GROUPS: Record<string, string[]> = {
   t: ["t", "T", "t'"],
   T: ["T", "t", "t'"],
   "t'": ["t'", "t", "T"],
-  ts: ["ts", "tz", "Tz"],
-  tz: ["tz", "ts", "Tz"],
+  ts: ["ts", "tz", "Tz", "S'"],
+  tz: ["tz", "ts", "Tz", "S'"],
+  Tz: ["Tz", "ts", "tz", "S'"],
+  k: ["k", "q", "k'"],
+  q: ["q", "k", "k'"],
+  "k'": ["k'", "k", "q"],
+  c: ["c", "ch", "c'"],
+  ch: ["ch", "c", "c'"],
+  "c'": ["c'", "ch", "c"],
+  p: ["p", "p'"],
+  "p'": ["p'", "p"],
+  z: ["z", "zh", "Z"],
+  zh: ["zh", "z", "Z"],
+  Z: ["Z", "z", "zh"],
 };
-
-import { transliterateText } from "./transliterator.js";
 
 export class SuggestionEngine {
   /**
@@ -41,6 +54,12 @@ export class SuggestionEngine {
     }
 
     const suggestions: string[] = primaryResult ? [primaryResult] : [];
+
+    // Check common word dictionary match
+    const commonMatch = COMMON_WORD_MAP[input.toLowerCase()];
+    if (commonMatch && !suggestions.includes(commonMatch)) {
+      suggestions.push(commonMatch);
+    }
 
     // Find homophone alternatives by swapping consonant root prefixes
     for (const [prefix, alternatives] of Object.entries(HOMOPHONE_GROUPS)) {

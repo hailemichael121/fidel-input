@@ -29,13 +29,16 @@
 ## Visual Demonstration & Media
 
 <p align="center">
-  <img src="media/screenshot.png" alt="Fidel VS Code Extension Interface" width="100%" />
+  <img src="media/demo.gif" alt="Fidel Input Live Extension Demonstration" width="100%" />
 </p>
 
 <p align="center">
-  <video src="https://github.com/hailemichael121/fidel-input/raw/HEAD/media/demo.mp4" controls="controls" width="100%" autoplay loop muted>
-    Your browser does not support HTML5 video streaming.
-  </video>
+  <img src="media/screenshot.png" alt="Fidel VS Code Extension Interface Screenshot" width="100%" />
+</p>
+
+<p align="center">
+  <a href="media/demo.mp4"><strong>Play Demonstration Video with Audio (MP4)</strong></a> &bull;
+  <a href="https://github.com/Hailemichael121/fidel-input/raw/HEAD/media/demo.mp4"><strong>Direct Video Download</strong></a>
 </p>
 
 ---

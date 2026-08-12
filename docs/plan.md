@@ -73,6 +73,8 @@ fidel-input/
 │   └── phase4.test.ts           # Phase 4 dictionary, correction & suggestion tests
 │
 ├── media/
+│   ├── demo.mp4                 # High-definition video demonstration (2026-08-12 17-17-53.mp4)
+│   ├── screenshot.png           # VS Code extension interface preview screenshot
 │   ├── logo.png                 # Primary extension branding logo
 │   ├── fidel.png                # Secondary extension icon
 │   ├── fidel.svg                # Vector branding asset

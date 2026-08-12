@@ -60,7 +60,21 @@ export class Transliterator {
             return commonWord;
         }
 
-        // 3. Perform standard Trie transliteration first
+        // 3. Check smart correction candidates against dictionary and common words
+        if (this.options.smartCorrection && input.length > 2) {
+            const candidates = this.corrector.normalizeInput(input);
+            for (const cand of candidates) {
+                if (cand !== input) {
+                    const dictCand = this.dictionary.get(cand);
+                    if (dictCand) return dictCand;
+
+                    const commonCand = this.lookupCommonWord(cand);
+                    if (commonCand) return commonCand;
+                }
+            }
+        }
+
+        // 4. Perform standard Trie transliteration
         const source = this.options.caseSensitive
             ? input
             : input.toLowerCase();
@@ -102,18 +116,16 @@ export class Transliterator {
             offset += 1;
         }
 
-        // 4. Try smart correction ONLY if output still contains unconverted Latin characters
+        // 5. Smart correction fallback for non-dictionary candidates (if unparsed Latin characters remain)
         if (this.options.smartCorrection && input.length > 2 && /[a-zA-Z]/.test(output)) {
             const candidates = this.corrector.normalizeInput(input);
             for (const cand of candidates) {
                 if (cand !== input) {
-                    const dictCand = this.dictionary.get(cand);
-                    if (dictCand) return dictCand;
-                    const commonCand = this.lookupCommonWord(cand);
-                    if (commonCand) return commonCand;
                     const candResult = new Transliterator({ ...this.options, smartCorrection: false }).transliterate(cand);
                     if (candResult && candResult !== cand && !/[a-zA-Z]/.test(candResult)) {
-                        return candResult;
+                        if (/[a-zA-Z]/.test(output) || output !== candResult) {
+                            return candResult;
+                        }
                     }
                 }
             }
@@ -126,9 +138,32 @@ export class Transliterator {
         return this.transliterate(input);
     }
 
+    // FIXED: No more infinite recursion!
     transliterateText(text: string, options?: FidelOptions): string {
-        const opts = { ...this.options, ...options };
-        return new Transliterator(opts).transliterateText(text, options);
+        // If options are provided, create a new instance with merged options
+        if (options) {
+            const opts = { ...this.options, ...options };
+            const instance = new Transliterator(opts);
+            // Use the instance to transliterate each word
+            const parts = text.split(/(\s+)/);
+            const result = parts.map(part => {
+                if (part.trim().length === 0) {
+                    return part;
+                }
+                return instance.transliterate(part);
+            }).join('');
+            return result;
+        }
+        
+        // Use the current instance
+        const parts = text.split(/(\s+)/);
+        const result = parts.map(part => {
+            if (part.trim().length === 0) {
+                return part;
+            }
+            return this.transliterate(part);
+        }).join('');
+        return result;
     }
 
     matchAt(
