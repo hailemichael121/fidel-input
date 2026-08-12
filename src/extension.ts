@@ -6,6 +6,7 @@ import { FidelViewProvider } from "./vscode/activityBar.js";
 import { FidelCompletionProvider } from "./vscode/completionProvider.js";
 
 let enabled = false;
+let bypassed = false;
 
 export function activate(context: vscode.ExtensionContext): void {
   console.log("Fidel Input extension activating...");
@@ -14,28 +15,44 @@ export function activate(context: vscode.ExtensionContext): void {
   enabled = config.get<boolean>("enableByDefault", false);
 
   const statusBar = new FidelStatusBar();
-  const viewProvider = new FidelViewProvider(() => enabled);
+  const viewProvider = new FidelViewProvider(
+    () => enabled,
+    () => bypassed
+  );
 
-  const updateState = (newState: boolean) => {
+  const updateState = (newState: boolean, newBypassState: boolean = bypassed) => {
     enabled = newState;
+    bypassed = newBypassState;
     void vscode.commands.executeCommand("setContext", "fidel.inputEnabled", enabled);
-    statusBar.update(enabled);
+    void vscode.commands.executeCommand("setContext", "fidel.inputBypassed", bypassed);
+    statusBar.update(enabled, bypassed);
     viewProvider.refresh();
   };
 
-  const interceptor = new InputInterceptor(() => enabled);
+  const interceptor = new InputInterceptor(
+    () => enabled,
+    () => bypassed
+  );
 
   registerFidelCommands(
     context,
     () => enabled,
     (newState) => {
-      updateState(newState);
+      if (!newState) {
+        bypassed = false;
+      }
+      updateState(newState, bypassed);
+      interceptor.resetComposition();
+    },
+    () => bypassed,
+    (newBypassState) => {
+      updateState(enabled, newBypassState);
       interceptor.resetComposition();
     },
     () => {
       // onRestart
       interceptor.resetComposition();
-      updateState(enabled);
+      updateState(enabled, bypassed);
     },
     () => {
       // onResetComposition

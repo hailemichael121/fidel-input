@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.1.1] - 2026-08-12
 
 ### Added
+- **Temporary Transliteration Skip (Latin Bypass Mode)**: Dedicated `Alt + X` or `Ctrl + Alt + B` (`Cmd + Alt + X` / `Cmd + Alt + B` on macOS) shortcut to temporarily pause transliteration and type raw Latin text without disabling Fidel.
+- **Escape Prefix Typing**: Support for typing a backtick (`` ` ``) before any character or word to skip transliteration (`fidel.enableEscapePrefix`).
+- **Marketplace SVG Compliance**: Excluded SVG files from the release `.vsix` package and converted Activity Bar assets to PNG format to adhere strictly to Visual Studio Marketplace security requirements.
 - **Live Composition Buffer Engine**: Intercepts typing inside active editors, dynamically recalculating and replacing active composition fragments without forcing manual backspacing.
 - **Complete Ethiopic Syllabary**: Full coverage across 33 core Ethiopic consonant families (ሀ through ፐ), 7 vowel orders, and 8th-order labialized forms (`wa` / `oa`).
 - **Punctuation & Boundary Delimiters**: Automatic composition commits on whitespace and punctuation marks (`.`, `,`, `!`, `?`, `;`, `:`). Includes configurable Latin-to-Ethiopic punctuation conversion (`fidel.convertPunctuation`).

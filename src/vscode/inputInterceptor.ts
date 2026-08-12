@@ -4,16 +4,22 @@ import { CompositionEngine } from "../engine/composition.js";
 export class InputInterceptor implements vscode.Disposable {
   private engine: CompositionEngine;
   private isEnabled: () => boolean;
+  private isBypassed: () => boolean;
   private isProcessingEdit: boolean = false;
+  private skipNextChar: boolean = false;
   private lastCompositionPosition: vscode.Position | null = null;
 
   private typeListener: vscode.Disposable | null = null;
   private deleteLeftListener: vscode.Disposable | null = null;
   private selectionListener: vscode.Disposable | null = null;
 
-  constructor(isEnabled: () => boolean = () => true) {
+  constructor(
+    isEnabled: () => boolean = () => true,
+    isBypassed: () => boolean = () => false
+  ) {
     this.engine = this.createEngine();
     this.isEnabled = isEnabled;
+    this.isBypassed = isBypassed;
     this.register();
     this.updateContext();
   }
@@ -34,7 +40,7 @@ export class InputInterceptor implements vscode.Disposable {
   }
 
   private updateContext(): void {
-    const hasComposition = this.isEnabled() && this.engine.raw.length > 0;
+    const hasComposition = this.isEnabled() && !this.isBypassed() && this.engine.raw.length > 0;
     void vscode.commands.executeCommand("setContext", "fidel.hasComposition", hasComposition);
   }
 
@@ -45,7 +51,24 @@ export class InputInterceptor implements vscode.Disposable {
       async (args: { text: string }) => {
         const editor = vscode.window.activeTextEditor;
 
-        if (!this.isEnabled() || !editor || !args.text) {
+        if (!this.isEnabled() || this.isBypassed() || !editor || !args.text) {
+          this.resetCompositionState();
+          return vscode.commands.executeCommand("default:type", args);
+        }
+
+        // If skipNextChar flag was set (e.g. via backtick escape prefix), skip transliteration once
+        if (this.skipNextChar) {
+          this.skipNextChar = false;
+          this.resetCompositionState();
+          return vscode.commands.executeCommand("default:type", args);
+        }
+
+        const config = vscode.workspace.getConfiguration("fidel");
+        const enableEscapePrefix = config.get<boolean>("enableEscapePrefix", true);
+
+        // Escape prefix: backtick (`) skips transliteration for the character/word
+        if (enableEscapePrefix && args.text === "`") {
+          this.skipNextChar = true;
           this.resetCompositionState();
           return vscode.commands.executeCommand("default:type", args);
         }

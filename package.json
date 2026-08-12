@@ -3,7 +3,7 @@
   "displayName": "Fidel Input — ፊደል",
   "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
   "version": "0.1.1",
-  "publisher": "yihun",
+  "publisher": "Yihun",
   "author": {
     "name": "Yihun Shekuri",
     "url": "https://github.com/Hailemichael121"
@@ -44,6 +44,11 @@
         "command": "fidel.toggleInput",
         "title": "Fidel: Toggle Amharic Input",
         "icon": "$(keyboard)"
+      },
+      {
+        "command": "fidel.toggleBypass",
+        "title": "Fidel: Toggle Skip Transliteration (Latin Bypass)",
+        "icon": "$(pass-filled)"
       },
       {
         "command": "fidel.enableInput",
@@ -102,6 +107,18 @@
         "when": "editorTextFocus"
       },
       {
+        "command": "fidel.toggleBypass",
+        "key": "alt+x",
+        "mac": "cmd+alt+x",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
+        "command": "fidel.toggleBypass",
+        "key": "ctrl+alt+b",
+        "mac": "cmd+alt+b",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
         "command": "fidel.convertSelection",
         "key": "ctrl+alt+f",
         "mac": "cmd+alt+f",
@@ -123,6 +140,9 @@
       "commandPalette": [
         {
           "command": "fidel.toggleInput"
+        },
+        {
+          "command": "fidel.toggleBypass"
         },
         {
           "command": "fidel.enableInput"
@@ -213,6 +233,11 @@
           "type": "boolean",
           "default": false,
           "description": "Enable Amharic input when VS Code starts."
+        },
+        "fidel.enableEscapePrefix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Type a backtick (`) before any character to skip transliteration and output literal Latin text."
         },
         "fidel.convertPunctuation": {
           "type": "boolean",

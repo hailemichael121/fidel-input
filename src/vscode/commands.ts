@@ -6,6 +6,8 @@ export function registerFidelCommands(
   context: vscode.ExtensionContext,
   getState: () => boolean,
   setState: (enabled: boolean) => void,
+  getBypassed: () => boolean,
+  setBypassed: (bypassed: boolean) => void,
   onRestart: () => void,
   onResetComposition: () => void
 ): void {
@@ -16,6 +18,18 @@ export function registerFidelCommands(
     vscode.window.setStatusBarMessage(
       newState ? "Fidel ፊደል: Amharic input enabled" : "Fidel ፊደል: Amharic input disabled",
       2500
+    );
+  });
+
+  // Fidel: Toggle Skip Transliteration (Latin Bypass)
+  const toggleBypassCommand = vscode.commands.registerCommand("fidel.toggleBypass", () => {
+    const newBypass = !getBypassed();
+    setBypassed(newBypass);
+    vscode.window.setStatusBarMessage(
+      newBypass
+        ? "Fidel ፊደል: Transliteration SKIPPED — Typing raw Latin (Alt+X to resume)"
+        : "Fidel ፊደል: Amharic transliteration RESUMED",
+      3000
     );
   });
 
@@ -241,6 +255,7 @@ export function registerFidelCommands(
 
   context.subscriptions.push(
     toggleCommand,
+    toggleBypassCommand,
     enableCommand,
     disableCommand,
     restartEngineCommand,

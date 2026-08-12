@@ -62,6 +62,7 @@
 | Command | Shortcut (Windows/Linux) | Shortcut (macOS) | Context | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `fidel.toggleInput` | **`Ctrl + Alt + A`** | **`Cmd + Alt + A`** | Editor Text Focus | Toggles Fidel Amharic input mode on or off |
+| `fidel.toggleBypass` | **`Alt + X`** / **`Ctrl + Alt + B`** | **`Cmd + Alt + X`** / **`Cmd + Alt + B`** | Fidel Input Active | Temporarily skips Ethiopic transliteration to type raw Latin text |
 | `fidel.convertSelection` | **`Ctrl + Alt + F`** | **`Cmd + Alt + F`** | Has Selection | Transliterates selected Latin text to Ethiopic script |
 | `fidel.restartEngine` | Title Bar / Palette | Title Bar / Palette | Global | Re-initializes Fidel engine and clears composition buffer |
 | `fidel.resetComposition` | Command Palette | Command Palette | Active Editor | Instantly resets uncommitted composition buffer |
@@ -127,9 +128,12 @@ Fidel offers two UI models for inspecting and choosing homophone candidates (e.g
 
 Highlight any Latin block of text in your editor and press **`Ctrl + Alt + F`** (or **`Cmd + Alt + F`** on macOS) to instantly convert it to Ethiopic script without enabling full live input mode.
 
-### 8. Atomic Undo / Redo Edit Stack
+### 9. Temporary Transliteration Skip (Latin Bypass Mode)
 
-Typing a word creates an atomic edit session. Pressing **`Ctrl + Z`** (Undo) after typing a word reverts the entire word composition at once, rather than stepping backward letter-by-letter.
+Fidel provides two seamless ways to type raw English/Latin text without disabling Amharic input mode completely:
+
+* **Bypass Mode Shortcut (`Alt + X` / `Ctrl + Alt + B`)**: Press **`Alt + X`** (or **`Ctrl + Alt + B`**) to toggle **Latin Bypass Mode**. The status bar updates to **`ፊደል: SKIPPED (Latin)`**, allowing you to type code or English text. Press **`Alt + X`** again to immediately resume Amharic transliteration.
+* **Escape Prefix (Backtick `` ` ``)**: Type a backtick **`` ` ``** before a letter or word to skip transliteration for that word and output literal Latin text.
 
 ---
 

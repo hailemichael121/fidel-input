@@ -4,7 +4,10 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
   private readonly changeEmitter = new vscode.EventEmitter<vscode.TreeItem | undefined | null | void>();
   readonly onDidChangeTreeData = this.changeEmitter.event;
 
-  constructor(private isEnabled: () => boolean) {}
+  constructor(
+    private isEnabled: () => boolean,
+    private isBypassed: () => boolean = () => false
+  ) {}
 
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;
@@ -12,6 +15,7 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
 
   getChildren(_element?: vscode.TreeItem): vscode.ProviderResult<vscode.TreeItem[]> {
     const enabled = this.isEnabled();
+    const bypassed = this.isBypassed();
     const config = vscode.workspace.getConfiguration("fidel");
     const smartCorrection = config.get<boolean>("smartCorrection", true);
     const convertPunctuation = config.get<boolean>("convertPunctuation", true);
@@ -28,6 +32,17 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
     };
     statusItem.tooltip = enabled ? "Fidel input is ON — click to disable" : "Fidel input is OFF — click to enable";
     statusItem.iconPath = new vscode.ThemeIcon(enabled ? "check" : "circle-outline");
+
+    const bypassItem = new vscode.TreeItem(
+      bypassed ? "Latin Skip (Bypass): ACTIVE" : "Latin Skip (Bypass): OFF",
+      vscode.TreeItemCollapsibleState.None
+    );
+    bypassItem.command = {
+      command: "fidel.toggleBypass",
+      title: "Toggle Skip Transliteration",
+    };
+    bypassItem.tooltip = "Temporarily skip Ethiopic transliteration to type raw Latin text (Alt+X / Ctrl+Alt+B)";
+    bypassItem.iconPath = new vscode.ThemeIcon(bypassed ? "pass-filled" : "pass");
 
     const restartItem = new vscode.TreeItem(
       "Restart Engine / Reload Extension",
@@ -106,7 +121,7 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
     dictItem.tooltip = "Configure custom word mappings in settings.json";
     dictItem.iconPath = new vscode.ThemeIcon("book");
 
-    return [statusItem, restartItem, convertItem, punctItem, numItem, suggItem, smartItem, dictItem];
+    return [statusItem, bypassItem, restartItem, convertItem, punctItem, numItem, suggItem, smartItem, dictItem];
   }
 
   refresh(): void {
