@@ -1,38 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <!-- Full edge-to-edge solid black background -->
+  <rect width="512" height="512" fill="#000000" />
 
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
-  <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0d1117" />
-      <stop offset="50%" stop-color="#161b22" />
-      <stop offset="100%" stop-color="#21262d" />
-    </linearGradient>
+  <!-- Outer Icon Boundary with clean crisp white stroke -->
+  <rect x="44" y="44" width="424" height="424" rx="92" fill="#000000" stroke="#ffffff" stroke-width="12" />
 
-    <!-- Accent Border Gradient -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.8" />
-      <stop offset="50%" stop-color="#d97706" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#b45309" stop-opacity="0.6" />
-    </linearGradient>
+  <!-- Subtle Input Cursor Accent Line -->
+  <line x1="186" y1="400" x2="326" y2="400" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.9" />
 
-    <!-- Glyph Fill Gradient -->
-    <linearGradient id="glyphGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="50%" stop-color="#f59e0b" />
-      <stop offset="100%" stop-color="#d97706" />
-    </linearGradient>
-
-    <!-- Soft Drop Shadow -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#f59e0b" flood-opacity="0.35" />
-    </filter>
-  </defs>
-
-  <!-- Container Base -->
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="2" />
-
-  <!-- Ethiopic Glyph ፊ -->
-  <g transform="translate(19.28, 102.71) scale(0.1072, -0.1072)" filter="url(#glow)">
-    <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="url(#glyphGrad)" />
+  <!-- Centered Authentic Ethiopic Glyph ፊ -->
+  <g transform="translate(111.61, 372) scale(0.34626, -0.34626)">
+    <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="#ffffff" />
   </g>
 </svg>
