@@ -21,18 +21,19 @@ describe("Mapping Data", () => {
     const flat = buildFlatMapping();
     expect(flat["s"]).toBe("ስ");
     expect(flat["sa"]).toBe("ሰ");
+    expect(flat["se"]).toBe("ሰ");
     expect(flat["su"]).toBe("ሱ");
     expect(flat["si"]).toBe("ሲ");
     expect(flat["saa"]).toBe("ሳ");
-    expect(flat["se"]).toBe("ሴ");
     expect(flat["see"]).toBe("ሴ");
     expect(flat["so"]).toBe("ሶ");
     expect(flat["swa"]).toBe("ሷ");
 
     expect(flat["sh"]).toBe("ሽ");
     expect(flat["sha"]).toBe("ሸ");
+    expect(flat["she"]).toBe("ሸ");
     expect(flat["shaa"]).toBe("ሻ");
-    expect(flat["she"]).toBe("ሼ");
+    expect(flat["shee"]).toBe("ሼ");
 
     expect(flat["lwa"]).toBe("ሏ");
     expect(flat["mwa"]).toBe("ሟ");

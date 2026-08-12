@@ -133,13 +133,13 @@ export function buildFlatMapping(): Record<string, string> {
   // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
     map[prefix] = family[""];
+    map[prefix + "e"] = family.e;      // 1st order triggered by 'e' (e.g. he -> ሀ, de -> ደ, le -> ለ)
     map[prefix + "a"] = family.e;      // 1st order triggered by 'a' (e.g. ha -> ሀ, da -> ደ, sa -> ሰ)
     map[prefix + "u"] = family.u;      // 2nd order (e.g. hu -> ሁ)
     map[prefix + "i"] = family.i;      // 3rd order (e.g. hi -> ሂ)
     map[prefix + "aa"] = family.a;     // 4th order triggered by 'aa' (e.g. haa -> ሃ, daa -> ዳ, saa -> ሳ)
-    map[prefix + "e"] = family.ee;     // 5th order triggered by 'e' (e.g. he -> ሄ, de -> ዴ, se -> ሴ)
     map[prefix + "ee"] = family.ee;    // 5th order triggered by 'ee' (e.g. hee -> ሄ, dee -> ዴ)
-    map[prefix + "ie"] = family.ee;    // 5th order triggered by 'ie'
+    map[prefix + "ie"] = family.ee;    // 5th order triggered by 'ie' (e.g. hie -> ሄ)
     map[prefix + "o"] = family.o;      // 7th order (e.g. ho -> ሆ)
 
     if (family.wa) {
@@ -156,11 +156,11 @@ export function buildFlatMapping(): Record<string, string> {
 
     const suffixEntries: [string, string | undefined][] = [
       ["", family[""]],
+      ["e", family.e],   // 1st order 'e'
       ["a", family.e],   // 1st order 'a'
       ["u", family.u],   // 2nd order
       ["i", family.i],   // 3rd order
       ["aa", family.a],  // 4th order 'aa'
-      ["e", family.ee],  // 5th order 'e'
       ["ee", family.ee], // 5th order 'ee'
       ["ie", family.ee], // 5th order 'ie'
       ["o", family.o],   // 7th order

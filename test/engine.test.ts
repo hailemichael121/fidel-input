@@ -5,10 +5,10 @@ import { CompositionEngine } from "../src/engine/composition.js";
 describe("Fidel Transliterator", () => {
   it("basic h family", () => {
     expect(transliterateWord("ha")).toBe("ሀ");
+    expect(transliterateWord("he")).toBe("ሀ");
     expect(transliterateWord("hu")).toBe("ሁ");
     expect(transliterateWord("hi")).toBe("ሂ");
     expect(transliterateWord("haa")).toBe("ሃ");
-    expect(transliterateWord("he")).toBe("ሄ");
     expect(transliterateWord("hee")).toBe("ሄ");
     expect(transliterateWord("h")).toBe("ህ");
     expect(transliterateWord("ho")).toBe("ሆ");
@@ -16,10 +16,10 @@ describe("Fidel Transliterator", () => {
 
   it("basic s family", () => {
     expect(transliterateWord("sa")).toBe("ሰ");
+    expect(transliterateWord("se")).toBe("ሰ");
     expect(transliterateWord("su")).toBe("ሱ");
     expect(transliterateWord("si")).toBe("ሲ");
     expect(transliterateWord("saa")).toBe("ሳ");
-    expect(transliterateWord("se")).toBe("ሴ");
     expect(transliterateWord("see")).toBe("ሴ");
     expect(transliterateWord("s")).toBe("ስ");
     expect(transliterateWord("so")).toBe("ሶ");
@@ -27,10 +27,10 @@ describe("Fidel Transliterator", () => {
 
   it("multi-character consonants", () => {
     expect(transliterateWord("sha")).toBe("ሸ");
+    expect(transliterateWord("she")).toBe("ሸ");
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
     expect(transliterateWord("shaa")).toBe("ሻ");
-    expect(transliterateWord("she")).toBe("ሼ");
     expect(transliterateWord("shee")).toBe("ሼ");
     expect(transliterateWord("sh")).toBe("ሽ");
     expect(transliterateWord("sho")).toBe("ሾ");

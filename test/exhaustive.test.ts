@@ -55,50 +55,56 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
 describe("Multi-Character Consonants & Capitalization Variants", () => {
   it("handles multi-character consonant prefixes", () => {
     expect(transliterateWord("sha")).toBe("ሸ");
+    expect(transliterateWord("she")).toBe("ሸ");
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
     expect(transliterateWord("shaa")).toBe("ሻ");
-    expect(transliterateWord("she")).toBe("ሼ");
     expect(transliterateWord("shee")).toBe("ሼ");
     expect(transliterateWord("sho")).toBe("ሾ");
     expect(transliterateWord("Sa")).toBe("ሰ");
+    expect(transliterateWord("Se")).toBe("ሰ");
     expect(transliterateWord("Sha")).toBe("ሸ");
 
     expect(transliterateWord("cha")).toBe("ቸ");
+    expect(transliterateWord("che")).toBe("ቸ");
     expect(transliterateWord("chu")).toBe("ቹ");
     expect(transliterateWord("chi")).toBe("ቺ");
     expect(transliterateWord("chaa")).toBe("ቻ");
-    expect(transliterateWord("che")).toBe("ቼ");
     expect(transliterateWord("chee")).toBe("ቼ");
     expect(transliterateWord("cho")).toBe("ቾ");
     expect(transliterateWord("ca")).toBe("ቸ");
 
     expect(transliterateWord("tsa")).toBe("ጸ");
+    expect(transliterateWord("tse")).toBe("ጸ");
     expect(transliterateWord("tsu")).toBe("ጹ");
     expect(transliterateWord("tsi")).toBe("ጺ");
     expect(transliterateWord("tsaa")).toBe("ጻ");
-    expect(transliterateWord("tse")).toBe("ጼ");
     expect(transliterateWord("tsee")).toBe("ጼ");
     expect(transliterateWord("tso")).toBe("ጾ");
     expect(transliterateWord("Tza")).toBe("ጸ");
 
     expect(transliterateWord("kha")).toBe("ኸ");
+    expect(transliterateWord("khe")).toBe("ኸ");
     expect(transliterateWord("khu")).toBe("ኹ");
 
     expect(transliterateWord("zha")).toBe("ዠ");
+    expect(transliterateWord("zhe")).toBe("ዠ");
     expect(transliterateWord("Za")).toBe("ዠ");
 
     expect(transliterateWord("Ta")).toBe("ጠ");
+    expect(transliterateWord("Te")).toBe("ጠ");
     expect(transliterateWord("t'a")).toBe("ጠ");
 
     // Verify homophone family variants (H / hh / ss) with smartCorrection enabled
     expect(transliterateWord("hha", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("hhe", { smartCorrection: true })).toBe("ሐ");
     expect(transliterateWord("hhaa", { smartCorrection: true })).toBe("ሓ");
-    expect(transliterateWord("hhe", { smartCorrection: true })).toBe("ሔ");
     expect(transliterateWord("hhee", { smartCorrection: true })).toBe("ሔ");
     expect(transliterateWord("Ha", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("He", { smartCorrection: true })).toBe("ሐ");
     expect(transliterateWord("Haa", { smartCorrection: true })).toBe("ሓ");
     expect(transliterateWord("ssa", { smartCorrection: true })).toBe("ሠ");
+    expect(transliterateWord("sse", { smartCorrection: true })).toBe("ሠ");
     expect(transliterateWord("ssaa", { smartCorrection: true })).toBe("ሣ");
 
     expect(transliterateWord("CHe")).toBe("ጨ");

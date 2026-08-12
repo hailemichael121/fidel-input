@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> &bull;
-  <a href="#keyboard-shortcuts--commands">Shortcuts</a> &bull;
+  <a href="#keyboard-shortcuts--commands">Shortcuts</a> &bull
   <a href="#feature-guide--how-it-works">Feature Guide</a> &bull;
   <a href="#phonetic-mapping-reference">Phonetic Reference</a> &bull;
   <a href="#configuration">Configuration</a> &bull;
