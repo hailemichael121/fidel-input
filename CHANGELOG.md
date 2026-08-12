@@ -4,6 +4,13 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-12
+
+### Added
+- **Temporary Transliteration Skip (Latin Bypass Mode)**: Dedicated `Alt + X` or `Ctrl + Alt + B` (`Cmd + Alt + X` / `Cmd + Alt + B` on macOS) shortcut to temporarily pause transliteration and type raw Latin text without disabling Fidel.
+- **Escape Prefix Typing**: Support for typing a backtick (`` ` ``) before any character or word to skip transliteration (`fidel.enableEscapePrefix`).
+- **Marketplace SVG Compliance**: Excluded SVG files from the release `.vsix` package and converted Activity Bar assets to PNG format to adhere strictly to Visual Studio Marketplace security requirements.
+
 ---
 
 ## [0.1.1] - 2026-08-12
