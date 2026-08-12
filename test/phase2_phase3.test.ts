@@ -39,17 +39,17 @@ describe("Phase 2 & Phase 3 Feature Verification", () => {
   });
 
   describe("Expanded Word Boundary Delimiters (CompositionEngine)", () => {
-    test("commits composition on punctuation boundaries", () => {
-      const engine = new CompositionEngine();
+    test("commits composition on space boundary with punctuation", () => {
+      const engine = new CompositionEngine({ convertPunctuation: false });
       engine.feedChar("s");
       engine.feedChar("e");
       engine.feedChar("l");
       engine.feedChar("a");
       engine.feedChar("m");
-
-      const state = engine.feedChar(",");
+      engine.feedChar(",");
+      const state = engine.feedChar(" ");
       expect(state.committed).toBe(true);
-      expect(state.rendered).toBe("ሰላም,");
+      expect(state.rendered).toBe("ሰላም, ");
       expect(engine.raw).toBe("");
     });
 
@@ -60,10 +60,10 @@ describe("Phase 2 & Phase 3 Feature Verification", () => {
       engine.feedChar("l");
       engine.feedChar("a");
       engine.feedChar("m");
-
-      const state = engine.feedChar(".");
+      engine.feedChar(".");
+      const state = engine.feedChar(" ");
       expect(state.committed).toBe(true);
-      expect(state.rendered).toBe("ሰላም።");
+      expect(state.rendered).toBe("ሰላም። ");
       expect(engine.raw).toBe("");
     });
   });

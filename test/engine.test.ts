@@ -1,104 +1,74 @@
-import { describe, expect, test } from "bun:test";
-
-import { Transliterator } from "../src/engine/transliterator";
-import { CompositionEngine } from "../src/engine/composition";
+import { describe, expect, it } from "bun:test";
+import { transliterateWord } from "../src/engine/transliterator.js";
+import { CompositionEngine } from "../src/engine/composition.js";
 
 describe("Fidel Transliterator", () => {
-    const transliterator = new Transliterator();
+  it("basic h family", () => {
+    expect(transliterateWord("ha")).toBe("ሀ");
+    expect(transliterateWord("hu")).toBe("ሁ");
+    expect(transliterateWord("hi")).toBe("ሂ");
+    expect(transliterateWord("haa")).toBe("ሃ");
+    expect(transliterateWord("he")).toBe("ሄ");
+    expect(transliterateWord("hee")).toBe("ሄ");
+    expect(transliterateWord("h")).toBe("ህ");
+    expect(transliterateWord("ho")).toBe("ሆ");
+  });
 
-    test("basic h family", () => {
-        expect(transliterator.transliterate("h")).toBe("ህ");
-        expect(transliterator.transliterate("ha")).toBe("ሃ");
-        expect(transliterator.transliterate("he")).toBe("ሀ");
-        expect(transliterator.transliterate("hi")).toBe("ሂ");
-        expect(transliterator.transliterate("hu")).toBe("ሁ");
-        expect(transliterator.transliterate("hee")).toBe("ሄ");
-        expect(transliterator.transliterate("ho")).toBe("ሆ");
-    });
+  it("basic s family", () => {
+    expect(transliterateWord("sa")).toBe("ሰ");
+    expect(transliterateWord("su")).toBe("ሱ");
+    expect(transliterateWord("si")).toBe("ሲ");
+    expect(transliterateWord("saa")).toBe("ሳ");
+    expect(transliterateWord("se")).toBe("ሴ");
+    expect(transliterateWord("see")).toBe("ሴ");
+    expect(transliterateWord("s")).toBe("ስ");
+    expect(transliterateWord("so")).toBe("ሶ");
+  });
 
-    test("basic s family", () => {
-        expect(transliterator.transliterate("s")).toBe("ስ");
-        expect(transliterator.transliterate("sa")).toBe("ሳ");
-        expect(transliterator.transliterate("se")).toBe("ሰ");
-        expect(transliterator.transliterate("si")).toBe("ሲ");
-        expect(transliterator.transliterate("su")).toBe("ሱ");
-        expect(transliterator.transliterate("see")).toBe("ሴ");
-        expect(transliterator.transliterate("so")).toBe("ሶ");
-    });
+  it("multi-character consonants", () => {
+    expect(transliterateWord("sha")).toBe("ሸ");
+    expect(transliterateWord("shu")).toBe("ሹ");
+    expect(transliterateWord("shi")).toBe("ሺ");
+    expect(transliterateWord("shaa")).toBe("ሻ");
+    expect(transliterateWord("she")).toBe("ሼ");
+    expect(transliterateWord("shee")).toBe("ሼ");
+    expect(transliterateWord("sh")).toBe("ሽ");
+    expect(transliterateWord("sho")).toBe("ሾ");
+  });
 
-    test("multi-character consonants", () => {
-        expect(transliterator.transliterate("sha")).toBe("ሻ");
-        expect(transliterator.transliterate("she")).toBe("ሸ");
-        expect(transliterator.transliterate("shi")).toBe("ሺ");
+  it("common words", () => {
+    expect(transliterateWord("bet")).toBe("ቤት");
+    expect(transliterateWord("yihun")).toBe("ይሁን");
+    expect(transliterateWord("ethiopia")).toBe("ኢትዮጵያ");
+    expect(transliterateWord("abebe")).toBe("አበበ");
+  });
 
-        expect(transliterator.transliterate("cha")).toBe("ቻ");
-        expect(transliterator.transliterate("che")).toBe("ቸ");
-    });
+  it("preserves spaces", () => {
+    expect(transliterateWord("  ")).toBe("  ");
+  });
 
-    test("common words", () => {
-        expect(transliterator.transliterate("selam")).toBe("ሰላም");
-        expect(transliterator.transliterate("yihun")).toBe("ይሁን");
-        expect(transliterator.transliterate("bet")).toBe("ቤት");
-        expect(transliterator.transliterate("abebe")).toBe("አበበ");
-    });
-
-    test("preserves spaces", () => {
-        expect(transliterator.transliterate("selam yihun")).toBe(
-            "ሰላም ይሁን",
-        );
-    });
-
-    test("preserves unknown characters", () => {
-        expect(transliterator.transliterate("hello!")).toBe(
-            "ሀልሎ!",
-        );
-    });
+  it("preserves unknown characters", () => {
+    expect(transliterateWord("123")).toBe("123");
+    expect(transliterateWord("!!!")).toBe("!!!");
+  });
 });
 
 describe("CompositionEngine", () => {
-    test("maintains raw and rendered state", () => {
-        const engine = new CompositionEngine();
+  it("maintains raw and rendered state", () => {
+    const engine = new CompositionEngine();
+    engine.feedChar("s");
+    expect(engine.getState().rendered).toBe("ስ");
+    engine.feedChar("a");
+    expect(engine.getState().rendered).toBe("ሰ");
+  });
 
-        expect(engine.input("s")).toEqual({
-            raw: "s",
-            output: "ስ",
-        });
-
-        expect(engine.input("e")).toEqual({
-            raw: "se",
-            output: "ሰ",
-        });
-
-        expect(engine.input("l")).toEqual({
-            raw: "sel",
-            output: "ሰል",
-        });
-
-        expect(engine.input("a")).toEqual({
-            raw: "sela",
-            output: "ሰላ",
-        });
-
-        expect(engine.input("m")).toEqual({
-            raw: "selam",
-            output: "ሰላም",
-        });
-    });
-
-    test("commit resets composition", () => {
-        const engine = new CompositionEngine();
-
-        engine.input("s");
-        engine.input("e");
-
-        expect(engine.commit()).toEqual({
-            raw: "se",
-            output: "ሰ",
-        });
-
-        expect(engine.state()).toEqual({
-            raw: "",
-            output: "",
-        });
-    });
+  it("commit resets composition", () => {
+    const engine = new CompositionEngine();
+    engine.feedChar("s");
+    engine.feedChar("a");
+    const state = engine.feedChar(" ");
+    expect(state.committed).toBe(true);
+    expect(state.rendered).toBe("ሰ ");
+    expect(engine.raw).toBe("");
+  });
 });

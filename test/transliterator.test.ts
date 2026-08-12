@@ -9,9 +9,9 @@ describe("Transliterator", () => {
   });
 
   it("handles multi-character consonants correctly", () => {
-    expect(transliterateWord("she")).toBe("ሸ");
-    expect(transliterateWord("che")).toBe("ቸ");
-    expect(transliterateWord("tse")).toBe("ጸ");
+    expect(transliterateWord("sha")).toBe("ሸ");
+    expect(transliterateWord("cha")).toBe("ቸ");
+    expect(transliterateWord("tsa")).toBe("ጸ");
   });
 
   it("transliterates multi-word sentences", () => {

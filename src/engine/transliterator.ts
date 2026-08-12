@@ -60,23 +60,7 @@ export class Transliterator {
             return commonWord;
         }
 
-        // 3. Try smart correction candidates if input has trailing repeated characters
-        if (this.options.smartCorrection && input.length > 2) {
-            const candidates = this.corrector.normalizeInput(input);
-            for (const cand of candidates) {
-                if (cand !== input) {
-                    const dictCand = this.dictionary.get(cand);
-                    if (dictCand) return dictCand;
-                    const commonCand = this.lookupCommonWord(cand);
-                    if (commonCand) return commonCand;
-                    const candResult = new Transliterator({ ...this.options, smartCorrection: false }).transliterate(cand);
-                    if (candResult && candResult !== cand) {
-                        return candResult;
-                    }
-                }
-            }
-        }
-
+        // 3. Perform standard Trie transliteration first
         const source = this.options.caseSensitive
             ? input
             : input.toLowerCase();
@@ -118,6 +102,23 @@ export class Transliterator {
             offset += 1;
         }
 
+        // 4. Try smart correction ONLY if output still contains unconverted Latin characters
+        if (this.options.smartCorrection && input.length > 2 && /[a-zA-Z]/.test(output)) {
+            const candidates = this.corrector.normalizeInput(input);
+            for (const cand of candidates) {
+                if (cand !== input) {
+                    const dictCand = this.dictionary.get(cand);
+                    if (dictCand) return dictCand;
+                    const commonCand = this.lookupCommonWord(cand);
+                    if (commonCand) return commonCand;
+                    const candResult = new Transliterator({ ...this.options, smartCorrection: false }).transliterate(cand);
+                    if (candResult && candResult !== cand && !/[a-zA-Z]/.test(candResult)) {
+                        return candResult;
+                    }
+                }
+            }
+        }
+
         return output;
     }
 
@@ -127,7 +128,7 @@ export class Transliterator {
 
     transliterateText(text: string, options?: FidelOptions): string {
         const opts = { ...this.options, ...options };
-        return new Transliterator(opts).transliterate(text);
+        return new Transliterator(opts).transliterateText(text, options);
     }
 
     matchAt(
@@ -149,11 +150,7 @@ export class Transliterator {
     }
 
     private lookupCommonWord(input: string): string | null {
-        const key = this.options.caseSensitive
-            ? input
-            : input.toLowerCase();
-
-        return COMMON_WORD_MAP[key] ?? null;
+        return COMMON_WORD_MAP[input] ?? COMMON_WORD_MAP[input.toLowerCase()] ?? null;
     }
 }
 

@@ -25,9 +25,8 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   r: { e: "ረ", u: "ሩ", i: "ሪ", a: "ራ", ee: "ሬ", "": "ር", o: "ሮ", wa: "ሯ" },
   // s (ሰ)
   s: { e: "ሰ", u: "ሱ", i: "ሲ", a: "ሳ", ee: "ሴ", "": "ስ", o: "ሶ", wa: "ሷ" },
-  // sh / S (ሸ)
+  // sh (ሸ)
   sh: { e: "ሸ", u: "ሹ", i: "ሺ", a: "ሻ", ee: "ሼ", "": "ሽ", o: "ሾ", wa: "ሿ" },
-  S: { e: "ሸ", u: "ሹ", i: "ሺ", a: "ሻ", ee: "ሼ", "": "ሽ", o: "ሾ", wa: "ሿ" },
   // q / k' (ቀ)
   q: { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
   "k'": { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
@@ -44,22 +43,25 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   "h'": { e: "ኀ", u: "ኁ", i: "ኂ", a: "ኃ", ee: "ኄ", "": "ኅ", o: "ኆ", wa: "ኋ" },
   // n (ነ)
   n: { e: "ነ", u: "ኑ", i: "ኒ", a: "ና", ee: "ኔ", "": "ን", o: "ኖ", wa: "ኗ" },
-  // ny / GN / N (ኘ)
+  // ny / GN (ኘ)
   ny: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
   GN: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
   N: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
-  // Standalone Vowels (አ family)
+  // Standalone Vowels (አ / እ / ኢ / ኡ / ኦ families)
   a: { e: "አ", u: "ኡ", i: "ኢ", a: "ኣ", ee: "ኤ", "": "አ", o: "ኦ", wa: "ኧ" },
   e: { e: "እ", u: "ኡ", i: "ኢ", a: "አ", ee: "ኤ", "": "እ", o: "ኦ" },
+  i: { e: "ኢ", u: "ኡ", i: "ኢ", a: "ኢያ", ee: "ኤ", "": "ኢ", o: "ኦ" },
+  u: { e: "ኡ", u: "ኡ", i: "ኢ", a: "ኡኣ", ee: "ኤ", "": "ኡ", o: "ኦ" },
+  o: { e: "ኦ", u: "ኡ", i: "ኢ", a: "ኦኣ", ee: "ኤ", "": "ኦ", o: "ኦ" },
   // k (ከ)
   k: { e: "ከ", u: "ኩ", i: "ኪ", a: "ካ", ee: "ኬ", "": "ክ", o: "ኮ", wa: "ኳ" },
   // kh (ኸ)
   kh: { e: "ኸ", u: "ኹ", i: "ኺ", a: "ኻ", ee: "ኼ", "": "ኽ", o: "ኾ", wa: "ዃ" },
   // w (ወ)
   w: { e: "ወ", u: "ዉ", i: "ዊ", a: "ዋ", ee: "ዌ", "": "ው", o: "ዎ" },
-  // A / ah (ዐ)
-  A: { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
+  // ah / A (ዐ)
   ah: { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
+  A: { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
   // z (ዘ)
   z: { e: "ዘ", u: "ዙ", i: "ዚ", a: "ዛ", ee: "ዜ", "": "ዝ", o: "ዞ", wa: "ዟ" },
   // zh / Z (ዠ)
@@ -73,21 +75,20 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   j: { e: "ጀ", u: "ጁ", i: "ጂ", a: "ጃ", ee: "ጄ", "": "ጅ", o: "ጆ", wa: "ጇ" },
   // g (ገ)
   g: { e: "ገ", u: "ጉ", i: "ጊ", a: "ጋ", ee: "ጌ", "": "ግ", o: "ጎ", wa: "ጓ" },
-  // T / t' (ጠ)
-  T: { e: "ጠ", u: "ጡ", i: "ጢ", a: "ጣ", ee: "ጤ", "": "ጥ", o: "ጦ", wa: "ጧ" },
+  // t' / T (ጠ)
   "t'": { e: "ጠ", u: "ጡ", i: "ጢ", a: "ጣ", ee: "ጤ", "": "ጥ", o: "ጦ", wa: "ጧ" },
-  // CH / c' (ጨ)
-  CH: { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
+  T: { e: "ጠ", u: "ጡ", i: "ጢ", a: "ጣ", ee: "ጤ", "": "ጥ", o: "ጦ", wa: "ጧ" },
+  // c' / CH (ጨ)
   "c'": { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
-  // P / p' (ጰ)
-  P: { e: "ጰ", u: "ጱ", i: "ጲ", a: "ጳ", ee: "ጴ", "": "ጵ", o: "ጶ", wa: "ጷ" },
+  CH: { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
+  // p' / P (ጰ)
   "p'": { e: "ጰ", u: "ጱ", i: "ጲ", a: "ጳ", ee: "ጴ", "": "ጵ", o: "ጶ", wa: "ጷ" },
-  // ts / Tz / S' (ጸ)
+  P: { e: "ጰ", u: "ጱ", i: "ጲ", a: "ጳ", ee: "ጴ", "": "ጵ", o: "ጶ", wa: "ጷ" },
+  // ts / tz / Tz / S' (ጸ / ፀ)
   ts: { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
+  tz: { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
   Tz: { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
   "S'": { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
-  // tz (ፀ)
-  tz: { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
   // f (ፈ)
   f: { e: "ፈ", u: "ፉ", i: "ፊ", a: "ፋ", ee: "ፌ", "": "ፍ", o: "ፎ", wa: "ፏ" },
   // p (ፐ)
@@ -120,6 +121,7 @@ export const COMMON_WORD_MAP: Record<string, string> = {
   hayle: "ኃይለ",
   hailemichael: "ኃይለሚካኤል",
   haylemikael: "ኃይለሚካኤል",
+  shekuri: "ሸኩሪ",
 };
 
 /**
@@ -128,26 +130,63 @@ export const COMMON_WORD_MAP: Record<string, string> = {
 export function buildFlatMapping(): Record<string, string> {
   const map: Record<string, string> = {};
 
+  // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
     map[prefix] = family[""];
-    map[prefix + "e"] = family.e;
-    map[prefix + "u"] = family.u;
-    map[prefix + "i"] = family.i;
-    map[prefix + "a"] = family.a;
-    map[prefix + "aa"] = family.a;
-    map[prefix + "ee"] = family.ee;
-    map[prefix + "ie"] = family.ee;
-    map[prefix + "o"] = family.o;
+    map[prefix + "a"] = family.e;      // 1st order triggered by 'a' (e.g. ha -> ሀ, da -> ደ, sa -> ሰ)
+    map[prefix + "u"] = family.u;      // 2nd order (e.g. hu -> ሁ)
+    map[prefix + "i"] = family.i;      // 3rd order (e.g. hi -> ሂ)
+    map[prefix + "aa"] = family.a;     // 4th order triggered by 'aa' (e.g. haa -> ሃ, daa -> ዳ, saa -> ሳ)
+    map[prefix + "e"] = family.ee;     // 5th order triggered by 'e' (e.g. he -> ሄ, de -> ዴ, se -> ሴ)
+    map[prefix + "ee"] = family.ee;    // 5th order triggered by 'ee' (e.g. hee -> ሄ, dee -> ዴ)
+    map[prefix + "ie"] = family.ee;    // 5th order triggered by 'ie'
+    map[prefix + "o"] = family.o;      // 7th order (e.g. ho -> ሆ)
 
     if (family.wa) {
-      map[prefix + "wa"] = family.wa;
+      map[prefix + "wa"] = family.wa;  // 8th order
       map[prefix + "oa"] = family.wa;
     }
   }
 
-  // Add common words
+  // 2. Pass 2: Add Title Case / Capitalized variants for general typing (if not already explicitly defined)
+  for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
+    const titlePrefix = prefix.length > 0 ? prefix[0].toUpperCase() + prefix.slice(1).toLowerCase() : prefix;
+    const upperPrefix = prefix.toUpperCase();
+    const variants = [titlePrefix, upperPrefix];
+
+    const suffixEntries: [string, string | undefined][] = [
+      ["", family[""]],
+      ["a", family.e],   // 1st order 'a'
+      ["u", family.u],   // 2nd order
+      ["i", family.i],   // 3rd order
+      ["aa", family.a],  // 4th order 'aa'
+      ["e", family.ee],  // 5th order 'e'
+      ["ee", family.ee], // 5th order 'ee'
+      ["ie", family.ee], // 5th order 'ie'
+      ["o", family.o],   // 7th order
+      ["wa", family.wa],
+      ["oa", family.wa],
+    ];
+
+    for (const vPrefix of variants) {
+      for (const [suf, target] of suffixEntries) {
+        if (!target) continue;
+        const key = vPrefix + suf;
+        if (map[key] === undefined) {
+          map[key] = target;
+        }
+      }
+    }
+  }
+
+  // 3. Pass 3: Add common words and their case variants (highest priority)
   for (const [word, ethiopic] of Object.entries(COMMON_WORD_MAP)) {
     map[word] = ethiopic;
+    map[word.toLowerCase()] = ethiopic;
+    map[word.toUpperCase()] = ethiopic;
+    if (word.length > 0) {
+      map[word[0].toUpperCase() + word.slice(1).toLowerCase()] = ethiopic;
+    }
   }
 
   return map;

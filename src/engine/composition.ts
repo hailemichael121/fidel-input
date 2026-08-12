@@ -39,11 +39,11 @@ export class CompositionEngine {
   }
 
   public feedChar(char: string): CompositionState {
-    const wordBoundaries = /[\s.,!?;:()"]/;
+    // Only whitespace / newlines trigger immediate session boundary commit
+    const whitespaceBoundary = /[\s\r\n\t]/;
 
-    if (wordBoundaries.test(char)) {
-      const boundaryChar = this.transliterator.transliterate(char);
-      const rendered = this.renderBuffer() + boundaryChar;
+    if (whitespaceBoundary.test(char)) {
+      const rendered = this.renderBuffer() + char;
 
       const state: CompositionState = {
         buffer: this.buffer,
@@ -148,12 +148,9 @@ export class CompositionEngine {
   }
 
   /**
-   * Render the current Latin composition.
-   *
-   * The important part here is that we transliterate the
-   * current buffer as a phonetic stream.
+   * Render the current composition buffer dynamically.
    */
   private renderBuffer(): string {
-    return this.transliterator.transliterateWord(this.buffer);
+    return this.transliterator.transliterateText(this.buffer);
   }
 }

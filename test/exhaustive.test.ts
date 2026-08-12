@@ -54,44 +54,69 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
 
 describe("Multi-Character Consonants & Capitalization Variants", () => {
   it("handles multi-character consonant prefixes", () => {
-    expect(transliterateWord("she")).toBe("ሸ");
+    expect(transliterateWord("sha")).toBe("ሸ");
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
-    expect(transliterateWord("sha")).toBe("ሻ");
+    expect(transliterateWord("shaa")).toBe("ሻ");
+    expect(transliterateWord("she")).toBe("ሼ");
     expect(transliterateWord("shee")).toBe("ሼ");
     expect(transliterateWord("sho")).toBe("ሾ");
-    expect(transliterateWord("Se")).toBe("ሸ");
+    expect(transliterateWord("Sa")).toBe("ሰ");
+    expect(transliterateWord("Sha")).toBe("ሸ");
 
-    expect(transliterateWord("che")).toBe("ቸ");
+    expect(transliterateWord("cha")).toBe("ቸ");
     expect(transliterateWord("chu")).toBe("ቹ");
     expect(transliterateWord("chi")).toBe("ቺ");
-    expect(transliterateWord("cha")).toBe("ቻ");
+    expect(transliterateWord("chaa")).toBe("ቻ");
+    expect(transliterateWord("che")).toBe("ቼ");
     expect(transliterateWord("chee")).toBe("ቼ");
     expect(transliterateWord("cho")).toBe("ቾ");
-    expect(transliterateWord("ce")).toBe("ቸ");
+    expect(transliterateWord("ca")).toBe("ቸ");
 
-    expect(transliterateWord("tse")).toBe("ጸ");
+    expect(transliterateWord("tsa")).toBe("ጸ");
     expect(transliterateWord("tsu")).toBe("ጹ");
     expect(transliterateWord("tsi")).toBe("ጺ");
-    expect(transliterateWord("tsa")).toBe("ጻ");
+    expect(transliterateWord("tsaa")).toBe("ጻ");
+    expect(transliterateWord("tse")).toBe("ጼ");
     expect(transliterateWord("tsee")).toBe("ጼ");
     expect(transliterateWord("tso")).toBe("ጾ");
-    expect(transliterateWord("Tze")).toBe("ጸ");
+    expect(transliterateWord("Tza")).toBe("ጸ");
 
-    expect(transliterateWord("khe")).toBe("ኸ");
+    expect(transliterateWord("kha")).toBe("ኸ");
     expect(transliterateWord("khu")).toBe("ኹ");
 
-    expect(transliterateWord("zhe")).toBe("ዠ");
-    expect(transliterateWord("Ze")).toBe("ዠ");
+    expect(transliterateWord("zha")).toBe("ዠ");
+    expect(transliterateWord("Za")).toBe("ዠ");
 
-    expect(transliterateWord("Te")).toBe("ጠ");
-    expect(transliterateWord("t'e")).toBe("ጠ");
+    expect(transliterateWord("Ta")).toBe("ጠ");
+    expect(transliterateWord("t'a")).toBe("ጠ");
+
+    // Verify homophone family variants (H / hh / ss) with smartCorrection enabled
+    expect(transliterateWord("hha", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("hhaa", { smartCorrection: true })).toBe("ሓ");
+    expect(transliterateWord("hhe", { smartCorrection: true })).toBe("ሔ");
+    expect(transliterateWord("hhee", { smartCorrection: true })).toBe("ሔ");
+    expect(transliterateWord("Ha", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("Haa", { smartCorrection: true })).toBe("ሓ");
+    expect(transliterateWord("ssa", { smartCorrection: true })).toBe("ሠ");
+    expect(transliterateWord("ssaa", { smartCorrection: true })).toBe("ሣ");
 
     expect(transliterateWord("CHe")).toBe("ጨ");
     expect(transliterateWord("c'e")).toBe("ጨ");
 
     expect(transliterateWord("Pe")).toBe("ጰ");
     expect(transliterateWord("p'e")).toBe("ጰ");
+  });
+
+  it("handles capitalized words (Selam Yihun) and standalone i conversion", () => {
+    expect(transliterateText("Selam Yihun")).toBe("ሰላም ይሁን");
+    expect(transliterateText("selam yihun")).toBe("ሰላም ይሁን");
+    expect(transliterateText("SELAM YIHUN")).toBe("ሰላም ይሁን");
+    expect(transliterateText("Shekuri")).toBe("ሸኩሪ");
+    expect(transliterateText("i")).toBe("ኢ");
+    expect(transliterateText("I")).toBe("ኢ");
+    expect(transliterateText("in")).toBe("ኢን");
+    expect(transliterateText("ityop'ya")).toBe("ኢትዮጵያ");
   });
 });
 
