@@ -1,5 +1,5 @@
 {
-  "name": "fidel-input",
+  "name": "fidel-amharic",
   "displayName": "Fidel Input — ፊደል",
   "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
   "version": "0.2.0",
@@ -213,7 +213,7 @@
         {
           "id": "fidel",
           "title": "Fidel",
-          "icon": "media/activity-bar.svg"
+          "icon": "media/activity-bar.png"
         }
       ]
     },
