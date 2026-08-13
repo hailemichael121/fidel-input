@@ -83,13 +83,23 @@ export class Transliterator {
         let offset = 0;
 
         while (offset < source.length) {
-            // Check 2-character punctuation first if enabled
-            if (this.options.convertPunctuation && offset + 1 < source.length) {
-                const doubleChar = source.slice(offset, offset + 2);
-                if (PUNCTUATION_MAP[doubleChar]) {
-                    output += PUNCTUATION_MAP[doubleChar];
-                    offset += 2;
-                    continue;
+            // Check multi-character punctuation first if enabled (3-char then 2-char)
+            if (this.options.convertPunctuation) {
+                if (offset + 3 <= source.length) {
+                    const tripleChar = source.slice(offset, offset + 3);
+                    if (PUNCTUATION_MAP[tripleChar]) {
+                        output += PUNCTUATION_MAP[tripleChar];
+                        offset += 3;
+                        continue;
+                    }
+                }
+                if (offset + 2 <= source.length) {
+                    const doubleChar = source.slice(offset, offset + 2);
+                    if (PUNCTUATION_MAP[doubleChar]) {
+                        output += PUNCTUATION_MAP[doubleChar];
+                        offset += 2;
+                        continue;
+                    }
                 }
             }
 

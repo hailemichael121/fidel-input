@@ -9,9 +9,16 @@ describe("Transliterator", () => {
   });
 
   it("handles multi-character consonants correctly", () => {
-    expect(transliterateWord("sha")).toBe("ሸ");
-    expect(transliterateWord("cha")).toBe("ቸ");
-    expect(transliterateWord("tsa")).toBe("ጸ");
+    expect(transliterateWord("she")).toBe("ሸ");
+    expect(transliterateWord("sha")).toBe("ሻ");
+    expect(transliterateWord("che")).toBe("ቸ");
+    expect(transliterateWord("cha")).toBe("ቻ");
+    expect(transliterateWord("tse")).toBe("ጸ");
+    expect(transliterateWord("tsa")).toBe("ጻ");
+    expect(transliterateWord("me")).toBe("መ");
+    expect(transliterateWord("ma")).toBe("ማ");
+    expect(transliterateWord("Te")).toBe("ጠ");
+    expect(transliterateWord("Ta")).toBe("ጣ");
   });
 
   it("transliterates multi-word sentences", () => {

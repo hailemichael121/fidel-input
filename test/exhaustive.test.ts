@@ -10,14 +10,23 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
     const familyKeys = Object.keys(FIDEL_FAMILIES);
     expect(familyKeys.length).toBeGreaterThanOrEqual(33);
 
+    const H_FAMILIES = new Set(["h", "H", "hh", "h'", "xh", "hx", "ah", "A", "a'"]);
+
     for (const prefix of familyKeys) {
       const family = FIDEL_FAMILIES[prefix];
 
       expect(flatMap[prefix]).toBe(family[""]);
-      expect(flatMap[prefix + "e"]).toBe(family.e);
+      if (H_FAMILIES.has(prefix)) {
+        expect(flatMap[prefix + "a"]).toBe(family.e);
+        expect(flatMap[prefix + "aa"]).toBe(family.a);
+        expect(flatMap[prefix + "e"]).toBe(family.ee);
+      } else {
+        expect(flatMap[prefix + "e"]).toBe(family.e);
+        expect(flatMap[prefix + "a"]).toBe(family.a);
+        expect(flatMap[prefix + "aa"]).toBe(family.a);
+      }
       expect(flatMap[prefix + "u"]).toBe(family.u);
       expect(flatMap[prefix + "i"]).toBe(family.i);
-      expect(flatMap[prefix + "aa"] ?? flatMap[prefix + "a"]).toBe(family.a);
       expect(flatMap[prefix + "ee"]).toBe(family.ee);
       expect(flatMap[prefix + "o"]).toBe(family.o);
 
@@ -53,65 +62,113 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
 });
 
 describe("Multi-Character Consonants & Capitalization Variants", () => {
-  it("handles multi-character consonant prefixes", () => {
-    expect(transliterateWord("sha")).toBe("ሸ");
+  it("handles multi-character consonants prefixes", () => {
     expect(transliterateWord("she")).toBe("ሸ");
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
+    expect(transliterateWord("sha")).toBe("ሻ");
     expect(transliterateWord("shaa")).toBe("ሻ");
     expect(transliterateWord("shee")).toBe("ሼ");
-    expect(transliterateWord("sho")).toBe("ሾ");
-    expect(transliterateWord("Sa")).toBe("ሰ");
-    expect(transliterateWord("Se")).toBe("ሰ");
-    expect(transliterateWord("Sha")).toBe("ሸ");
+    expect(transliterateWord("se")).toBe("ሰ");
+    expect(transliterateWord("sa")).toBe("ሳ");
+    expect(transliterateWord("Se")).toBe("ሠ");
+    expect(transliterateWord("Sa")).toBe("ሣ");
+    expect(transliterateWord("Sha")).toBe("ሻ");
+    expect(transliterateWord("She")).toBe("ሸ");
 
-    expect(transliterateWord("cha")).toBe("ቸ");
     expect(transliterateWord("che")).toBe("ቸ");
+    expect(transliterateWord("cha")).toBe("ቻ");
     expect(transliterateWord("chu")).toBe("ቹ");
     expect(transliterateWord("chi")).toBe("ቺ");
     expect(transliterateWord("chaa")).toBe("ቻ");
     expect(transliterateWord("chee")).toBe("ቼ");
     expect(transliterateWord("cho")).toBe("ቾ");
-    expect(transliterateWord("ca")).toBe("ቸ");
+    expect(transliterateWord("ce")).toBe("ቸ");
+    expect(transliterateWord("ca")).toBe("ቻ");
 
-    expect(transliterateWord("tsa")).toBe("ጸ");
     expect(transliterateWord("tse")).toBe("ጸ");
+    expect(transliterateWord("tsa")).toBe("ጻ");
     expect(transliterateWord("tsu")).toBe("ጹ");
     expect(transliterateWord("tsi")).toBe("ጺ");
     expect(transliterateWord("tsaa")).toBe("ጻ");
     expect(transliterateWord("tsee")).toBe("ጼ");
     expect(transliterateWord("tso")).toBe("ጾ");
-    expect(transliterateWord("Tza")).toBe("ጸ");
+    expect(transliterateWord("Tze")).toBe("ጸ");
+    expect(transliterateWord("Tza")).toBe("ጻ");
 
-    expect(transliterateWord("kha")).toBe("ኸ");
     expect(transliterateWord("khe")).toBe("ኸ");
+    expect(transliterateWord("kha")).toBe("ኻ");
     expect(transliterateWord("khu")).toBe("ኹ");
 
-    expect(transliterateWord("zha")).toBe("ዠ");
     expect(transliterateWord("zhe")).toBe("ዠ");
-    expect(transliterateWord("Za")).toBe("ዠ");
+    expect(transliterateWord("zha")).toBe("ዣ");
+    expect(transliterateWord("Ze")).toBe("ዠ");
+    expect(transliterateWord("Za")).toBe("ዣ");
 
-    expect(transliterateWord("Ta")).toBe("ጠ");
     expect(transliterateWord("Te")).toBe("ጠ");
+    expect(transliterateWord("Ta")).toBe("ጣ");
     expect(transliterateWord("t'e")).toBe("ጠ");
+    expect(transliterateWord("t'a")).toBe("ጣ");
 
     // Verify homophone family variants (H / hh / ss) with smartCorrection enabled
     expect(transliterateWord("hha", { smartCorrection: true })).toBe("ሐ");
-    expect(transliterateWord("hhe", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("hhe", { smartCorrection: true })).toBe("ሔ");
     expect(transliterateWord("hhaa", { smartCorrection: true })).toBe("ሓ");
     expect(transliterateWord("hhee", { smartCorrection: true })).toBe("ሔ");
     expect(transliterateWord("Ha", { smartCorrection: true })).toBe("ሐ");
-    expect(transliterateWord("He", { smartCorrection: true })).toBe("ሐ");
+    expect(transliterateWord("He", { smartCorrection: true })).toBe("ሔ");
     expect(transliterateWord("Haa", { smartCorrection: true })).toBe("ሓ");
-    expect(transliterateWord("ssa", { smartCorrection: true })).toBe("ሠ");
     expect(transliterateWord("sse", { smartCorrection: true })).toBe("ሠ");
+    expect(transliterateWord("ssa", { smartCorrection: true })).toBe("ሣ");
     expect(transliterateWord("ssaa", { smartCorrection: true })).toBe("ሣ");
 
     expect(transliterateWord("CHe")).toBe("ጨ");
+    expect(transliterateWord("CHa")).toBe("ጫ");
     expect(transliterateWord("c'e")).toBe("ጨ");
+    expect(transliterateWord("c'a")).toBe("ጫ");
 
     expect(transliterateWord("Pe")).toBe("ጰ");
+    expect(transliterateWord("Pa")).toBe("ጳ");
     expect(transliterateWord("p'e")).toBe("ጰ");
+    expect(transliterateWord("p'a")).toBe("ጳ");
+
+    // Alternate homophone root triggers
+    expect(transliterateWord("Ce")).toBe("ጨ");
+    expect(transliterateWord("Ca")).toBe("ጫ");
+    expect(transliterateWord("Se")).toBe("ሠ");
+    expect(transliterateWord("Sa")).toBe("ሣ");
+    expect(transliterateWord("s'e")).toBe("ሠ");
+    expect(transliterateWord("s'a")).toBe("ሣ");
+    expect(transliterateWord("Ke")).toBe("ቀ");
+    expect(transliterateWord("Ka")).toBe("ቃ");
+    expect(transliterateWord("Qe")).toBe("ቀ");
+    expect(transliterateWord("Qa")).toBe("ቃ");
+    expect(transliterateWord("Be")).toBe("ቨ");
+    expect(transliterateWord("Ba")).toBe("ቫ");
+    expect(transliterateWord("b'e")).toBe("ቨ");
+    expect(transliterateWord("b'a")).toBe("ቫ");
+    expect(transliterateWord("xe")).toBe("ኸ");
+    expect(transliterateWord("xa")).toBe("ኻ");
+    expect(transliterateWord("Xe")).toBe("ኸ");
+    expect(transliterateWord("Xa")).toBe("ኻ");
+    expect(transliterateWord("Ae")).toBe("ዔ");
+    expect(transliterateWord("Aa")).toBe("ዐ");
+    expect(transliterateWord("Aaa")).toBe("ዓ");
+    expect(transliterateWord("a'e")).toBe("ዔ");
+    expect(transliterateWord("a'a")).toBe("ዐ");
+    expect(transliterateWord("a'aa")).toBe("ዓ");
+    expect(transliterateWord("z'e")).toBe("ዠ");
+    expect(transliterateWord("z'a")).toBe("ዣ");
+    expect(transliterateWord("n'e")).toBe("ኘ");
+    expect(transliterateWord("n'a")).toBe("ኛ");
+    expect(transliterateWord("ts'e")).toBe("ፀ");
+    expect(transliterateWord("ts'a")).toBe("ፃ");
+    expect(transliterateWord("xhe")).toBe("ኄ");
+    expect(transliterateWord("xha")).toBe("ኀ");
+    expect(transliterateWord("xhaa")).toBe("ኃ");
+    expect(transliterateWord("hxe")).toBe("ኄ");
+    expect(transliterateWord("hxa")).toBe("ኀ");
+    expect(transliterateWord("hxaa")).toBe("ኃ");
   });
 
   it("handles capitalized words (Selam Yihun) and standalone i conversion", () => {
@@ -149,9 +206,18 @@ describe("Punctuation, Numbers, Formatting & Mixed Inputs", () => {
     expect(transliterateText("selam::", { convertPunctuation: true })).toBe("ሰላም።");
     expect(transliterateText("selam..", { convertPunctuation: true })).toBe("ሰላም።");
     expect(transliterateText("bet:", { convertPunctuation: true })).toBe("ቤት፡");
-    expect(transliterateText("abebe, beso", { convertPunctuation: true })).toBe("አበበ፤ በሶ");
-    expect(transliterateText("yihun;-", { convertPunctuation: true })).toBe("ይሁን፤-");
+    expect(transliterateText("abebe, beso", { convertPunctuation: true })).toBe("አበበ፣ በሶ");
+    expect(transliterateText("abebe; beso", { convertPunctuation: true })).toBe("አበበ፤ በሶ");
+    expect(transliterateText("yihun:-", { convertPunctuation: true })).toBe("ይሁን፥");
+    expect(transliterateText("yihun|", { convertPunctuation: true })).toBe("ይሁን፥");
+    expect(transliterateText("yihun:::", { convertPunctuation: true })).toBe("ይሁን፦");
+    expect(transliterateText("yihun>", { convertPunctuation: true })).toBe("ይሁን፦");
     expect(transliterateText("mewad?", { convertPunctuation: true })).toBe("መዋድ፧");
+    expect(transliterateText("fidel@", { convertPunctuation: true })).toBe("ፊደል፠");
+    expect(transliterateText("fidel#", { convertPunctuation: true })).toBe("ፊደል፨");
+    expect(transliterateText("fidel~", { convertPunctuation: true })).toBe("ፊደል፟");
+    expect(transliterateText("fidel*", { convertPunctuation: true })).toBe("ፊደል፠");
+    expect(transliterateText("fidel**", { convertPunctuation: true })).toBe("ፊደል፨");
   });
 
   it("preserves Latin punctuation when convertPunctuation is false", () => {

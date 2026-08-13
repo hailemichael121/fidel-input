@@ -39,9 +39,10 @@ export class CompositionEngine {
   }
 
   public feedChar(char: string): CompositionState {
-    // Only whitespace / newlines trigger immediate session boundary commit
     const whitespaceBoundary = /[\s\r\n\t]/;
+    const punctuationBoundary = /[.,!?;:@*#~_|><]/;
 
+    // Whitespace / newlines trigger immediate session boundary commit
     if (whitespaceBoundary.test(char)) {
       const rendered = this.renderBuffer() + char;
 
@@ -60,6 +61,24 @@ export class CompositionEngine {
 
     if (char.length !== 1) {
       return this.getState();
+    }
+
+    // Punctuation delimiters trigger immediate word commit and buffer reset
+    if (punctuationBoundary.test(char)) {
+      this.buffer += char;
+      const rendered = this.renderBuffer();
+
+      const state: CompositionState = {
+        buffer: this.buffer,
+        rendered,
+        committed: true,
+        replaceLength: this.previousRendered.length,
+        raw: this.buffer,
+        output: rendered,
+      };
+
+      this.reset();
+      return state;
     }
 
     this.buffer += char;

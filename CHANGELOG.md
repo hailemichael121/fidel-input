@@ -4,21 +4,56 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-08-13
+
+### Added
+- **Homophone & Alternate Root Triggers**: Full support for quick SERA uppercase, apostrophe, and alternate root triggers to distinguish similar-sounding Ethiopic letters directly:
+  - `A` / `ah` / `a'` → **ዐ** (vs `a` → **አ**)
+  - `S` / `ss` / `s'` → **ሠ** (vs `s` → **ሰ**)
+  - `C` / `CH` / `c'` → **ጨ** (vs `c` / `ch` → **ቸ**)
+  - `T` / `t'` → **ጠ** (vs `t` → **ተ**)
+  - `K` / `q` / `k'` / `Q` → **ቀ** (vs `k` → **ከ**) and `x` / `kh` / `X` → **ኸ**
+  - `B` / `v` / `V` / `b'` → **ቨ** (vs `b` → **በ**)
+  - `tz` / `TZ` / `ts'` → **ፀ** (vs `ts` / `Ts` / `Tz` → **ጸ**)
+  - `P` / `p'` → **ጰ** (vs `p` → **ፐ**)
+  - `Z` / `zh` / `z'` → **ዠ** (vs `z` → **ዘ**)
+  - `N` / `ny` / `n'` → **ኘ** (vs `n` → **ነ**)
+  - `H` / `hh` → **ሐ** and `xh` / `hx` / `h'` → **ኀ** (vs `h` → **ሀ**)
+- **Distinct Ethiopic Punctuation Keyboard Triggers**: Dedicated 1-to-1 keys for all authentic Ethiopic punctuation marks, eliminating multi-character collision issues:
+  - `.` → **።** (*Arat Neteb* / Full Stop)
+  - `,` → **፣** (*Netela Serez* / Comma)
+  - `;` → **፤** (*Derb Serez* / Semicolon)
+  - `:` → **፡** (*Hulat Neteb* / Wordspace)
+  - `?` → **፧** (*Yimer* / Question Mark)
+  - `|` → **፥** (*Sost Neteb* / Colon)
+  - `>` → **፦** (*Meqereya* / Preface Colon)
+  - `@` → **፠** (*Ayne T'ila* / Section Mark)
+  - `#` → **፨** (*Yieti* / Paragraph Separator)
+  - `~` → **፟** (*T'ebiq* / Gemination Mark)
+
+### Changed & Fixed
+- **Phonetic Vowel Order Alignment**:
+  - For standard consonants (`m`, `l`, `s`, `k`, `d`, `t`, `b`, etc.): `e` produces 1st Order (e.g. `me` → **መ**, `le` → **ለ**, `se` → **ሰ**), `a` / `aa` produces 4th Order (e.g. `ma` → **ማ**, `la` → **ላ**, `sa` → **ሳ**), and `ee` produces 5th Order (`mee` → **ሜ**).
+  - For guttural families (`h`, `H`, `h'`, `A`): `ha` produces 1st Order (**ሀ**), `haa` produces 4th Order (**ሃ**), and `he` / `hee` produces 5th Order (**ሄ**).
+- **Activity Bar Vector Icon**: Converted Activity Bar container icon to a clean 24x24 monochrome SVG (`media/activity-bar.svg`) with `currentColor` and `fill-rule="evenodd"` for seamless theme masking.
+- **Packaging Rules**: Fixed `.vscodeignore` to bundle SVG vector assets into releases while ignoring dev scratch and test files.
+- **Marketplace & Open VSX Media Rendering**: Converted all relative media paths in `README.md` to raw GitHub URLs for proper image/video rendering on extension detail pages.
+- **Trie Singleton Performance Optimization**: Pre-built shared lookup trie singleton reducing keystroke latency and memory overhead.
+
+---
+
 ## [0.2.0] - 2026-08-12
 
 ### Added
 - **Temporary Transliteration Skip (Latin Bypass Mode)**: Dedicated `Alt + X` or `Ctrl + Alt + B` (`Cmd + Alt + X` / `Cmd + Alt + B` on macOS) shortcut to temporarily pause transliteration and type raw Latin text without disabling Fidel.
 - **Escape Prefix Typing**: Support for typing a backtick (`` ` ``) before any character or word to skip transliteration (`fidel.enableEscapePrefix`).
-- **Marketplace SVG Compliance**: Excluded SVG files from the release `.vsix` package and converted Activity Bar assets to PNG format to adhere strictly to Visual Studio Marketplace security requirements.
+- **Marketplace SVG Compliance**: Configured proper fallback assets for Visual Studio Marketplace security requirements.
 
 ---
 
 ## [0.1.1] - 2026-08-12
 
 ### Added
-- **Temporary Transliteration Skip (Latin Bypass Mode)**: Dedicated `Alt + X` or `Ctrl + Alt + B` (`Cmd + Alt + X` / `Cmd + Alt + B` on macOS) shortcut to temporarily pause transliteration and type raw Latin text without disabling Fidel.
-- **Escape Prefix Typing**: Support for typing a backtick (`` ` ``) before any character or word to skip transliteration (`fidel.enableEscapePrefix`).
-- **Marketplace SVG Compliance**: Excluded SVG files from the release `.vsix` package and converted Activity Bar assets to PNG format to adhere strictly to Visual Studio Marketplace security requirements.
 - **Live Composition Buffer Engine**: Intercepts typing inside active editors, dynamically recalculating and replacing active composition fragments without forcing manual backspacing.
 - **Complete Ethiopic Syllabary**: Full coverage across 33 core Ethiopic consonant families (ሀ through ፐ), 7 vowel orders, and 8th-order labialized forms (`wa` / `oa`).
 - **Punctuation & Boundary Delimiters**: Automatic composition commits on whitespace and punctuation marks (`.`, `,`, `!`, `?`, `;`, `:`). Includes configurable Latin-to-Ethiopic punctuation conversion (`fidel.convertPunctuation`).

@@ -8,11 +8,23 @@ export class TrieNode {
   output: string | null = null;
 }
 
+let sharedRoot: TrieNode | null = null;
+
 export class FidelTrie {
-  private root: TrieNode = new TrieNode();
+  private root: TrieNode;
 
   constructor() {
-    this.init();
+    if (!sharedRoot) {
+      sharedRoot = new TrieNode();
+      this.root = sharedRoot;
+      this.init();
+    } else {
+      this.root = sharedRoot;
+    }
+  }
+
+  public static resetSharedRoot(): void {
+    sharedRoot = null;
   }
 
   private init(): void {

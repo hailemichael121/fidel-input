@@ -19,34 +19,44 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   hh: { e: "ሐ", u: "ሑ", i: "ሒ", a: "ሓ", ee: "ሔ", "": "ሕ", o: "ሖ", wa: "ሗ" },
   // m (መ)
   m: { e: "መ", u: "ሙ", i: "ሚ", a: "ማ", ee: "ሜ", "": "ም", o: "ሞ", wa: "ሟ" },
-  // ss (ሠ)
+  // ss / S / s' (ሠ)
   ss: { e: "ሠ", u: "ሡ", i: "ሢ", a: "ሣ", ee: "ሤ", "": "ሥ", o: "ሦ", wa: "ሧ" },
+  S: { e: "ሠ", u: "ሡ", i: "ሢ", a: "ሣ", ee: "ሤ", "": "ሥ", o: "ሦ", wa: "ሧ" },
+  "s'": { e: "ሠ", u: "ሡ", i: "ሢ", a: "ሣ", ee: "ሤ", "": "ሥ", o: "ሦ", wa: "ሧ" },
   // r (ረ)
   r: { e: "ረ", u: "ሩ", i: "ሪ", a: "ራ", ee: "ሬ", "": "ር", o: "ሮ", wa: "ሯ" },
   // s (ሰ)
   s: { e: "ሰ", u: "ሱ", i: "ሲ", a: "ሳ", ee: "ሴ", "": "ስ", o: "ሶ", wa: "ሷ" },
   // sh (ሸ)
   sh: { e: "ሸ", u: "ሹ", i: "ሺ", a: "ሻ", ee: "ሼ", "": "ሽ", o: "ሾ", wa: "ሿ" },
-  // q / k' (ቀ)
+  // q / k' / K / Q (ቀ)
   q: { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
   "k'": { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
+  K: { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
+  Q: { e: "ቀ", u: "ቁ", i: "ቂ", a: "ቃ", ee: "ቄ", "": "ቅ", o: "ቆ", wa: "ቋ" },
   // b (በ)
   b: { e: "በ", u: "ቡ", i: "ቢ", a: "ባ", ee: "ቤ", "": "ብ", o: "ቦ", wa: "ቧ" },
-  // v (ቨ)
-  v: { e: "ቨ", u: "ቨ", i: "ቪ", a: "ቫ", ee: "ቬ", "": "ቭ", o: "ቮ", wa: "ቯ" },
+  // v / V / B / b' (ቨ)
+  v: { e: "ቨ", u: "ቩ", i: "ቪ", a: "ቫ", ee: "ቬ", "": "ቭ", o: "ቮ", wa: "ቯ" },
+  V: { e: "ቨ", u: "ቩ", i: "ቪ", a: "ቫ", ee: "ቬ", "": "ቭ", o: "ቮ", wa: "ቯ" },
+  B: { e: "ቨ", u: "ቩ", i: "ቪ", a: "ቫ", ee: "ቬ", "": "ቭ", o: "ቮ", wa: "ቯ" },
+  "b'": { e: "ቨ", u: "ቩ", i: "ቪ", a: "ቫ", ee: "ቬ", "": "ቭ", o: "ቮ", wa: "ቯ" },
   // t (ተ)
   t: { e: "ተ", u: "ቱ", i: "ቲ", a: "ታ", ee: "ቴ", "": "ት", o: "ቶ", wa: "ቷ" },
   // ch / c (ቸ)
   ch: { e: "ቸ", u: "ቹ", i: "ቺ", a: "ቻ", ee: "ቼ", "": "ች", o: "ቾ", wa: "ቿ" },
   c: { e: "ቸ", u: "ቹ", i: "ቺ", a: "ቻ", ee: "ቼ", "": "ች", o: "ቾ", wa: "ቿ" },
-  // h' (ኀ)
+  // h' / xh / hx (ኀ)
   "h'": { e: "ኀ", u: "ኁ", i: "ኂ", a: "ኃ", ee: "ኄ", "": "ኅ", o: "ኆ", wa: "ኋ" },
+  xh: { e: "ኀ", u: "ኁ", i: "ኂ", a: "ኃ", ee: "ኄ", "": "ኅ", o: "ኆ", wa: "ኋ" },
+  hx: { e: "ኀ", u: "ኁ", i: "ኂ", a: "ኃ", ee: "ኄ", "": "ኅ", o: "ኆ", wa: "ኋ" },
   // n (ነ)
   n: { e: "ነ", u: "ኑ", i: "ኒ", a: "ና", ee: "ኔ", "": "ን", o: "ኖ", wa: "ኗ" },
-  // ny / GN (ኘ)
+  // ny / GN / N / n' (ኘ)
   ny: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
   GN: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
   N: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
+  "n'": { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
   // Standalone Vowels (አ / እ / ኢ / ኡ / ኦ families)
   a: { e: "አ", u: "ኡ", i: "ኢ", a: "ኣ", ee: "ኤ", "": "አ", o: "ኦ", wa: "ኧ" },
   e: { e: "እ", u: "ኡ", i: "ኢ", a: "አ", ee: "ኤ", "": "እ", o: "ኦ" },
@@ -55,18 +65,22 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   o: { e: "ኦ", u: "ኡ", i: "ኢ", a: "ኦኣ", ee: "ኤ", "": "ኦ", o: "ኦ" },
   // k (ከ)
   k: { e: "ከ", u: "ኩ", i: "ኪ", a: "ካ", ee: "ኬ", "": "ክ", o: "ኮ", wa: "ኳ" },
-  // kh (ኸ)
+  // kh / x / X (ኸ)
   kh: { e: "ኸ", u: "ኹ", i: "ኺ", a: "ኻ", ee: "ኼ", "": "ኽ", o: "ኾ", wa: "ዃ" },
+  x: { e: "ኸ", u: "ኹ", i: "ኺ", a: "ኻ", ee: "ኼ", "": "ኽ", o: "ኾ", wa: "ዃ" },
+  X: { e: "ኸ", u: "ኹ", i: "ኺ", a: "ኻ", ee: "ኼ", "": "ኽ", o: "ኾ", wa: "ዃ" },
   // w (ወ)
   w: { e: "ወ", u: "ዉ", i: "ዊ", a: "ዋ", ee: "ዌ", "": "ው", o: "ዎ" },
-  // ah / A (ዐ)
+  // ah / A / a' (ዐ)
   ah: { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
   A: { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
+  "a'": { e: "ዐ", u: "ዑ", i: "ዒ", a: "ዓ", ee: "ዔ", "": "ዕ", o: "ዖ" },
   // z (ዘ)
   z: { e: "ዘ", u: "ዙ", i: "ዚ", a: "ዛ", ee: "ዜ", "": "ዝ", o: "ዞ", wa: "ዟ" },
-  // zh / Z (ዠ)
+  // zh / Z / z' (ዠ)
   zh: { e: "ዠ", u: "ዡ", i: "ዢ", a: "ዣ", ee: "ዤ", "": "ዥ", o: "ዦ", wa: "ዧ" },
   Z: { e: "ዠ", u: "ዡ", i: "ዢ", a: "ዣ", ee: "ዤ", "": "ዥ", o: "ዦ", wa: "ዧ" },
+  "z'": { e: "ዠ", u: "ዡ", i: "ዢ", a: "ዣ", ee: "ዤ", "": "ዥ", o: "ዦ", wa: "ዧ" },
   // y (የ)
   y: { e: "የ", u: "ዩ", i: "ይ", a: "ያ", ee: "ዬ", "": "ይ", o: "ዮ" },
   // d (ደ)
@@ -78,34 +92,54 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   // t' / T (ጠ)
   "t'": { e: "ጠ", u: "ጡ", i: "ጢ", a: "ጣ", ee: "ጤ", "": "ጥ", o: "ጦ", wa: "ጧ" },
   T: { e: "ጠ", u: "ጡ", i: "ጢ", a: "ጣ", ee: "ጤ", "": "ጥ", o: "ጦ", wa: "ጧ" },
-  // c' / CH (ጨ)
+  // c' / CH / C (ጨ)
   "c'": { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
   CH: { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
+  C: { e: "ጨ", u: "ጩ", i: "ጪ", a: "ጫ", ee: "ጬ", "": "ጭ", o: "ጮ", wa: "ጯ" },
   // p' / P (ጰ)
   "p'": { e: "ጰ", u: "ጱ", i: "ጲ", a: "ጳ", ee: "ጴ", "": "ጵ", o: "ጶ", wa: "ጷ" },
   P: { e: "ጰ", u: "ጱ", i: "ጲ", a: "ጳ", ee: "ጴ", "": "ጵ", o: "ጶ", wa: "ጷ" },
-  // ts / tz / Tz / S' (ጸ / ፀ)
+  // ts / tz / Tz / S' / Ts / ts' (ጸ / ፀ)
   ts: { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
-  tz: { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
+  Ts: { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
   Tz: { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
   "S'": { e: "ጸ", u: "ጹ", i: "ጺ", a: "ጻ", ee: "ጼ", "": "ጽ", o: "ጾ", wa: "ጿ" },
+  tz: { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
+  TZ: { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
+  "ts'": { e: "ፀ", u: "ፁ", i: "ፂ", a: "ፃ", ee: "ፄ", "": "ፅ", o: "ፆ" },
   // f (ፈ)
   f: { e: "ፈ", u: "ፉ", i: "ፊ", a: "ፋ", ee: "ፌ", "": "ፍ", o: "ፎ", wa: "ፏ" },
   // p (ፐ)
   p: { e: "ፐ", u: "ፑ", i: "ፒ", a: "ፓ", ee: "ፔ", "": "ፕ", o: "ፖ", wa: "ፗ" },
 };
 
-/** Ethiopic Punctuation Map */
+/** Complete Ethiopic Punctuation Map */
 export const PUNCTUATION_MAP: Record<string, string> = {
-  ".": "።",
-  ":": "፡",
-  "::": "።",
-  "..": "።",
-  ",": "፤",
-  ";": "፤",
-  ":-": "፦",
-  "?": "፧",
-  "*": "፠",
+  // 1. Distinct 1-to-1 Keyboard Triggers
+  ".": "።",     // Ethiopic Full Stop / Arat Neteb (አራት ነጥብ)
+  ",": "፣",     // Ethiopic Comma / Netela Serez (ነጠላ ሰረዝ)
+  ";": "፤",     // Ethiopic Semicolon / Derb Serez (ድርብ ሰረዝ)
+  ":": "፡",     // Ethiopic Wordspace / Hulat Neteb (ሁለት ነጥብ)
+  "?": "፧",     // Ethiopic Question Mark / Yimer (ይመር)
+  "|": "፥",     // Ethiopic Colon / Sost Neteb (ሦስት ነጥብ / አንቀጽ)
+  ">": "፦",     // Ethiopic Preface Colon / Meqereya (መቅረዝ)
+  "@": "፠",     // Ethiopic Section Mark / Ayne T'ila (ዓይነ ጥላ)
+  "#": "፨",     // Ethiopic Paragraph Separator / Yieti (ይእቲ)
+  "~": "፟",     // Ethiopic Combining Gemination Mark / T'ebiq (ጥብቅ)
+
+  // 2. Multi-character & Shorthand Aliases
+  "::": "።",    // Arat Neteb alias
+  "..": "።",    // Arat Neteb alias
+  ",,": "፤",    // Derb Serez alias
+  ":-": "፥",    // Sost Neteb alias
+  ":-:": "፦",   // Meqereya alias
+  ":::": "፦",   // Meqereya alias
+  "*": "፠",     // Ayne T'ila alias
+  "@@": "፠",    // Ayne T'ila alias
+  "**": "፨",    // Yieti alias
+  "***": "፨",   // Yieti alias
+  "##": "፨",    // Yieti alias
+  "_": "፟",     // Gemination Mark alias
 };
 
 /** Special Word Exceptions for common transliterations */
@@ -222,22 +256,43 @@ export const COMMON_WORD_MAP: Record<string, string> = {
 export function buildFlatMapping(): Record<string, string> {
   const map: Record<string, string> = {};
 
-  const FOURTH_ORDER_A_PREFIXES = new Set(["l", "y", "w", "k'", "t'", "c'", "p'"]);
+  // For h families (ሀ, ሐ, ኀ) and Ayn (ዐ):
+  // - 'ha' produces 1st order (ሀ, ሐ, ኀ, ዐ)
+  // - 'haa' produces 4th order (ሃ, ሓ, ኃ, ዓ)
+  // - 'he' or 'hee' produces 5th order (ሄ, ሔ, ኄ, ዔ)
+  // For all other consonant families (m, l, s, r, b, t, k, d, T, CH, P, etc.):
+  // - 'e' produces 1st order (e.g. me -> መ, le -> ለ, Te -> ጠ)
+  // - 'a' or 'aa' produces 4th order (e.g. ma -> ማ, la -> ላ, Ta -> ጣ)
+  // - 'ee' produces 5th order (e.g. mee -> ሜ, lee -> ሌ, see -> ሴ)
+  const H_FAMILY_PREFIXES = new Set([
+    "h", "H", "hh", "h'", "xh", "hx",
+    "ah", "A", "a'"
+  ]);
 
   // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
     map[prefix] = family[""];
-    map[prefix + "e"] = family.e;      // 1st order triggered by 'e' (e.g. he -> ሀ, de -> ደ, le -> ለ)
-    map[prefix + "a"] = FOURTH_ORDER_A_PREFIXES.has(prefix) ? family.a : family.e; // 4th order for l, y, w, glottal apostrophes; 1st order for others
-    map[prefix + "u"] = family.u;      // 2nd order (e.g. hu -> ሁ)
-    map[prefix + "i"] = family.i;      // 3rd order (e.g. hi -> ሂ)
-    map[prefix + "aa"] = family.a;     // 4th order triggered by 'aa' (e.g. haa -> ሃ, daa -> ዳ, saa -> ሳ)
-    map[prefix + "ee"] = family.ee;    // 5th order triggered by 'ee' (e.g. hee -> ሄ, dee -> ዴ)
-    map[prefix + "ie"] = family.ee;    // 5th order triggered by 'ie' (e.g. hie -> ሄ)
-    map[prefix + "o"] = family.o;      // 7th order (e.g. ho -> ሆ)
+
+    if (H_FAMILY_PREFIXES.has(prefix)) {
+      map[prefix + "a"] = family.e;   // 1st order 'a' (e.g. ha -> ሀ, Ha -> ሐ, xha -> ኀ, Aa -> ዐ)
+      map[prefix + "aa"] = family.a;  // 4th order 'aa' (e.g. haa -> ሃ, Haa -> ሓ, xhaa -> ኃ, Aaa -> ዓ)
+      map[prefix + "e"] = family.ee;  // 5th order 'e' (e.g. he -> ሄ, He -> ሔ, xhe -> ኄ, Ae -> ዔ)
+      map[prefix + "ee"] = family.ee; // 5th order 'ee' (e.g. hee -> ሄ, Hee -> ሔ, xhee -> ኄ)
+      map[prefix + "ie"] = family.ee; // 5th order 'ie' (e.g. hie -> ሄ)
+    } else {
+      map[prefix + "e"] = family.e;   // 1st order 'e' (e.g. me -> መ, le -> ለ, se -> ሰ, Te -> ጠ)
+      map[prefix + "a"] = family.a;   // 4th order 'a' (e.g. ma -> ማ, la -> ላ, sa -> ሳ, Ta -> ጣ)
+      map[prefix + "aa"] = family.a;  // 4th order 'aa' (e.g. maa -> ማ, laa -> ላ, saa -> ሳ)
+      map[prefix + "ee"] = family.ee; // 5th order 'ee' (e.g. mee -> ሜ, lee -> ሌ, see -> ሴ)
+      map[prefix + "ie"] = family.ee; // 5th order 'ie' (e.g. mie -> ሜ)
+    }
+
+    map[prefix + "u"] = family.u;     // 2nd order (e.g. hu -> ሁ, mu -> ሙ)
+    map[prefix + "i"] = family.i;     // 3rd order (e.g. hi -> ሂ, mi -> ሚ)
+    map[prefix + "o"] = family.o;     // 7th order (e.g. ho -> ホ -> ሆ, mo -> ሞ)
 
     if (family.wa) {
-      map[prefix + "wa"] = family.wa;  // 8th order
+      map[prefix + "wa"] = family.wa; // 8th order
       map[prefix + "oa"] = family.wa;
     }
   }
@@ -247,18 +302,20 @@ export function buildFlatMapping(): Record<string, string> {
     const titlePrefix = prefix.length > 0 ? prefix[0].toUpperCase() + prefix.slice(1).toLowerCase() : prefix;
     const upperPrefix = prefix.toUpperCase();
     const variants = [titlePrefix, upperPrefix];
-    const aTarget = FOURTH_ORDER_A_PREFIXES.has(prefix) ? family.a : family.e;
+    const isHFamily = H_FAMILY_PREFIXES.has(prefix);
+    const aTarget = isHFamily ? family.e : family.a;
+    const eTarget = isHFamily ? family.ee : family.e;
 
     const suffixEntries: [string, string | undefined][] = [
       ["", family[""]],
-      ["e", family.e],   // 1st order 'e'
-      ["a", aTarget],    // 4th or 1st order 'a'
-      ["u", family.u],   // 2nd order
-      ["i", family.i],   // 3rd order
-      ["aa", family.a],  // 4th order 'aa'
-      ["ee", family.ee], // 5th order 'ee'
-      ["ie", family.ee], // 5th order 'ie'
-      ["o", family.o],   // 7th order
+      ["e", eTarget],
+      ["a", aTarget],
+      ["u", family.u],
+      ["i", family.i],
+      ["aa", family.a],
+      ["ee", family.ee],
+      ["ie", family.ee],
+      ["o", family.o],
       ["wa", family.wa],
       ["oa", family.wa],
     ];
@@ -286,3 +343,4 @@ export function buildFlatMapping(): Record<string, string> {
 
   return map;
 }
+

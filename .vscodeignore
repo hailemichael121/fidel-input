@@ -2,11 +2,12 @@
 test/
 src/
 node_modules/
+docs/
 *.ts
 tsconfig.json
 esbuild.js
 .git/
 .gitignore
-*.svg
-**/*.svg
+bun.lock
+*.vsix
 
