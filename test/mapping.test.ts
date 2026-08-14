@@ -24,15 +24,17 @@ describe("Mapping Data", () => {
     expect(flat["su"]).toBe("ሱ");
     expect(flat["si"]).toBe("ሲ");
     expect(flat["sa"]).toBe("ሳ");
-    expect(flat["saa"]).toBe("ሳ");
+    expect(flat["saa"]).toBeUndefined();
     expect(flat["see"]).toBe("ሴ");
     expect(flat["so"]).toBe("ሶ");
-    expect(flat["swa"]).toBe("ሷ");
+    expect(flat["sw"]).toBe("ሷ");
+    expect(flat["swa"]).toBeUndefined();
+    expect(flat["soa"]).toBeUndefined();
 
     expect(flat["sh"]).toBe("ሽ");
     expect(flat["she"]).toBe("ሸ");
     expect(flat["sha"]).toBe("ሻ");
-    expect(flat["shaa"]).toBe("ሻ");
+    expect(flat["shaa"]).toBeUndefined();
     expect(flat["shee"]).toBe("ሼ");
 
     expect(flat["me"]).toBe("መ");
@@ -46,8 +48,12 @@ describe("Mapping Data", () => {
     expect(flat["Pe"]).toBe("ጰ");
     expect(flat["Pa"]).toBe("ጳ");
 
-    expect(flat["lwa"]).toBe("ሏ");
-    expect(flat["mwa"]).toBe("ሟ");
+    expect(flat["lw"]).toBe("ሏ");
+    expect(flat["lwa"]).toBeUndefined();
+    expect(flat["loa"]).toBeUndefined();
+    expect(flat["mw"]).toBe("ሟ");
+    expect(flat["mwa"]).toBeUndefined();
+    expect(flat["moa"]).toBeUndefined();
   });
 
   it("verifies 1st order (e) vs 4th order (a) rule across all 33 families", () => {
@@ -63,7 +69,7 @@ describe("Mapping Data", () => {
       } else {
         expect(flat[prefix + "e"]).toBe(family.e);   // 1st order 'e' (me -> መ)
         expect(flat[prefix + "a"]).toBe(family.a);   // 4th order 'a' (ma -> ማ)
-        expect(flat[prefix + "aa"]).toBe(family.a);  // 4th order 'aa' (maa -> ማ)
+        expect(flat[prefix + "aa"]).toBeUndefined(); // non-H families do not map aa to 4th order
         expect(flat[prefix + "ee"]).toBe(family.ee); // 5th order 'ee' (mee -> ሜ)
       }
     }

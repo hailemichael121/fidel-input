@@ -53,16 +53,13 @@ export const FIDEL_FAMILIES: Record<string, FamilyRules> = {
   // n (ነ)
   n: { e: "ነ", u: "ኑ", i: "ኒ", a: "ና", ee: "ኔ", "": "ን", o: "ኖ", wa: "ኗ" },
   // ny / GN / N / n' (ኘ)
-  ny: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
-  GN: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
-  N: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
-  "n'": { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ጜ", "": "ኝ", o: "ኞ", wa: "፝" },
-  // Standalone Vowels (አ / እ / ኢ / ኡ / ኦ families)
-  a: { e: "አ", u: "ኡ", i: "ኢ", a: "ኣ", ee: "ኤ", "": "አ", o: "ኦ", wa: "ኧ" },
-  e: { e: "እ", u: "ኡ", i: "ኢ", a: "አ", ee: "ኤ", "": "እ", o: "ኦ" },
-  i: { e: "ኢ", u: "ኡ", i: "ኢ", a: "ኢያ", ee: "ኤ", "": "ኢ", o: "ኦ" },
-  u: { e: "ኡ", u: "ኡ", i: "ኢ", a: "ኡኣ", ee: "ኤ", "": "ኡ", o: "ኦ" },
-  o: { e: "ኦ", u: "ኡ", i: "ኢ", a: "ኦኣ", ee: "ኤ", "": "ኦ", o: "ኦ" },
+  ny: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ኜ", "": "ኝ", o: "ኞ", wa: "ኟ" },
+  GN: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ኜ", "": "ኝ", o: "ኞ", wa: "ኟ" },
+  N: { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ኜ", "": "ኝ", o: "ኞ", wa: "ኟ" },
+  "n'": { e: "ኘ", u: "ኙ", i: "ኚ", a: "ኛ", ee: "ኜ", "": "ኝ", o: "ኞ", wa: "ኟ" },
+  // ' / ea (አ - Alef consonant family)
+  "'": { e: "አ", u: "ኡ", i: "ኢ", a: "ኣ", ee: "ኤ", "": "እ", o: "ኦ", wa: "ኧ" },
+  ea: { e: "አ", u: "ኡ", i: "ኢ", a: "ኣ", ee: "ኤ", "": "አ", o: "ኦ", wa: "ኧ" },
   // k (ከ)
   k: { e: "ከ", u: "ኩ", i: "ኪ", a: "ካ", ee: "ኬ", "": "ክ", o: "ኮ", wa: "ኳ" },
   // kh / x / X (ኸ)
@@ -256,21 +253,37 @@ export const COMMON_WORD_MAP: Record<string, string> = {
 export function buildFlatMapping(): Record<string, string> {
   const map: Record<string, string> = {};
 
-  // For h families (ሀ, ሐ, ኀ) and Ayn (ዐ):
-  // - 'ha' produces 1st order (ሀ, ሐ, ኀ, ዐ)
-  // - 'haa' produces 4th order (ሃ, ሓ, ኃ, ዓ)
-  // - 'he' or 'hee' produces 5th order (ሄ, ሔ, ኄ, ዔ)
-  // For all other consonant families (m, l, s, r, b, t, k, d, T, CH, P, etc.):
-  // - 'e' produces 1st order (e.g. me -> መ, le -> ለ, Te -> ጠ)
-  // - 'a' or 'aa' produces 4th order (e.g. ma -> ማ, la -> ላ, Ta -> ጣ)
-  // - 'ee' produces 5th order (e.g. mee -> ሜ, lee -> ሌ, see -> ሴ)
+  /**
+   * Uppercase Letter Collision & Disambiguation Audit:
+   *
+   * 1. SAFELY EXTENDED CAPITAL VOWELS (E, I, U, O):
+   *    - 'E' -> standalone 6th order 'እ' (e.g. tE -> ትእ, gEz -> ግእዝ, tEgst -> ትእግስት)
+   *    - 'I' -> standalone 3rd order 'ኢ' (e.g. tI -> ትኢ, sI -> ስኢ)
+   *    - 'U' -> standalone 2nd order 'ኡ' (e.g. tU -> ትኡ, mU -> ምኡ)
+   *    - 'O' -> standalone 7th order 'ኦ' (e.g. tO -> ትኦ, lO -> ልኦ)
+   *    These vowels are NOT claimed by any consonant family and have no prefix collisions.
+   *    They serve as an always-available, mode-independent instant shortcut for syllable splitting.
+   *
+   * 2. EXCLUDED COLLISION VOWEL ('A'):
+   *    - 'A' is explicitly claimed as the 4th-guttural Ayn (ዐ) consonant family:
+   *      A -> ዕ, Aa -> ዐ (1st order), Aaa -> ዓ (4th order), Ae -> ዔ, Au -> ዑ, Ai -> ዒ, Ao -> ዖ.
+   *    - 'A' is NOT repurposed for vowel splitting to avoid breaking Ayn transliteration.
+   *    - Disambiguation for 'a' (አ) is handled via:
+   *      a) Boundary character: "t-a" -> "ትአ"
+   *      b) Configurable mode: `fidel.defaultSyllableMerging: "standalone"`
+   *      c) Hover Provider quick suggestion.
+   */
   const H_FAMILY_PREFIXES = new Set([
     "h", "H", "hh", "h'", "xh", "hx",
     "ah", "A", "a'"
   ]);
 
-  // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES
+  const STANDALONE_VOWEL_PREFIXES = new Set(["a", "e", "E", "i", "u", "o"]);
+
+  // 1. Pass 1: Insert exact explicit keys from FIDEL_FAMILIES (consonants)
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
+    if (STANDALONE_VOWEL_PREFIXES.has(prefix)) continue;
+
     map[prefix] = family[""];
 
     if (H_FAMILY_PREFIXES.has(prefix)) {
@@ -282,7 +295,6 @@ export function buildFlatMapping(): Record<string, string> {
     } else {
       map[prefix + "e"] = family.e;   // 1st order 'e' (e.g. me -> መ, le -> ለ, se -> ሰ, Te -> ጠ)
       map[prefix + "a"] = family.a;   // 4th order 'a' (e.g. ma -> ማ, la -> ላ, sa -> ሳ, Ta -> ጣ)
-      map[prefix + "aa"] = family.a;  // 4th order 'aa' (e.g. maa -> ማ, laa -> ላ, saa -> ሳ)
       map[prefix + "ee"] = family.ee; // 5th order 'ee' (e.g. mee -> ሜ, lee -> ሌ, see -> ሴ)
       map[prefix + "ie"] = family.ee; // 5th order 'ie' (e.g. mie -> ሜ)
     }
@@ -292,13 +304,14 @@ export function buildFlatMapping(): Record<string, string> {
     map[prefix + "o"] = family.o;     // 7th order (e.g. ho -> ホ -> ሆ, mo -> ሞ)
 
     if (family.wa) {
-      map[prefix + "wa"] = family.wa; // 8th order
-      map[prefix + "oa"] = family.wa;
+      map[prefix + "w"] = family.wa;  // 8th order directly with w (e.g. lw -> ሏ, mw -> ሟ, tw -> ቷ, kw -> ኳ, gw -> ጓ)
     }
   }
 
-  // 2. Pass 2: Add Title Case / Capitalized variants for general typing (if not already explicitly defined)
+  // 2. Pass 2: Add Title Case / Capitalized variants for consonant families
   for (const [prefix, family] of Object.entries(FIDEL_FAMILIES)) {
+    if (STANDALONE_VOWEL_PREFIXES.has(prefix)) continue;
+
     const titlePrefix = prefix.length > 0 ? prefix[0].toUpperCase() + prefix.slice(1).toLowerCase() : prefix;
     const upperPrefix = prefix.toUpperCase();
     const variants = [titlePrefix, upperPrefix];
@@ -312,12 +325,11 @@ export function buildFlatMapping(): Record<string, string> {
       ["a", aTarget],
       ["u", family.u],
       ["i", family.i],
-      ["aa", family.a],
+      ...(isHFamily ? [["aa", family.a] as [string, string | undefined]] : []),
       ["ee", family.ee],
       ["ie", family.ee],
       ["o", family.o],
-      ["wa", family.wa],
-      ["oa", family.wa],
+      ["w", family.wa],
     ];
 
     for (const vPrefix of variants) {
@@ -331,7 +343,47 @@ export function buildFlatMapping(): Record<string, string> {
     }
   }
 
-  // 3. Pass 3: Add common words and their case variants (highest priority)
+  // 3. Standalone Vowels & Digraphs
+  const standaloneVowels: [string, string][] = [
+    // 6th order standalone (እ)
+    ["e", "እ"],
+    ["E", "እ"],
+    // 5th order standalone (ኤ)
+    ["ee", "ኤ"],
+    ["EE", "ኤ"],
+    ["Ee", "ኤ"],
+    ["eE", "ኤ"],
+    ["ie", "ኤ"],
+    ["IE", "ኤ"],
+    ["Ie", "ኤ"],
+    // 1st order standalone (አ)
+    ["a", "አ"],
+    ["ea", "አ"],
+    // 4th order standalone (ኣ)
+    ["aa", "ኣ"],
+    ["AA", "ኣ"],
+    // 2nd order standalone (ኡ)
+    ["u", "ኡ"],
+    ["uu", "ኡ"],
+    ["U", "ኡ"],
+    ["UU", "ኡ"],
+    // 3rd order standalone (ኢ)
+    ["i", "ኢ"],
+    ["ii", "ኢ"],
+    ["I", "ኢ"],
+    ["II", "ኢ"],
+    // 7th order standalone (ኦ)
+    ["o", "ኦ"],
+    ["oo", "ኦ"],
+    ["O", "ኦ"],
+    ["OO", "ኦ"],
+  ];
+
+  for (const [vKey, vVal] of standaloneVowels) {
+    map[vKey] = vVal;
+  }
+
+  // 4. Pass 4: Add common words and their case variants (highest priority)
   for (const [word, ethiopic] of Object.entries(COMMON_WORD_MAP)) {
     map[word] = ethiopic;
     map[word.toLowerCase()] = ethiopic;

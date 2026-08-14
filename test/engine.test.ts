@@ -19,10 +19,10 @@ describe("Fidel Transliterator", () => {
     expect(transliterateWord("su")).toBe("ሱ");
     expect(transliterateWord("si")).toBe("ሲ");
     expect(transliterateWord("sa")).toBe("ሳ");
-    expect(transliterateWord("saa")).toBe("ሳ");
     expect(transliterateWord("see")).toBe("ሴ");
     expect(transliterateWord("s")).toBe("ስ");
     expect(transliterateWord("so")).toBe("ሶ");
+    expect(transliterateWord("sw")).toBe("ሷ");
   });
 
   it("multi-character consonants", () => {
@@ -30,10 +30,10 @@ describe("Fidel Transliterator", () => {
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
     expect(transliterateWord("sha")).toBe("ሻ");
-    expect(transliterateWord("shaa")).toBe("ሻ");
     expect(transliterateWord("shee")).toBe("ሼ");
     expect(transliterateWord("sh")).toBe("ሽ");
     expect(transliterateWord("sho")).toBe("ሾ");
+    expect(transliterateWord("shw")).toBe("ሿ");
   });
 
   it("common words", () => {

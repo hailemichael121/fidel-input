@@ -23,7 +23,7 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
       } else {
         expect(flatMap[prefix + "e"]).toBe(family.e);
         expect(flatMap[prefix + "a"]).toBe(family.a);
-        expect(flatMap[prefix + "aa"]).toBe(family.a);
+        expect(flatMap[prefix + "aa"]).toBeUndefined();
       }
       expect(flatMap[prefix + "u"]).toBe(family.u);
       expect(flatMap[prefix + "i"]).toBe(family.i);
@@ -31,33 +31,34 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
       expect(flatMap[prefix + "o"]).toBe(family.o);
 
       if (family.wa) {
-        expect(flatMap[prefix + "wa"]).toBe(family.wa);
+        expect(flatMap[prefix + "w"]).toBe(family.wa);
+        expect(flatMap[prefix + "wa"]).toBeUndefined();
       }
     }
   });
 
   it("translates 8th-order labialized / diqala compound forms", () => {
-    expect(transliterateWord("lwa")).toBe("ሏ");
-    expect(transliterateWord("mwa")).toBe("ሟ");
-    expect(transliterateWord("rwa")).toBe("ሯ");
-    expect(transliterateWord("swa")).toBe("ሷ");
-    expect(transliterateWord("shwa")).toBe("ሿ");
-    expect(transliterateWord("qwa")).toBe("ቋ");
-    expect(transliterateWord("bwa")).toBe("ቧ");
-    expect(transliterateWord("twa")).toBe("ቷ");
-    expect(transliterateWord("chwa")).toBe("ቿ");
-    expect(transliterateWord("nwa")).toBe("ኗ");
-    expect(transliterateWord("kwa")).toBe("ኳ");
-    expect(transliterateWord("zwa")).toBe("ዟ");
-    expect(transliterateWord("zhwa")).toBe("ዧ");
-    expect(transliterateWord("dwa")).toBe("ዷ");
-    expect(transliterateWord("jwa")).toBe("ጇ");
-    expect(transliterateWord("gwa")).toBe("ጓ");
-    expect(transliterateWord("Twa")).toBe("ጧ");
-    expect(transliterateWord("CHwa")).toBe("ጯ");
-    expect(transliterateWord("Pwa")).toBe("ጷ");
-    expect(transliterateWord("tswa")).toBe("ጿ");
-    expect(transliterateWord("fwa")).toBe("ፏ");
+    expect(transliterateWord("lw")).toBe("ሏ");
+    expect(transliterateWord("mw")).toBe("ሟ");
+    expect(transliterateWord("rw")).toBe("ሯ");
+    expect(transliterateWord("sw")).toBe("ሷ");
+    expect(transliterateWord("shw")).toBe("ሿ");
+    expect(transliterateWord("qw")).toBe("ቋ");
+    expect(transliterateWord("bw")).toBe("ቧ");
+    expect(transliterateWord("tw")).toBe("ቷ");
+    expect(transliterateWord("chw")).toBe("ቿ");
+    expect(transliterateWord("nw")).toBe("ኗ");
+    expect(transliterateWord("kw")).toBe("ኳ");
+    expect(transliterateWord("zw")).toBe("ዟ");
+    expect(transliterateWord("zhw")).toBe("ዧ");
+    expect(transliterateWord("dw")).toBe("ዷ");
+    expect(transliterateWord("jw")).toBe("ጇ");
+    expect(transliterateWord("gw")).toBe("ጓ");
+    expect(transliterateWord("Tw")).toBe("ጧ");
+    expect(transliterateWord("CHw")).toBe("ጯ");
+    expect(transliterateWord("Pw")).toBe("ጷ");
+    expect(transliterateWord("tsw")).toBe("ጿ");
+    expect(transliterateWord("fw")).toBe("ፏ");
   });
 });
 
@@ -67,7 +68,6 @@ describe("Multi-Character Consonants & Capitalization Variants", () => {
     expect(transliterateWord("shu")).toBe("ሹ");
     expect(transliterateWord("shi")).toBe("ሺ");
     expect(transliterateWord("sha")).toBe("ሻ");
-    expect(transliterateWord("shaa")).toBe("ሻ");
     expect(transliterateWord("shee")).toBe("ሼ");
     expect(transliterateWord("se")).toBe("ሰ");
     expect(transliterateWord("sa")).toBe("ሳ");
@@ -80,7 +80,6 @@ describe("Multi-Character Consonants & Capitalization Variants", () => {
     expect(transliterateWord("cha")).toBe("ቻ");
     expect(transliterateWord("chu")).toBe("ቹ");
     expect(transliterateWord("chi")).toBe("ቺ");
-    expect(transliterateWord("chaa")).toBe("ቻ");
     expect(transliterateWord("chee")).toBe("ቼ");
     expect(transliterateWord("cho")).toBe("ቾ");
     expect(transliterateWord("ce")).toBe("ቸ");
@@ -90,7 +89,6 @@ describe("Multi-Character Consonants & Capitalization Variants", () => {
     expect(transliterateWord("tsa")).toBe("ጻ");
     expect(transliterateWord("tsu")).toBe("ጹ");
     expect(transliterateWord("tsi")).toBe("ጺ");
-    expect(transliterateWord("tsaa")).toBe("ጻ");
     expect(transliterateWord("tsee")).toBe("ጼ");
     expect(transliterateWord("tso")).toBe("ጾ");
     expect(transliterateWord("Tze")).toBe("ጸ");
@@ -120,7 +118,6 @@ describe("Multi-Character Consonants & Capitalization Variants", () => {
     expect(transliterateWord("Haa", { smartCorrection: true })).toBe("ሓ");
     expect(transliterateWord("sse", { smartCorrection: true })).toBe("ሠ");
     expect(transliterateWord("ssa", { smartCorrection: true })).toBe("ሣ");
-    expect(transliterateWord("ssaa", { smartCorrection: true })).toBe("ሣ");
 
     expect(transliterateWord("CHe")).toBe("ጨ");
     expect(transliterateWord("CHa")).toBe("ጫ");
@@ -189,8 +186,8 @@ describe("Duplicate, Consecutive & Repeated Syllables", () => {
     expect(transliterateWord("sese")).toBe("ሰሰ");
     expect(transliterateWord("lala")).toBe("ላላ");
     expect(transliterateWord("mimi")).toBe("ሚሚ");
-    expect(transliterateWord("shaashaa")).toBe("ሻሻ");
-    expect(transliterateWord("chaache")).toBe("ቻቸ");
+    expect(transliterateWord("shasha")).toBe("ሻሻ");
+    expect(transliterateWord("chache")).toBe("ቻቸ");
   });
 
   it("handles repeated bare consonants", () => {
@@ -313,12 +310,19 @@ describe("Composition Engine — Deep Interception & Backspace Tests", () => {
 
     state = engine.backspace();
     expect(state.rendered).toBe("ይህ");
+    expect(state.buffer).toBe("yih");
 
     state = engine.backspace();
     expect(state.rendered).toBe("ይ");
+    expect(state.buffer).toBe("yi");
+
+    state = engine.backspace();
+    expect(state.rendered).toBe("ይ");
+    expect(state.buffer).toBe("y");
 
     state = engine.backspace();
     expect(state.rendered).toBe("");
+    expect(state.buffer).toBe("");
     expect(engine.getState().buffer).toBe("");
   });
 });

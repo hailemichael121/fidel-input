@@ -75,63 +75,14 @@ export class Transliterator {
         }
 
         // 4. Perform standard Trie transliteration
-        const source = this.options.caseSensitive
-            ? input
-            : input.toLowerCase();
-
-        let output = "";
-        let offset = 0;
-
-        while (offset < source.length) {
-            // Check multi-character punctuation first if enabled (3-char then 2-char)
-            if (this.options.convertPunctuation) {
-                if (offset + 3 <= source.length) {
-                    const tripleChar = source.slice(offset, offset + 3);
-                    if (PUNCTUATION_MAP[tripleChar]) {
-                        output += PUNCTUATION_MAP[tripleChar];
-                        offset += 3;
-                        continue;
-                    }
-                }
-                if (offset + 2 <= source.length) {
-                    const doubleChar = source.slice(offset, offset + 2);
-                    if (PUNCTUATION_MAP[doubleChar]) {
-                        output += PUNCTUATION_MAP[doubleChar];
-                        offset += 2;
-                        continue;
-                    }
-                }
-            }
-
-            // Check single match in trie
-            const match = this.findMatch(source, offset);
-
-            if (match) {
-                output += match.output;
-                offset += match.consumed;
-                continue;
-            }
-
-            const character = input[offset];
-
-            if (
-                this.options.convertPunctuation &&
-                PUNCTUATION_MAP[character]
-            ) {
-                output += PUNCTUATION_MAP[character];
-            } else {
-                output += character;
-            }
-
-            offset += 1;
-        }
+        const output = this.matchTrie(input);
 
         // 5. Smart correction fallback for non-dictionary candidates (if unparsed Latin characters remain)
         if (this.options.smartCorrection && input.length > 2 && /[a-zA-Z]/.test(output)) {
             const candidates = this.corrector.normalizeInput(input);
             for (const cand of candidates) {
                 if (cand !== input) {
-                    const candResult = new Transliterator({ ...this.options, smartCorrection: false }).transliterate(cand);
+                    const candResult = this.matchTrie(cand);
                     if (candResult && candResult !== cand && !/[a-zA-Z]/.test(candResult)) {
                         if (/[a-zA-Z]/.test(output) || output !== candResult) {
                             return candResult;
@@ -185,6 +136,61 @@ export class Transliterator {
             : input.toLowerCase();
 
         return this.findMatch(source, offset);
+    }
+
+    private matchTrie(input: string): string {
+        const source = this.options.caseSensitive
+            ? input
+            : input.toLowerCase();
+
+        let output = "";
+        let offset = 0;
+
+        while (offset < source.length) {
+            // Check multi-character punctuation first if enabled (3-char then 2-char)
+            if (this.options.convertPunctuation) {
+                if (offset + 3 <= source.length) {
+                    const tripleChar = source.slice(offset, offset + 3);
+                    if (PUNCTUATION_MAP[tripleChar]) {
+                        output += PUNCTUATION_MAP[tripleChar];
+                        offset += 3;
+                        continue;
+                    }
+                }
+                if (offset + 2 <= source.length) {
+                    const doubleChar = source.slice(offset, offset + 2);
+                    if (PUNCTUATION_MAP[doubleChar]) {
+                        output += PUNCTUATION_MAP[doubleChar];
+                        offset += 2;
+                        continue;
+                    }
+                }
+            }
+
+            // Check single match in trie
+            const match = this.findMatch(source, offset);
+
+            if (match) {
+                output += match.output;
+                offset += match.consumed;
+                continue;
+            }
+
+            const character = input[offset];
+
+            if (
+                this.options.convertPunctuation &&
+                PUNCTUATION_MAP[character]
+            ) {
+                output += PUNCTUATION_MAP[character];
+            } else {
+                output += character;
+            }
+
+            offset += 1;
+        }
+
+        return output;
     }
 
     private findMatch(

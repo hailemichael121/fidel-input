@@ -2,7 +2,7 @@
   "name": "fidel-amharic",
   "displayName": "Fidel — Amharic Phonetic Input (ፊደል)",
   "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "publisher": "Yihun",
   "author": {
     "name": "Yihun Shekuri",
@@ -97,6 +97,10 @@
         "command": "fidel.resetComposition",
         "title": "Fidel: Reset Composition Buffer",
         "icon": "$(clear-all)"
+      },
+      {
+        "command": "fidel.applyAlternateComposition",
+        "title": "Fidel: Apply Alternate Syllable Interpretation"
       }
     ],
     "keybindings": [
@@ -268,6 +272,30 @@
           "type": "boolean",
           "default": true,
           "description": "Offer candidate suggestion overlays for homophones and alternative phonetic forms directly under cursor."
+        },
+        "fidel.defaultSyllableMerging": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "standalone"
+          ],
+          "default": "merge",
+          "description": "When a typed sequence is ambiguous between merging into one syllable (e.g. 't'+'e' -> ተ) and staying as two separate letters (e.g. 't'+'e' -> ትእ), choose which interpretation is applied automatically."
+        },
+        "fidel.compositionBoundaryChar": {
+          "type": "string",
+          "default": "-",
+          "description": "Explicit syllable boundary character that commits the current syllable without inserting the character (e.g. 't' + '-' + 'e' -> ትእ)."
+        },
+        "fidel.compositionMergeChar": {
+          "type": "string",
+          "default": "+",
+          "description": "Explicit syllable merge character that forces the next character to merge into a single syllable even when standalone mode is active (e.g. 't' + '+' + 'e' -> ተ)."
+        },
+        "fidel.enableHoverDisambiguation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show hover tooltip on recently composed ambiguous syllables to swap between merged and standalone interpretations."
         }
       }
     }

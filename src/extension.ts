@@ -4,6 +4,7 @@ import { InputInterceptor } from "./vscode/inputInterceptor.js";
 import { registerFidelCommands } from "./vscode/commands.js";
 import { FidelViewProvider } from "./vscode/activityBar.js";
 import { FidelCompletionProvider } from "./vscode/completionProvider.js";
+import { AmbiguitySpanTracker, AmbiguityHoverProvider, TrackedAmbiguitySpan, toVsCodeRange } from "./vscode/hoverProvider.js";
 
 let enabled = false;
 let bypassed = false;
@@ -29,9 +30,12 @@ export function activate(context: vscode.ExtensionContext): void {
     viewProvider.refresh();
   };
 
+  const ambiguityTracker = new AmbiguitySpanTracker();
+
   const interceptor = new InputInterceptor(
     () => enabled,
-    () => bypassed
+    () => bypassed,
+    ambiguityTracker
   );
 
   registerFidelCommands(
@@ -73,12 +77,31 @@ export function activate(context: vscode.ExtensionContext): void {
     "'", "-", " "
   );
 
+  const hoverProvider = vscode.languages.registerHoverProvider(
+    { scheme: "file" },
+    new AmbiguityHoverProvider(ambiguityTracker)
+  );
+
+  const applyAlternateCommand = vscode.commands.registerCommand(
+    "fidel.applyAlternateComposition",
+    async (span: TrackedAmbiguitySpan) => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor || !span) return;
+      await editor.edit((editBuilder) => {
+        editBuilder.replace(toVsCodeRange(span.range), span.alternate);
+      });
+      ambiguityTracker.removeSpan(span);
+    }
+  );
+
   context.subscriptions.push(
     statusBar,
     interceptor,
     treeView,
     viewProvider,
-    completionProvider
+    completionProvider,
+    hoverProvider,
+    applyAlternateCommand
   );
 
   updateState(enabled);

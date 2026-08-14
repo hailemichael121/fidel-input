@@ -30,4 +30,53 @@ describe("Transliterator", () => {
     expect(transliterateText("selam.", { convertPunctuation: true })).toBe("ሰላም።");
     expect(transliterateText("selam::", { convertPunctuation: true })).toBe("ሰላም።");
   });
+
+  it("handles 8th order labialized letters directly with w", () => {
+    expect(transliterateWord("lw")).toBe("ሏ");
+    expect(transliterateWord("mw")).toBe("ሟ");
+    expect(transliterateWord("tw")).toBe("ቷ");
+    expect(transliterateWord("kw")).toBe("ኳ");
+    expect(transliterateWord("gw")).toBe("ጓ");
+    expect(transliterateWord("sw")).toBe("ሷ");
+    expect(transliterateWord("bw")).toBe("ቧ");
+    expect(transliterateWord("hw")).toBe("ኋ");
+    expect(transliterateWord("qw")).toBe("ቋ");
+    expect(transliterateWord("rw")).toBe("ሯ");
+    expect(transliterateWord("nw")).toBe("ኗ");
+    expect(transliterateWord("nyw")).toBe("ኟ");
+    expect(transliterateWord("zw")).toBe("ዟ");
+    expect(transliterateWord("dw")).toBe("ዷ");
+    expect(transliterateWord("jw")).toBe("ጇ");
+    expect(transliterateWord("Tw")).toBe("ጧ");
+    expect(transliterateWord("CHw")).toBe("ጯ");
+    expect(transliterateWord("Pw")).toBe("ጷ");
+    expect(transliterateWord("tsw")).toBe("ጿ");
+    expect(transliterateWord("fw")).toBe("ፏ");
+  });
+
+  it("handles fast consonant clusters without merging errors", () => {
+    expect(transliterateWord("amst")).toBe("አምስት");
+    expect(transliterateWord("gebriel")).toBe("ገብርኤል");
+  });
+
+  it("handles continuous 6th order consonant and standalone vowel via E", () => {
+    expect(transliterateWord("tE")).toBe("ትእ");
+    expect(transliterateWord("gEz")).toBe("ግእዝ");
+    expect(transliterateWord("mEraf")).toBe("ምእራፍ");
+    expect(transliterateWord("lElna")).toBe("ልእልና");
+    expect(transliterateWord("tEzaz")).toBe("ትእዛዝ");
+    expect(transliterateWord("yEti")).toBe("ይእቲ");
+    expect(transliterateWord("tEgst")).toBe("ትእግስት");
+  });
+
+  it("separates second 'a' for non-H families while preserving H family 4th order", () => {
+    // H family: ha -> ሀ, haa -> ሃ
+    expect(transliterateWord("ha")).toBe("ሀ");
+    expect(transliterateWord("haa")).toBe("ሃ");
+    // Non-H families: la -> ላ, laa -> ላአ, ba -> ባ, baa -> ባአ
+    expect(transliterateWord("la")).toBe("ላ");
+    expect(transliterateWord("laa")).toBe("ላአ");
+    expect(transliterateWord("ba")).toBe("ባ");
+    expect(transliterateWord("baa")).toBe("ባአ");
+  });
 });

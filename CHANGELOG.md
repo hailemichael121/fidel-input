@@ -4,6 +4,27 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-14
+
+### Added
+- **Segmented Incremental Composition Buffer**: Architectural rewrite of `CompositionEngine` using decoupled `lockedOutput` (immutable committed syllables) and `pendingFragment` (active bounded syllable matching), ensuring O(1) per-keystroke matching and zero full-word re-scanning.
+- **Configurable Syllable Merge vs Standalone Mode (`fidel.defaultSyllableMerging`)**: Global setting (`"merge"` or `"standalone"`) controlling whether ambiguous consonant+vowel sequences like `te` default to merged syllable `ተ` or standalone pair `ትእ`.
+- **Explicit Syllable Boundary (`-`) & Merge (`+`) Overrides**:
+  - `"-"` (`fidel.compositionBoundaryChar`): Immediately commits the active syllable without inserting the character (e.g. `t-e` → `ትእ`, `t-a` → `ትአ`).
+  - `"+"` (`fidel.compositionMergeChar`): Forces merging into a single syllable under standalone mode (e.g. `t+e` → `ተ`).
+- **Capital Vowel Shorthand (`E`, `I`, `U`, `O`)**: Always-available, mode-independent shortcut for typing 6th-order consonant + standalone vowel splits without boundary keys (e.g. `tE` → `ትእ`, `gEz` → `ግእዝ`, `tEgst` → `ትእግስት`, `tI` → `ትኢ`, `tU` → `ትኡ`, `tO` → `ትኦ`).
+- **Post-Commit Hover Disambiguation Provider (`AmbiguityHoverProvider`)**: Non-intrusive tooltip on ambiguous committed words offering a one-click action to swap interpretations (`[Use "ትእ" instead]`).
+- **Completion Provider Disambiguation Candidate**: Live IntelliSense suggestion item for ambiguous syllables surfacing the standalone split alternative and shortcut tip.
+- **Single-Character Exact Backspacing**: Guaranteed 1-character buffer pop per backspace press without output-comparison while loops or skipped characters.
+- **Async Task Queue Serialization**: FIFO Promise queue in `InputInterceptor` serializing all `type` and `fidel.deleteLeft` commands to prevent concurrency races during fast typing.
+
+### Changed & Fixed
+- **Standalone Vowels Expansion Fix**: Fixed off-by-one vowel expansion where `ee` previously mapped to `እ` and `eee` to `ኤ`. Both small `e`/`ee` and capital `E`/`EE` now cleanly produce `እ`/`ኤ` with 100% mathematical symmetry.
+- **8th-Order Labialized Direct Suffix (`w`)**: Direct `w` suffix mapping for 8th-order labialized letters (`sw` → `ሷ`, `lw` → `ሏ`, `mw` → `ሟ`, `kw` → `ኳ`), completely removing residual `wa`/`oa` duplicate keys.
+- **Hot-Path Zero Allocations**: Extracted trie lookup helpers in `Transliterator`, eliminating runtime `new Transliterator(...)` allocations during smart correction.
+
+---
+
 ## [0.2.1] - 2026-08-13
 
 ### Added

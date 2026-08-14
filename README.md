@@ -124,11 +124,55 @@ Fidel offers two UI models for inspecting and choosing homophone candidates (e.g
 * **IntelliSense Suggestion Box Below Text Cursor**: When `"fidel.suggestions": true` is enabled in settings, VS Code displays an IntelliSense candidate list directly beneath your active typing cursor as you type.
 * **Interactive QuickPick Command Palette**: Select any word or place your cursor on a word and run command `Fidel: Show Homophone Candidate Suggestions` (`fidel.showSuggestions`) to inspect and select homophone variants.
 
-### 7. On-Demand Selection Conversion (`Ctrl + Alt + F`)
+### 7. Syllable Disambiguation & Capital Vowel Split
+
+When typing sequences like `t` followed by `e`, there are two valid phonetic intents:
+1. Merged into a single 1st-order syllable: `te` $\rightarrow$ **`ተ`**
+2. Kept as two separate standalone letters (6th-order consonant + standalone vowel): `t` + `e` $\rightarrow$ **`ትእ`**
+
+Fidel provides three complementary, non-breaking disambiguation mechanisms that work together seamlessly:
+
+#### A. Capital Vowel Shorthand (Always Available, Mode-Independent)
+Type capital **`E`**, **`I`**, **`U`**, or **`O`** to immediately force a 6th-order consonant + standalone vowel split without typing any boundary characters or changing any settings:
+* `tE` $\rightarrow$ **`ትእ`** (e.g. `tEgst` $\rightarrow$ **`ትእግስት`**)
+* `gEz` $\rightarrow$ **`ግእዝ`**
+* `tI` $\rightarrow$ **`ትኢ`**
+* `tU` $\rightarrow$ **`ትኡ`**
+* `tO` $\rightarrow$ **`ትኦ`**
+
+> **Note on Capital `A` (Ayn ዐ collision)**: `A` is explicitly reserved for the 4th-guttural **Ayn (ዐ)** consonant family (`A` $\rightarrow$ **`ዕ`**, `Aa` $\rightarrow$ **`ዐ`**, `Aaa` $\rightarrow$ **`ዓ`**). To split with **Alef (`አ`)**, use the boundary character `t-a` $\rightarrow$ **`ትአ`** or standalone mode.
+
+#### B. Explicit Boundary (`-`) and Merge (`+`) Keys
+* **Boundary Character (`"-"`)**: Typing a hyphen between letters immediately commits the prior consonant as 6th-order without inserting the hyphen (e.g. `t-e` $\rightarrow$ **`ትእ`**, `t-a` $\rightarrow$ **`ትአ`**).
+* **Merge Character (`"+"`)**: When standalone mode is active, typing a plus forces the next vowel to merge (e.g. `t+e` $\rightarrow$ **`ተ`**).
+
+#### C. Configurable Default Mode (`fidel.defaultSyllableMerging`)
+Choose your preferred global default in settings:
+* `"merge"` *(default)*: `te` produces **`ተ`**; use `tE` or `t-e` for **`ትእ`**.
+* `"standalone"`: `te` produces **`ትእ`**; use `t+e` for **`ተ`**.
+
+#### Combined Example:
+```text
+Default "merge" mode:
+  "teza"        -> ተዛ       (standard merge)
+  "tEgst"       -> ትእግስት   (capital vowel shortcut)
+  "t-azaz"      -> ትአዛዝ    (boundary character override for Alef)
+
+"standalone" mode:
+  "teza"        -> ትእዛ      (default standalone)
+  "t+eza"       -> ተዛ       (plus merge override)
+```
+
+### 8. Post-Commit Hover Disambiguation & IntelliSense Alternative
+
+* **IntelliSense Live Suggestion**: When typing an ambiguous syllable like `te`, Fidel automatically adds a completion item showing `ትእ` along with a shortcut tip (*"Type capital E for ትእ instead of ተ"*).
+* **Hover Disambiguation**: Hover your mouse over any recently typed ambiguous word in your editor to see a one-click action: `[Use "ትእ" instead]`.
+
+### 9. On-Demand Selection Conversion (`Ctrl + Alt + F`)
 
 Highlight any Latin block of text in your editor and press **`Ctrl + Alt + F`** (or **`Cmd + Alt + F`** on macOS) to instantly convert it to Ethiopic script without enabling full live input mode.
 
-### 9. Temporary Transliteration Skip (Latin Bypass Mode)
+### 10. Temporary Transliteration Skip (Latin Bypass Mode)
 
 Fidel provides two seamless ways to type raw English/Latin text without disabling Amharic input mode completely:
 
@@ -247,11 +291,35 @@ Extension settings can be configured in VS Code `settings.json`:
 ```json
 {
   "fidel.enableByDefault": false,
+  "fidel.defaultSyllableMerging": "merge",
+  "fidel.compositionBoundaryChar": "-",
+  "fidel.compositionMergeChar": "+",
+  "fidel.enableHoverDisambiguation": true,
   "fidel.convertPunctuation": true,
   "fidel.convertNumbers": true,
-  "fidel.autoDisableOnEnter": false
+  "fidel.smartCorrection": true,
+  "fidel.suggestions": true,
+  "fidel.autoDisableOnEnter": false,
+  "fidel.dictionary": {
+    "myword": "ማይዎርድ"
+  }
 }
 ```
+
+| Setting | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `fidel.defaultSyllableMerging` | `"merge"` \| `"standalone"` | `"merge"` | Choose default behavior when typing ambiguous consonant+vowel combinations (`te` $\rightarrow$ `ተ` vs `ትእ`) |
+| `fidel.compositionBoundaryChar` | `string` | `"-"` | Explicit character that splits syllables without being inserted |
+| `fidel.compositionMergeChar` | `string` | `"+"` | Explicit character that forces merging under standalone mode |
+| `fidel.enableHoverDisambiguation` | `boolean` | `true` | Show hover tooltip on ambiguous words to swap interpretations |
+| `fidel.smartCorrection` | `boolean` | `true` | Auto-correct double-consonant typos (e.g. `selamm` $\rightarrow$ `ሰላም`) |
+| `fidel.suggestions` | `boolean` | `true` | Offer candidate suggestion overlays and disambiguation tips |
+| `fidel.convertPunctuation` | `boolean` | `true` | Convert Latin punctuation marks to authentic Ethiopic typography |
+| `fidel.convertNumbers` | `boolean` | `true` | Convert Arabic digits to traditional Ethiopic numerals |
+| `fidel.dictionary` | `object` | `{}` | Custom personal dictionary mappings |
+| `fidel.enableByDefault` | `boolean` | `false` | Enable Amharic input when VS Code starts |
+| `fidel.enableEscapePrefix` | `boolean` | `true` | Type backtick (`` ` ``) to output literal Latin text |
+| `fidel.autoDisableOnEnter` | `boolean` | `false` | Automatically disable input mode after pressing Enter |
 
 ---
 

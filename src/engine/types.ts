@@ -31,6 +31,16 @@ export interface MatchResult {
   canContinue?: boolean;
 }
 
+export type SyllableMergeMode = "merge" | "standalone";
+
+export interface AmbiguousSpan {
+  chosen: string;
+  alternate: string;
+  startOffset: number;
+  endOffset: number;
+  raw: string;
+}
+
 export interface CompositionState {
   buffer: string;
   rendered: string;
@@ -38,6 +48,9 @@ export interface CompositionState {
   replaceLength: number;
   raw: string;
   output: string;
+  lockedOutput?: string;
+  pendingFragment?: string;
+  ambiguousSpans?: AmbiguousSpan[];
 }
 
 export interface LegacyCompositionState {
@@ -57,4 +70,10 @@ export interface TransliterationOptions {
   language?: "amharic" | "tigrinya" | "oromo" | "geez";
 }
 
-export type FidelOptions = TransliterationOptions;
+export interface CompositionOptions extends TransliterationOptions {
+  defaultSyllableMerging?: SyllableMergeMode;
+  compositionBoundaryChar?: string;
+  compositionMergeChar?: string;
+}
+
+export type FidelOptions = CompositionOptions;

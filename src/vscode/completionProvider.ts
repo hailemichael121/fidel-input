@@ -47,6 +47,23 @@ export class FidelCompletionProvider implements vscode.CompletionItemProvider {
       return item;
     });
 
+    const splitCandidate = this.suggestionEngine.getAmbiguousSplitCandidate(word, primary);
+    if (splitCandidate && !items.some((it) => it.label === splitCandidate.ethiopic)) {
+      const splitItem = new vscode.CompletionItem(splitCandidate.ethiopic, vscode.CompletionItemKind.Text);
+      splitItem.filterText = word;
+      splitItem.insertText = splitCandidate.ethiopic;
+      splitItem.detail = `Fidel Disambiguation: ${splitCandidate.description}`;
+      splitItem.documentation = new vscode.MarkdownString(
+        `**Standalone Syllable Disambiguation**\n\n` +
+        `• Current default: \`${primary}\`\n` +
+        `• Standalone split: \`${splitCandidate.ethiopic}\`\n\n` +
+        `*${splitCandidate.description}*`
+      );
+      splitItem.range = wordRange;
+      splitItem.sortText = String(candidates.length + 1).padStart(3, "0");
+      items.push(splitItem);
+    }
+
     // isIncomplete: true tells VS Code to persistently query completion items on backspacing & typing
     return new vscode.CompletionList(items, true);
   }
