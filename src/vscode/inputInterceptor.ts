@@ -224,6 +224,24 @@ export class InputInterceptor implements vscode.Disposable {
     const state = this.engine.backspace();
     this.updateContext();
 
+    // When replaceLength is 0 and there's still rendered output,
+    // the engine has only locked output with no pending fragment.
+    // Re-inserting the rendered text would duplicate it, so just
+    // do a normal backspace and reset the composition.
+    if (state.replaceLength === 0 && state.rendered.length > 0) {
+      this.isProcessingEdit = true;
+      try {
+        await editor.edit((editBuilder) => {
+          const startPos = selection.active.translate(0, -1);
+          editBuilder.delete(new vscode.Range(startPos, selection.active));
+        });
+      } finally {
+        this.isProcessingEdit = false;
+      }
+      this.resetCompositionState();
+      return;
+    }
+
     this.isProcessingEdit = true;
     try {
       await editor.edit((editBuilder) => {
