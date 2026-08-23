@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Fast, real-time Amharic phonetic input and Ethiopic transliteration engine for Visual Studio Code.</strong>
+  <strong>Fast, real-time Amharic Keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration engine for Visual Studio Code & Cursor.</strong>
 </p>
 
 <p align="center">
