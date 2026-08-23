@@ -4,6 +4,11 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-08-23
+
+### Fixed
+- **Locked Output Backspacing**: Prevent duplicate character re-insertion when backspacing past the pending composition buffer into committed locked syllables.
+
 ## [0.3.0] - 2026-08-14
 
 ### Added

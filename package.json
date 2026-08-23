@@ -2,7 +2,7 @@
   "name": "fidel-amharic",
   "displayName": "Fidel — Amharic Phonetic Input (ፊደል)",
   "description": "Fast, live Amharic phonetic input and Ethiopic transliteration for VS Code.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "publisher": "Yihun",
   "author": {
     "name": "Yihun Shekuri",
