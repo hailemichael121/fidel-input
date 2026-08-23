@@ -7,7 +7,7 @@ export function isStandardEditable(el: Element | null): el is HTMLInputElement |
   if (el instanceof HTMLInputElement) {
     if (el.readOnly || el.disabled) return false;
     const type = (el.type || 'text').toLowerCase();
-    if (type === 'password' || type === 'file' || type === 'checkbox' || type === 'radio') return false;
+    if (type === 'password' || type === 'file' || type === 'checkbox' || type === 'radio' || type === 'button' || type === 'submit') return false;
     return true;
   }
   return false;
@@ -31,13 +31,13 @@ export function applyNativeValue(
     el.value = newValue;
   }
 
-  // Synchronize React / Vue internal tracker to prevent rollback loops
+  // Synchronize React internal tracker so React registers the synthetic change
   const tracker = (el as unknown as { _valueTracker?: { setValue: (v: string) => void } })._valueTracker;
   if (tracker) {
     tracker.setValue(previousValue);
   }
 
-  // Restore caret position
+  // Restore caret position before dispatching input event
   try {
     el.setSelectionRange(newSelectionStart, newSelectionEnd);
   } catch {
@@ -79,11 +79,6 @@ export class StandardInputHandler {
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
 
-    // If caret position moved away from composition end, reset composition
-    if (session.lastSelectionStart !== null && session.lastSelectionStart !== start) {
-      session.engine.reset();
-    }
-
     // Modifier keys check (Ctrl, Cmd, Alt)
     if (e.ctrlKey || e.metaKey || e.altKey) {
       if (session.engine.raw.length > 0 && e.key !== 'Shift') {
@@ -93,11 +88,9 @@ export class StandardInputHandler {
     }
 
     // Navigation and submit keys commit/reset composition
-    if (['Escape', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
+    if (['Escape', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
-        session.lastSelectionStart = null;
-        session.lastSelectionEnd = null;
       }
       return false;
     }
@@ -111,7 +104,6 @@ export class StandardInputHandler {
         // If user highlighted text, delete selection natively and reset
         if (start !== end) {
           session.engine.reset();
-          session.lastSelectionStart = null;
           const currentValue = el.value;
           const newValue = currentValue.slice(0, start) + currentValue.slice(end);
           applyNativeValue(el, newValue, start, start);
@@ -121,11 +113,10 @@ export class StandardInputHandler {
         const state = session.engine.backspace();
         const currentValue = el.value;
 
-        // If replaceLength is 0 but raw is cleared or locked output exists,
+        // When replaceLength is 0 (engine has no pending fragment),
         // do not duplicate! Do a single character backspace and reset.
         if (state.replaceLength === 0) {
           session.engine.reset();
-          session.lastSelectionStart = null;
           const prefix = currentValue.slice(0, Math.max(0, start - 1));
           const suffix = currentValue.slice(start);
           const newValue = prefix + suffix;
@@ -143,9 +134,6 @@ export class StandardInputHandler {
 
         if (session.engine.raw.length === 0) {
           session.engine.reset();
-          session.lastSelectionStart = null;
-        } else {
-          session.lastSelectionStart = newPos;
         }
         return true;
       }
@@ -184,9 +172,6 @@ export class StandardInputHandler {
 
       if (state.committed) {
         session.engine.reset();
-        session.lastSelectionStart = null;
-      } else {
-        session.lastSelectionStart = newPos;
       }
       return true;
     }

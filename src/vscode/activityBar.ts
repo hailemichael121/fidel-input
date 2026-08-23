@@ -108,7 +108,7 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
       title: "Toggle Smart Correction",
     };
     smartItem.tooltip = "Toggle smart phonetic correction for double consonants";
-    smartItem.iconPath = new vscode.ThemeIcon("sparkle");
+    smartItem.iconPath = new vscode.ThemeIcon("symbol-keyword");
 
     const dictItem = new vscode.TreeItem(
       "Personal Dictionary Settings",
