@@ -108,17 +108,6 @@ const browserLandingOptions = {
   minify: false,
 };
 
-const browserDocsInjectOptions = {
-  entryPoints: ["src/browser/content/docs_inject.ts"],
-  bundle: true,
-  outfile: "dist/browser/docs_inject.js",
-  format: "iife",
-  platform: "browser",
-  target: "es2022",
-  sourcemap: false,
-  minify: false,
-};
-
 async function buildAll() {
   if (target === "all" || target === "vscode") {
     if (watch) {
@@ -141,7 +130,6 @@ async function buildAll() {
         esbuild.context(browserPopupOptions),
         esbuild.context(browserOptionsPageOptions),
         esbuild.context(browserLandingOptions),
-        esbuild.context(browserDocsInjectOptions),
       ]);
       await Promise.all(ctxs.map((ctx) => ctx.watch()));
       console.log("Fidel [Browser]: watching for changes...");
@@ -152,7 +140,6 @@ async function buildAll() {
         esbuild.build(browserPopupOptions),
         esbuild.build(browserOptionsPageOptions),
         esbuild.build(browserLandingOptions),
-        esbuild.build(browserDocsInjectOptions),
       ]);
       console.log("Fidel [Browser]: build complete.");
     }
