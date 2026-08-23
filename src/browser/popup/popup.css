@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="dark"] {
   --bg-black: #000000;
   --bg-surface: #0a0a0d;
   --bg-surface-raised: #121216;
@@ -16,6 +17,23 @@
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
   --font-ethiopic: "Nyala", "Abyssinica SIL", "Noto Sans Ethiopic", "Kefa", sans-serif;
+}
+
+[data-theme="light"] {
+  --bg-black: #ffffff;
+  --bg-surface: #f8fafc;
+  --bg-surface-raised: #ffffff;
+  --bg-input: #f1f5f9;
+  --bg-hover: #e2e8f0;
+
+  --border-dim: #e2e8f0;
+  --border-mid: #cbd5e1;
+  --border-bright: #0f172a;
+
+  --text-pure: #09090b;
+  --text-high: #18181b;
+  --text-mid: #475569;
+  --text-muted: #94a3b8;
 }
 
 * {
@@ -38,6 +56,13 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
   overflow: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="light"] body {
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(0, 0, 0, 0.03) 0%, transparent 60%),
+    radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
 }
 
 /* Subtle Ethiopic Watermark */
@@ -53,6 +78,10 @@ body::before {
   pointer-events: none;
   z-index: 0;
   line-height: 1;
+}
+
+[data-theme="light"] body::before {
+  color: rgba(0, 0, 0, 0.02);
 }
 
 .popup-shell {
@@ -81,7 +110,7 @@ body::before {
 .logo-mark {
   width: 32px;
   height: 32px;
-  background: #000000;
+  background: var(--bg-black);
   border: 1px solid var(--border-mid);
   border-radius: 6px;
   display: flex;
@@ -113,8 +142,8 @@ body::before {
 .badge-fidel {
   font-family: var(--font-ethiopic);
   font-size: 11px;
-  background: #ffffff;
-  color: #000000;
+  background: var(--text-pure);
+  color: var(--bg-black);
   padding: 0 5px;
   border-radius: 3px;
   font-weight: 700;
@@ -126,11 +155,46 @@ body::before {
   font-family: monospace;
 }
 
-/* Ultra-Slick Monochrome Switch */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-theme-mini {
+  background: var(--bg-input);
+  border: 1px solid var(--border-dim);
+  color: var(--text-mid);
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-theme-mini:hover {
+  background: var(--bg-hover);
+  color: var(--text-pure);
+}
+
+.icon-theme-mini {
+  width: 13px;
+  height: 13px;
+}
+
+[data-theme="dark"] .icon-sun { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: block; }
+
+/* Main Master Switch */
 .switch-control {
   position: relative;
   display: inline-block;
-  width: 42px;
+  width: 40px;
   height: 22px;
   cursor: pointer;
 }
@@ -165,13 +229,13 @@ body::before {
 }
 
 .switch-control input:checked + .switch-track {
-  background-color: #ffffff;
-  border-color: #ffffff;
+  background-color: var(--text-pure);
+  border-color: var(--text-pure);
 }
 
 .switch-control input:checked + .switch-track .switch-thumb {
-  transform: translateX(20px);
-  background-color: #000000;
+  transform: translateX(18px);
+  background-color: var(--bg-black);
 }
 
 /* Status Strip */
@@ -195,9 +259,13 @@ body::before {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--text-pure);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
   transition: all 0.2s;
+}
+
+[data-theme="light"] .status-pulse {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 }
 
 .status-strip.disabled .status-pulse {
@@ -337,7 +405,7 @@ body::before {
 .btn-copy-action.copied .icon-copy { display: none; }
 .btn-copy-action.copied .icon-check { display: block; }
 
-/* Toggle Grid */
+/* Toggle Grid with Custom Mini Switches */
 .toggle-grid {
   display: flex;
   flex-direction: column;
@@ -377,11 +445,52 @@ body::before {
   color: var(--text-muted);
 }
 
-.mini-checkbox {
-  width: 14px;
-  height: 14px;
-  accent-color: var(--text-pure);
-  cursor: pointer;
+/* Custom Mini Switch */
+.mini-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.mini-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mini-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.mini-thumb {
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.15s ease;
+}
+
+.mini-switch input:checked + .mini-track {
+  background-color: var(--text-pure);
+  border-color: var(--text-pure);
+}
+
+.mini-switch input:checked + .mini-track .mini-thumb {
+  transform: translateX(14px);
+  background-color: var(--bg-black);
 }
 
 /* Footer Navigation */

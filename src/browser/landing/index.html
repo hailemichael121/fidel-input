@@ -26,7 +26,7 @@
 
       <nav class="header-nav">
         <a href="#sandbox" class="nav-link">Interactive Sandbox</a>
-        <a href="#user-guide" class="nav-link">How It Works</a>
+        <a href="#user-guide" class="nav-link">User Guide</a>
         <a href="#cheatsheet" class="nav-link">Syllabary Matrix</a>
         <a href="#developer-docs" class="nav-link">Developer Docs</a>
         <a href="#install" class="nav-link">Downloads</a>
@@ -48,14 +48,9 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-container">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        <span>Cross-Platform Amharic IME &bull; VS Code &amp; Web Browsers</span>
-      </div>
-
       <h1 class="hero-title">
         Fast, Native Amharic Typing.<br>
-        <span class="gradient-text">Zero Compromises.</span>
+        <span class="gradient-text">Zero Friction.</span>
       </h1>
 
       <p class="hero-subtitle">
@@ -94,7 +89,7 @@
           <div class="sim-row">
             <span class="sim-prompt">&gt;</span>
             <span class="sim-label">Ethiopic Output:</span>
-            <span class="sim-text-output" id="sim-output">ሰላም ይሁን</span>
+            <span class="sim-text-output font-ethiopic" id="sim-output">ሰላም ይሁን</span>
           </div>
           <div class="sim-divider"></div>
           <div class="sim-meta-row">
@@ -110,7 +105,6 @@
   <section id="sandbox" class="section-block">
     <div class="container">
       <div class="section-header">
-        <span class="section-eyebrow">Try It Yourself</span>
         <h2 class="section-title">Interactive Composition Sandbox</h2>
         <p class="section-desc">Type below using standard QWERTY phonetic input on the left to see real-time Ethiopic resolution and syllable metrics on the right.</p>
       </div>
@@ -133,7 +127,7 @@
                 <span>Copy</span>
               </button>
             </div>
-            <div id="sandbox-rendered" class="sandbox-rendered-area">ሰላም! እንኳን ወደ ፊደል በሰላም መጣሁ።</div>
+            <div id="sandbox-rendered" class="sandbox-rendered-area font-ethiopic">ሰላም! እንኳን ወደ ፊደል በሰላም መጣሁ።</div>
           </div>
         </div>
         <div class="sandbox-footer">
@@ -158,7 +152,6 @@
   <section id="user-guide" class="section-block section-darker">
     <div class="container">
       <div class="section-header">
-        <span class="section-eyebrow">User Guide &amp; Settings Walkthrough</span>
         <h2 class="section-title">What You Can Do With Fidel</h2>
         <p class="section-desc">Practical tips, shortcuts, and settings to make Amharic typing effortless in your daily workflow.</p>
       </div>
@@ -276,11 +269,11 @@
           <div class="guide-pane-grid">
             <div class="guide-pane-content">
               <h3>Smart Website Exclusions (Mini Browser Preview)</h3>
-              <p>When coding on GitHub or designing in Figma, you want raw Latin keystrokes without manually turning off your Amharic keyboard. Fidel provides an automated bypass list:</p>
+              <p>When typing code or design shortcuts on websites like GitHub, Figma, or CodePen, you want to type raw Latin without turning off Amharic mode manually. The Website Bypass List does this automatically:</p>
               <ul class="guide-feature-list">
-                <li><strong>Social &amp; Docs Sites (e.g. twitter.com, docs.google.com):</strong> Fidel transliterates to Amharic automatically.</li>
-                <li><strong>Coding &amp; Design Sites (e.g. github.com, figma.com):</strong> Fidel automatically stays in English Latin mode.</li>
-                <li><strong>Instant Shortcut:</strong> Press <kbd>Alt + A</kbd> (or <kbd>Alt + Shift + A</kbd>) anywhere on any page to toggle Fidel on or off instantly.</li>
+                <li><strong>All Standard Websites (e.g. twitter.com, docs.google.com, gmail.com):</strong> Fidel transliterates to Amharic automatically.</li>
+                <li><strong>Bypassed Websites (e.g. github.com, figma.com, codepen.io):</strong> Fidel automatically stays in standard English (Latin) mode.</li>
+                <li><strong>Global Shortcut:</strong> Press <kbd>Alt + A</kbd> (or <kbd>Alt + Shift + A</kbd>) anytime to toggle Fidel on or off on any page.</li>
               </ul>
             </div>
 
@@ -324,7 +317,7 @@
               <h3>Personal Dictionary &amp; Custom Word Shortcuts</h3>
               <p>Have custom names, family spellings, or phrases you type frequently? Add them to your personal dictionary for immediate 1-to-1 transliteration:</p>
               <ul class="guide-feature-list">
-                <li><strong>Custom Name Overrides:</strong> <code>myname</code> &rarr; <strong>ይሁን</strong>, <code>familyname</code> &rarr; <strong>ሸኩሪ</strong></li>
+                <li><strong>Custom Name Overrides:</strong> <code>myname</code> &rarr; <strong>ይሁን</strong>, <code>haile</code> &rarr; <strong>ኃይለ</strong></li>
                 <li><strong>Quick JSON Export/Import:</strong> Backup your personalized vocabulary and sync it across all your computers in one click.</li>
                 <li><strong>Highest Priority:</strong> Personal dictionary entries override standard phonetic rules for zero spelling friction.</li>
               </ul>
@@ -359,7 +352,6 @@
   <section id="cheatsheet" class="section-block">
     <div class="container">
       <div class="section-header">
-        <span class="section-eyebrow">Phonetic Matrix</span>
         <h2 class="section-title">Ethiopic Syllabary Reference (33 Families &amp; Compounds)</h2>
         <p class="section-desc">Search across all 33 Ethiopic consonant families and 7 vowel orders. Click any character to copy it instantly.</p>
       </div>
@@ -402,8 +394,7 @@
   <section id="developer-docs" class="section-block section-darker">
     <div class="container">
       <div class="section-header">
-        <span class="section-eyebrow">Developer &amp; Engine Architecture</span>
-        <h2 class="section-title">Engineered for Performance &amp; Precision</h2>
+        <h2 class="section-title">Developer &amp; Engine Architecture</h2>
         <p class="section-desc">Technical specification of the Fidel core transliteration pipeline and cross-platform architecture.</p>
       </div>
 
@@ -439,7 +430,6 @@
   <section id="install" class="section-block">
     <div class="container">
       <div class="section-header">
-        <span class="section-eyebrow">Installation</span>
         <h2 class="section-title">Install Fidel Everywhere</h2>
         <p class="section-desc">Available for Visual Studio Code, Cursor, and all Chromium/Firefox web browsers.</p>
       </div>

@@ -2,6 +2,18 @@ import { BrowserStorageAdapter } from '../storage/storageAdapter';
 import { Transliterator } from '../../engine/transliterator';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Theme Management
+  const themeToggleBtn = document.getElementById('popup-theme-toggle') as HTMLButtonElement;
+  const savedTheme = localStorage.getItem('fidel_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  themeToggleBtn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('fidel_theme', next);
+  });
+
   const toggleEnabled = document.getElementById('toggle-enabled') as HTMLInputElement;
   const statusBanner = document.getElementById('status-banner') as HTMLElement;
   const statusLabel = document.getElementById('status-label') as HTMLElement;
