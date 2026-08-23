@@ -82,11 +82,11 @@ function initLanding() {
 
   // 1. Live Typing Simulator Animation
   const demoPhrases = [
-    { text: 'selam yihun', desc: 'Family: s (Sat) → y (Yaman)' },
-    { text: 'gEz qwanqwa', desc: 'Capital Vowel Split: gEz → ግእዝ' },
-    { text: 't-e metahu', desc: 'Boundary Override: t-e → ትእ' },
-    { text: "k'idus yared", desc: 'Glottal Stop: k\' → ቅ' },
-    { text: 'enkwan des alachu', desc: '8th Order Diqala: kwa → ኳ' }
+    { text: 'selam yihun', desc: 'Greeting: selam yihun → ሰላም ይሁን' },
+    { text: 'gEz qwanqwa', desc: 'Geez Language: gEz qwanqwa → ግእዝ ቋንቋ' },
+    { text: "k'idus yared", desc: 'Saint Yared: k\'idus yared → ቅዱስ ያሬድ' },
+    { text: 't-e metahu', desc: 'Boundary Override: t-e metahu → ትእ መጣሁ' },
+    { text: 'enkwan des alachu', desc: 'Celebration: enkwan des alachu → እንኳን ደስ አላቹ' }
   ];
 
   let phraseIdx = 0;

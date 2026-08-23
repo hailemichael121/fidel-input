@@ -32,7 +32,7 @@ describe("Exhaustive Ethiopic Syllabary Test Suite (33 Families x 7 Orders)", ()
 
       if (family.wa) {
         expect(flatMap[prefix + "w"]).toBe(family.wa);
-        expect(flatMap[prefix + "wa"]).toBeUndefined();
+        expect(flatMap[prefix + "wa"]).toBe(family.wa);
       }
     }
   });

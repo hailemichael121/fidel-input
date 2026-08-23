@@ -28,8 +28,8 @@ describe("Mapping Data", () => {
     expect(flat["see"]).toBe("ሴ");
     expect(flat["so"]).toBe("ሶ");
     expect(flat["sw"]).toBe("ሷ");
-    expect(flat["swa"]).toBeUndefined();
-    expect(flat["soa"]).toBeUndefined();
+    expect(flat["swa"]).toBe("ሷ");
+    expect(flat["soa"]).toBe("ሷ");
 
     expect(flat["sh"]).toBe("ሽ");
     expect(flat["she"]).toBe("ሸ");
@@ -49,11 +49,11 @@ describe("Mapping Data", () => {
     expect(flat["Pa"]).toBe("ጳ");
 
     expect(flat["lw"]).toBe("ሏ");
-    expect(flat["lwa"]).toBeUndefined();
-    expect(flat["loa"]).toBeUndefined();
+    expect(flat["lwa"]).toBe("ሏ");
+    expect(flat["loa"]).toBe("ሏ");
     expect(flat["mw"]).toBe("ሟ");
-    expect(flat["mwa"]).toBeUndefined();
-    expect(flat["moa"]).toBeUndefined();
+    expect(flat["mwa"]).toBe("ሟ");
+    expect(flat["moa"]).toBe("ሟ");
   });
 
   it("verifies 1st order (e) vs 4th order (a) rule across all 33 families", () => {

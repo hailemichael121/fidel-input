@@ -52,6 +52,14 @@ describe("Transliterator", () => {
     expect(transliterateWord("Pw")).toBe("ጷ");
     expect(transliterateWord("tsw")).toBe("ጿ");
     expect(transliterateWord("fw")).toBe("ፏ");
+
+    // Full labialized words with wa
+    expect(transliterateWord("qwanqwa")).toBe("ቋንቋ");
+    expect(transliterateWord("enkwan")).toBe("እንኳን");
+    expect(transliterateText("gEz qwanqwa")).toBe("ግእዝ ቋንቋ");
+    expect(transliterateText("k'idus yared")).toBe("ቅዱስ ያሬድ");
+    expect(transliterateText("qdus yared")).toBe("ቅዱስ ያሬድ");
+    expect(transliterateText("enkwan des alachu")).toBe("እንኳን ደስ አላቹ");
   });
 
   it("handles fast consonant clusters without merging errors", () => {

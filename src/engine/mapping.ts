@@ -196,6 +196,12 @@ export const COMMON_WORD_MAP: Record<string, string> = {
   michael: "ሚካኤል",
   gebriel: "ገብርኤል",
   gabriel: "ገብርኤል",
+  kidus: "ቅዱስ",
+  "k'idus": "ቅዱስ",
+  qidus: "ቅዱስ",
+  qdus: "ቅዱስ",
+  yared: "ያሬድ",
+  yareed: "ያሬድ",
 
   // Common Amharic Personal Names
   abebe: "አበበ",
@@ -304,7 +310,9 @@ export function buildFlatMapping(): Record<string, string> {
     map[prefix + "o"] = family.o;     // 7th order (e.g. ho -> ホ -> ሆ, mo -> ሞ)
 
     if (family.wa) {
-      map[prefix + "w"] = family.wa;  // 8th order directly with w (e.g. lw -> ሏ, mw -> ሟ, tw -> ቷ, kw -> ኳ, gw -> ጓ)
+      map[prefix + "w"] = family.wa;   // 8th order directly with w (e.g. lw -> ሏ, mw -> ሟ, tw -> ቷ, kw -> ኳ, gw -> ጓ)
+      map[prefix + "wa"] = family.wa;  // 8th order with wa (e.g. qwa -> ቋ, kwa -> ኳ, lwa -> ሏ, mwa -> ሟ, twa -> ቷ, gwa -> ጓ)
+      map[prefix + "oa"] = family.wa;  // 8th order with oa (e.g. qoa -> ቋ, koa -> ኳ, loa -> ሏ)
     }
   }
 
@@ -330,6 +338,8 @@ export function buildFlatMapping(): Record<string, string> {
       ["ie", family.ee],
       ["o", family.o],
       ["w", family.wa],
+      ["wa", family.wa],
+      ["oa", family.wa],
     ];
 
     for (const vPrefix of variants) {
