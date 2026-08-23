@@ -55,7 +55,7 @@ jobs:
   publish_ovsx:
     name: Publish to Open VSX (Cursor / VSCodium)
     needs: test
-    if: (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch') && secrets.OVSX_PAT != ''
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -81,4 +81,9 @@ jobs:
       - name: Publish to Open VSX
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
-        run: npx ovsx publish -p "$OVSX_PAT"
+        run: |
+          if [ -n "$OVSX_PAT" ]; then
+            npx ovsx publish -p "$OVSX_PAT"
+          else
+            echo "OVSX_PAT secret is not configured in repository secrets. Skipping Open VSX publish."
+          fi
