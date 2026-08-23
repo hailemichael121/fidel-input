@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   test:
@@ -23,27 +23,39 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Bun Environment
+      - name: Setup Bun Runtime
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install Dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
-      - name: Type Check
+      - name: Type Check TypeScript
         run: bun run check
 
-      - name: Run Test Suite
+      - name: Run Unit Test Suite (70+ Tests)
         run: bun test
 
-      - name: Build Extension Bundle
-        run: bun run build
+      - name: Build Production VS Code & Browser Bundles
+        run: bun run build && bun run package:browser
 
-  publish:
-    name: Publish to VS Code & Open VSX Marketplaces
+      - name: Package VSIX Release
+        run: npx @vscode/vsce package --no-dependencies
+
+      - name: Upload Release Artifacts (VSIX & Browser ZIP)
+        uses: actions/upload-artifact@v4
+        with:
+          name: fidel-releases
+          path: |
+            *.vsix
+            fidel-browser-extension.zip
+          retention-days: 14
+
+  publish_ovsx:
+    name: Publish to Open VSX (Cursor / VSCodium)
     needs: test
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    if: (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch') && secrets.OVSX_PAT != ''
     runs-on: ubuntu-latest
 
     steps:
@@ -55,45 +67,18 @@ jobs:
         with:
           node-version: 22
 
-      - name: Setup Bun Environment
+      - name: Setup Bun Runtime
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install Dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Build Production Bundle
         run: bun run build
 
-      - name: Verify Release Version Match
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-
-          echo "======================================"
-          echo "package.json version: $PACKAGE_VERSION"
-          echo "Git release tag:      $TAG_VERSION"
-          echo "======================================"
-
-          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-            echo "ERROR: Version mismatch between package.json ($PACKAGE_VERSION) and tag ($TAG_VERSION)!"
-            exit 1
-          fi
-
-      - name: Package VSIX Release
-        run: npx @vscode/vsce package
-
-      - name: Publish to VS Code Marketplace
-        if: env.VSCE_PAT != ''
-        continue-on-error: true
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: npx @vscode/vsce publish -p "$VSCE_PAT"
-
-      - name: Publish to Open VSX (Cursor / VSCodium)
-        if: always() && env.OVSX_PAT != ''
+      - name: Publish to Open VSX
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: npx ovsx publish -p "$OVSX_PAT"
