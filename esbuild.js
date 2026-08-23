@@ -26,6 +26,10 @@ function copyBrowserStaticAssets() {
   fs.copyFileSync("src/browser/options/options.html", "dist/browser/options.html");
   fs.copyFileSync("src/browser/options/options.css", "dist/browser/options.css");
 
+  // Copy landing/showcase page HTML/CSS
+  fs.copyFileSync("src/browser/landing/index.html", "dist/browser/landing.html");
+  fs.copyFileSync("src/browser/landing/landing.css", "dist/browser/landing.css");
+
   // Copy icons
   if (fs.existsSync("media/fidel.png")) {
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-16.png");
@@ -93,6 +97,17 @@ const browserOptionsPageOptions = {
   minify: false,
 };
 
+const browserLandingOptions = {
+  entryPoints: ["src/browser/landing/landing.ts"],
+  bundle: true,
+  outfile: "dist/browser/landing.js",
+  format: "iife",
+  platform: "browser",
+  target: "es2022",
+  sourcemap: true,
+  minify: false,
+};
+
 async function buildAll() {
   if (target === "all" || target === "vscode") {
     if (watch) {
@@ -114,6 +129,7 @@ async function buildAll() {
         esbuild.context(browserContentOptions),
         esbuild.context(browserPopupOptions),
         esbuild.context(browserOptionsPageOptions),
+        esbuild.context(browserLandingOptions),
       ]);
       await Promise.all(ctxs.map((ctx) => ctx.watch()));
       console.log("Fidel [Browser]: watching for changes...");
@@ -123,6 +139,7 @@ async function buildAll() {
         esbuild.build(browserContentOptions),
         esbuild.build(browserPopupOptions),
         esbuild.build(browserOptionsPageOptions),
+        esbuild.build(browserLandingOptions),
       ]);
       console.log("Fidel [Browser]: build complete.");
     }

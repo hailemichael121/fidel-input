@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidel (ፊደል) — Amharic Phonetic Input IME & Transliteration</title>
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <svg viewBox="0 0 512 512" fill="none" class="brand-logo-svg">
+          <rect width="512" height="512" rx="110" fill="#0c111a" stroke="#222f42" stroke-width="16" />
+          <path d="M186 410 L326 410" stroke="#10b981" stroke-width="14" stroke-linecap="round" />
+          <g transform="translate(111.61, 372) scale(0.34626, -0.34626)">
+            <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="#f8fafc" />
+          </g>
+        </svg>
+        <span class="brand-title">Fidel <span class="brand-ethiopic">ፊደል</span></span>
+      </div>
+
+      <nav class="header-nav">
+        <a href="#sandbox" class="nav-link">Interactive Sandbox</a>
+        <a href="#features" class="nav-link">Architecture</a>
+        <a href="#cheatsheet" class="nav-link">Syllabary Matrix</a>
+        <a href="#install" class="nav-link">Downloads</a>
+        <a href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="nav-btn-github">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Cross-Platform Amharic IME &bull; VS Code &amp; Web Browsers</span>
+      </div>
+
+      <h1 class="hero-title">
+        Fast, Native Amharic Typing.<br>
+        <span class="gradient-text">Zero Compromises.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        An uncompromised Input Method Editor (IME) and transliteration engine. Live phonetic composition, 
+        O(1) buffer segmentation, native caret preservation, and support for all 33 Ethiopic families.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#install" class="btn-cta-primary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Get Extension</span>
+        </a>
+        <a href="#sandbox" class="btn-cta-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+          <span>Try Live Demo</span>
+        </a>
+      </div>
+
+      <!-- Live Typing Simulator Terminal -->
+      <div class="hero-terminal-shell">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="terminal-title">fidel-composition-engine &mdash; live stream</div>
+          <div class="terminal-chip">O(1) Buffer</div>
+        </div>
+        <div class="terminal-body">
+          <div class="sim-row">
+            <span class="sim-prompt">&gt;</span>
+            <span class="sim-label">Latin Input:</span>
+            <span id="sim-input" class="sim-text-input">selam yihun</span>
+            <span class="sim-cursor"></span>
+          </div>
+          <div class="sim-divider"></div>
+          <div class="sim-row">
+            <span class="sim-prompt">&gt;</span>
+            <span class="sim-label">Ethiopic Output:</span>
+            <span id="sim-output" class="sim-text-output">ሰላም ይሁን</span>
+          </div>
+          <div class="sim-meta-row">
+            <span class="meta-tag" id="sim-family">Family: s (Sat) &rarr; y (Yaman)</span>
+            <span class="meta-tag" id="sim-speed">Latency: &lt; 0.1ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Sandbox Section -->
+  <section id="sandbox" class="section-block section-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Try It Yourself</span>
+        <h2 class="section-title">Interactive Composition Sandbox</h2>
+        <p class="section-desc">Type below using standard QWERTY phonetic input to see real-time character resolution and phoneme segmentation.</p>
+      </div>
+
+      <div class="sandbox-widget">
+        <div class="sandbox-topbar">
+          <div class="sandbox-tabs">
+            <span class="sandbox-tab active">Live IME</span>
+          </div>
+          <div class="sandbox-tips">
+            <span>Try: <code>gEz</code> &rarr; <strong>ግእዝ</strong> &bull; <code>t-e</code> &rarr; <strong>ትእ</strong> &bull; <code>k'idus</code> &rarr; <strong>ቅዱስ</strong></span>
+          </div>
+        </div>
+
+        <div class="sandbox-main">
+          <div class="sandbox-input-col">
+            <label for="sandbox-input" class="col-label">QWERTY Input (Latin)</label>
+            <textarea id="sandbox-input" placeholder="Type here... e.g. Selam! Enkwan wede fidel be-selam met'ahu." rows="4" autofocus spellcheck="false"></textarea>
+          </div>
+
+          <div class="sandbox-output-col">
+            <div class="col-header-row">
+              <label class="col-label">Ethiopic Unicode Output</label>
+              <button id="btn-copy-sandbox" class="btn-copy-inline">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy</span>
+              </button>
+            </div>
+            <div id="sandbox-rendered" class="sandbox-rendered-area">ሰላም! እንኳን ወደ ፊደል በሰላም መጣሁ።</div>
+          </div>
+        </div>
+
+        <div class="sandbox-footer">
+          <div class="stats-item">
+            <span class="stats-label">Characters:</span>
+            <span id="stat-chars" class="stats-val">0</span>
+          </div>
+          <div class="stats-item">
+            <span class="stats-label">Syllables:</span>
+            <span id="stat-syllables" class="stats-val">0</span>
+          </div>
+          <div class="stats-item">
+            <span class="stats-label">Engine Mode:</span>
+            <span class="stats-val text-emerald">Segmented O(1)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Architecture Highlights -->
+  <section id="features" class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Engineering Precision</span>
+        <h2 class="section-title">Built for Performance &amp; Accuracy</h2>
+        <p class="section-desc">Engineered from the ground up with mathematical syllabary symmetry and clean event decoupling.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3>Segmented Buffer Architecture</h3>
+          <p>Decouples immutable committed syllables (<code>lockedOutput</code>) from active bounded matching (<code>pendingFragment</code>) for O(1) performance per keystroke.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <h3>Modern Framework Compatible</h3>
+          <p>Bypasses React / Vue / Angular <code>_valueTracker</code> overriding issues on web inputs by invoking native prototype setters directly.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          </div>
+          <h3>Syllable Disambiguation</h3>
+          <p>Seamlessly handles ambiguous sequences with capital-vowel splitting (<code>tE</code> &rarr; <strong>ትእ</strong>, <code>gEz</code> &rarr; <strong>ግእዝ</strong>) and boundary overrides.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </div>
+          <h3>Personal Dictionary</h3>
+          <p>User-defined phonetic overrides synced across devices via cloud storage that take precedence over default syllabary mappings.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <h3>Ethiopic Numerals (፩ - ፼)</h3>
+          <p>Mathematical numeral positional converter transforming standard Arabic digits (1, 2, 3...) into traditional Ethiopic numerals.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3>Smart Phonetic Correction</h3>
+          <p>Intelligently normalizes non-standard double-consonants and phonetic slips without interrupting the typing flow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Syllabary Reference Matrix -->
+  <section id="cheatsheet" class="section-block section-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Phonetic Matrix</span>
+        <h2 class="section-title">Ethiopic Syllabary Reference (ፊደል ገበታ)</h2>
+        <p class="section-desc">Search across 33 Ethiopic consonant families and 7 vowel orders. Click any character to copy it.</p>
+      </div>
+
+      <div class="matrix-card">
+        <div class="matrix-search-row">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="matrix-search-input" placeholder="Search by Latin trigger (h, l, s, sh, q, b...) or Ethiopic letter...">
+          </div>
+          <span class="matrix-hint">Click any letter to copy to clipboard</span>
+        </div>
+
+        <div class="matrix-scroll-wrapper">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Family</th>
+                <th>1st (ä/e)</th>
+                <th>2nd (u)</th>
+                <th>3rd (i)</th>
+                <th>4th (a)</th>
+                <th>5th (e/ie)</th>
+                <th>6th (ə/-)</th>
+                <th>7th (o)</th>
+                <th>8th (wa)</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloads & Installation Section -->
+  <section id="install" class="section-block">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Installation</span>
+        <h2 class="section-title">Install Fidel Everywhere</h2>
+        <p class="section-desc">Available for Visual Studio Code, Cursor, and all Chromium/Firefox web browsers.</p>
+      </div>
+
+      <div class="install-cards-grid">
+        <!-- VS Code / Cursor Card -->
+        <div class="install-card">
+          <div class="install-card-header">
+            <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <div>
+              <h3>VS Code &amp; Cursor IDE</h3>
+              <span class="install-sub">Marketplace Release v0.3.2</span>
+            </div>
+          </div>
+          <p class="install-desc">Native extension with activity bar tree view, live status bar indicator, and hover disambiguation.</p>
+          <div class="code-snippet-box">
+            <code>ext install Yihun.fidel-amharic</code>
+            <button class="btn-copy-snippet" data-copy="ext install Yihun.fidel-amharic" title="Copy install command">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+          <div class="install-actions">
+            <a href="https://marketplace.visualstudio.com/items?itemName=Yihun.fidel-amharic" target="_blank" class="btn-install-primary">
+              <span>VS Code Marketplace</span>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <a href="https://open-vsx.org/extension/Yihun/fidel-amharic" target="_blank" class="btn-install-secondary">
+              <span>Open VSX (Cursor)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Browser Extension Card -->
+        <div class="install-card">
+          <div class="install-card-header">
+            <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <div>
+              <h3>Browser Extension</h3>
+              <span class="install-sub">Manifest V3 &bull; Chrome, Edge, Brave, Firefox</span>
+            </div>
+          </div>
+          <p class="install-desc">Type Amharic across Twitter/X, Gmail, Google Docs, Slack, Notion, and any web form effortlessly.</p>
+          <div class="code-snippet-box">
+            <code>Shortcut: Alt + Shift + A</code>
+          </div>
+          <div class="install-actions">
+            <a href="fidel-browser-extension.zip" download class="btn-install-primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Download ZIP (.zip)</span>
+            </a>
+            <a href="options.html" target="_blank" class="btn-install-secondary">
+              <span>Open Settings</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <span class="footer-title">Fidel (ፊደል) Input</span>
+        <span class="footer-copy">&copy; 2026 Yihun Shekuri. Released under the MIT License.</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Hailemichael121/fidel-input" target="_blank">GitHub</a>
+        <a href="options.html" target="_blank">Options</a>
+        <a href="https://github.com/Hailemichael121/fidel-input/issues" target="_blank">Report Issue</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+</body>
+</html>

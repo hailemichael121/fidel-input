@@ -4,7 +4,7 @@ import { Transliterator } from '../../engine/transliterator';
 document.addEventListener('DOMContentLoaded', async () => {
   const toggleEnabled = document.getElementById('toggle-enabled') as HTMLInputElement;
   const statusBanner = document.getElementById('status-banner') as HTMLElement;
-  const statusText = document.getElementById('status-text') as HTMLElement;
+  const statusLabel = document.getElementById('status-label') as HTMLElement;
 
   const quickInput = document.getElementById('quick-input') as HTMLInputElement;
   const quickOutput = document.getElementById('quick-output') as HTMLElement;
@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings.enabled) {
       statusBanner.classList.remove('disabled');
-      statusText.textContent = 'Fidel Input Active';
+      statusLabel.textContent = 'Active • Amharic Mode';
     } else {
       statusBanner.classList.add('disabled');
-      statusText.textContent = 'Fidel Input Disabled';
+      statusLabel.textContent = 'Disabled • Latin Passthrough';
     }
 
     optNumbers.checked = settings.convertNumbers;
@@ -58,32 +58,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     quickOutput.textContent = res;
   }
 
-  // Initial UI populate
+  // Initial population
   updateUi(currentSettings);
 
-  // Main Toggle
+  // Toggle switch listener
   toggleEnabled.addEventListener('change', async () => {
     const updated = await BrowserStorageAdapter.saveSettings({ enabled: toggleEnabled.checked });
     chrome.runtime.sendMessage({ type: 'SET_ENABLED', enabled: updated.enabled });
     updateUi(updated);
   });
 
-  // Quick Input Listener
+  // Live input
   quickInput.addEventListener('input', renderQuickTransliteration);
 
-  // Copy to clipboard
+  // Copy with SVG checkmark animation
   btnCopy.addEventListener('click', async () => {
     const text = quickOutput.textContent || '';
     if (text) {
       await navigator.clipboard.writeText(text);
-      btnCopy.textContent = '✅';
+      btnCopy.classList.add('copied');
       setTimeout(() => {
-        btnCopy.textContent = '📋';
+        btnCopy.classList.remove('copied');
       }, 1500);
     }
   });
 
-  // Options toggles
+  // Quick settings toggles
   optNumbers.addEventListener('change', async () => {
     const updated = await BrowserStorageAdapter.saveSettings({ convertNumbers: optNumbers.checked });
     updateUi(updated);
