@@ -323,6 +323,17 @@ Extension settings can be configured in VS Code `settings.json`:
 
 ---
 
+## Web Browser Extension (Chrome, Edge, Brave, Firefox)
+
+Fidel is also available as a Manifest V3 browser extension to type fluent Amharic across Twitter/X, Gmail, Google Docs, Slack, Notion, and any web form.
+
+* **Toggle Shortcut**: **`Alt + A`** (or **`Alt + Shift + A`**) toggles Fidel on any web page.
+* **Website Exclusion / Bypass List**: Configure websites (like `github.com` or `figma.com`) where Fidel automatically stays in Latin mode.
+* **Interactive Cheatsheet**: Built-in 33-family syllabary matrix with instant click-to-copy functionality.
+* **Personal Dictionary**: Add custom phonetic mappings stored locally and synchronized across your browser sessions.
+
+---
+
 ## Development & Testing
 
 Built with [Bun](https://bun.sh), TypeScript, and esbuild.

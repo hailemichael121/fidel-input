@@ -43,10 +43,10 @@
   "commands": {
     "toggle-fidel": {
       "suggested_key": {
-        "default": "Alt+Shift+A",
-        "mac": "Alt+Shift+A"
+        "default": "Alt+A",
+        "mac": "Alt+A"
       },
-      "description": "Toggle Fidel Amharic Input"
+      "description": "Toggle Fidel Amharic Input (Alt+A or Alt+Shift+A)"
     }
   },
   "options_page": "options.html"
