@@ -178,6 +178,11 @@
             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
             <span>Custom Personal Dictionary</span>
           </button>
+
+          <button class="guide-nav-btn" data-guide="guide-compatibility">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Platform Support &amp; Behavior</span>
+          </button>
         </div>
 
         <!-- Tab 1: Syllable Disambiguation -->
@@ -339,6 +344,41 @@
                   <span class="demo-pill">Trigger: <code>kifle</code></span>
                   <span class="demo-arrow">&rarr;</span>
                   <span class="demo-output font-ethiopic">ክፍሌ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Platform Support & Behavior -->
+        <div id="guide-compatibility" class="guide-tab-pane">
+          <div class="guide-pane-grid">
+            <div class="guide-pane-content">
+              <h3>Where Fidel Works Natively &amp; Platform Behaviors</h3>
+              <p>Fidel operates directly in real-time across standard web elements, modern reactive frameworks, and major platforms:</p>
+              <ul class="guide-feature-list">
+                <li><strong>AI Prompts &amp; Chats:</strong> Real-time typing across <code>ChatGPT</code>, <code>Claude</code>, <code>Gemini</code>, and <code>Perplexity</code>.</li>
+                <li><strong>Web &amp; Search:</strong> Direct input on <code>Google Search</code>, <code>YouTube</code>, <code>Twitter/X</code>, <code>Reddit</code>, <code>Wikipedia</code>, and standard form inputs.</li>
+                <li><strong>Work &amp; Messaging:</strong> Native transliteration in <code>Gmail</code>, <code>Notion</code>, <code>Slack</code>, <code>Telegram</code>, <code>WhatsApp Web</code>, and <code>Discord</code>.</li>
+                <li><strong>Code Editors:</strong> Full native extension support inside <code>VS Code</code> &amp; <code>Cursor IDE</code>.</li>
+              </ul>
+            </div>
+            <div class="guide-pane-demo">
+              <div class="demo-card">
+                <span class="demo-card-title">Platform Notes</span>
+                <div class="compat-status-card">
+                  <div class="compat-badge-row">
+                    <span class="badge-status-dot active"></span>
+                    <span class="compat-title-sm">Web Standard (DOM Text Elements)</span>
+                  </div>
+                  <p class="compat-desc-sm">Fidel intercepts standard typing events with instant O(1) buffer resolution and automatic caret preservation.</p>
+                </div>
+                <div class="compat-status-card">
+                  <div class="compat-badge-row">
+                    <span class="badge-status-dot canvas"></span>
+                    <span class="compat-title-sm">Google Docs (Canvas Renderer)</span>
+                  </div>
+                  <p class="compat-desc-sm">Google Docs renders text as canvas pixels. For Google Docs, use Fidel's 1-click <strong>Quick Transliteration</strong> popup to copy formatted Amharic text instantly.</p>
                 </div>
               </div>
             </div>
