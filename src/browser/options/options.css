@@ -46,7 +46,7 @@ body::after {
   right: 40px;
   bottom: 20px;
   font-family: var(--font-ethiopic);
-  font-size: 240px;
+  font-size: 260px;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.015);
   pointer-events: none;
@@ -64,7 +64,7 @@ body::after {
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
+  width: 270px;
   background-color: var(--bg-sidebar);
   border-right: 1px solid var(--border-dim);
   display: flex;
@@ -175,10 +175,11 @@ body::after {
   stroke-width: 2;
 }
 
-/* Main Body */
+/* Wide Enhanced Main Body */
 .main-body {
   flex: 1;
-  max-width: 920px;
+  max-width: 1500px;
+  width: 100%;
   padding: 40px 48px;
   display: flex;
   flex-direction: column;
@@ -189,6 +190,7 @@ body::after {
   display: none;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 .tab-pane.active {
@@ -196,7 +198,7 @@ body::after {
 }
 
 .pane-header h2 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-pure);
@@ -204,7 +206,7 @@ body::after {
 }
 
 .pane-lead {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-mid);
 }
 
@@ -213,11 +215,12 @@ body::after {
   background-color: var(--bg-card);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 22px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   position: relative;
+  width: 100%;
 }
 
 .card-accent {
@@ -249,13 +252,13 @@ body::after {
 }
 
 .card h3 {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-pure);
 }
 
 .card-desc {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--text-mid);
 }
 
@@ -267,7 +270,7 @@ body::after {
   background-color: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 12px 14px;
+  padding: 12px 16px;
 }
 
 .sandbox-label {
@@ -277,14 +280,14 @@ body::after {
 
 .sandbox-rendered {
   font-family: var(--font-ethiopic);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: #ffffff;
 }
 
 .sandbox-decomp {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-mid);
 }
 
@@ -299,17 +302,17 @@ body::after {
 .radio-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 14px;
 }
 
 .radio-card {
   border: 1px solid var(--border-dim);
   background-color: var(--bg-input);
   border-radius: 4px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -329,7 +332,7 @@ body::after {
 }
 
 .radio-title {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-pure);
   margin-bottom: 2px;
@@ -373,7 +376,7 @@ body::after {
   border: 1px solid var(--border-dim);
   border-radius: 4px;
   color: var(--text-pure);
-  padding: 9px 12px;
+  padding: 10px 14px;
   font-size: 13.5px;
   outline: none;
   font-family: inherit;
@@ -386,9 +389,9 @@ body::after {
   border: 1px solid var(--border-dim);
   border-radius: 4px;
   color: var(--text-pure);
-  padding: 7px 10px;
+  padding: 8px 12px;
   font-size: 13px;
-  width: 80px;
+  width: 90px;
   outline: none;
 }
 
@@ -403,8 +406,8 @@ body::after {
   border: 1px solid var(--border-dim);
   border-radius: 4px;
   color: var(--text-pure);
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 12px 14px;
+  font-size: 13.5px;
   outline: none;
   font-family: monospace;
   width: 100%;
@@ -422,7 +425,7 @@ body::after {
   color: #000000;
   border: none;
   border-radius: 4px;
-  padding: 9px 16px;
+  padding: 10px 18px;
   font-size: 13px;
   font-weight: 700;
   display: flex;
@@ -441,8 +444,8 @@ body::after {
   color: var(--text-mid);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 8px 14px;
+  font-size: 12.5px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -467,7 +470,7 @@ body::after {
 .dict-add-grid {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-end;
 }
 
@@ -494,9 +497,9 @@ body::after {
   background-color: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   flex: 1;
-  max-width: 320px;
+  max-width: 380px;
 }
 
 .search-icon {
@@ -510,7 +513,7 @@ body::after {
   background: transparent;
   border: none;
   color: var(--text-pure);
-  font-size: 12.5px;
+  font-size: 13px;
   outline: none;
   width: 100%;
 }
@@ -530,7 +533,7 @@ body::after {
 
 .data-table th {
   background-color: var(--bg-input);
-  padding: 9px 12px;
+  padding: 10px 14px;
   font-weight: 600;
   color: var(--text-muted);
   font-size: 11px;
@@ -540,7 +543,7 @@ body::after {
 }
 
 .data-table td {
-  padding: 10px 12px;
+  padding: 11px 14px;
   border-bottom: 1px solid var(--border-dim);
 }
 
@@ -581,75 +584,113 @@ body::after {
   color: #000000;
 }
 
-/* Syllabary Reference Table */
+/* Wide Enhanced Syllabary Reference Table */
+.syllabary-filter-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
 .syllabary-grid-container {
   border: 1px solid var(--border-dim);
   border-radius: 4px;
   overflow-x: auto;
-  max-height: 480px;
+  max-height: 600px;
+  width: 100%;
 }
 
 .syllabary-table {
   width: 100%;
+  min-width: 1180px;
   border-collapse: collapse;
   text-align: center;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 .syllabary-table th {
-  background-color: var(--bg-input);
-  padding: 8px 10px;
-  font-size: 11px;
+  background-color: #121217;
+  padding: 12px 14px;
+  font-size: 11.5px;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-dim);
+  border-right: 1px solid var(--border-dim);
   position: sticky;
   top: 0;
   z-index: 2;
+  white-space: nowrap;
+}
+
+.syllabary-table th:last-child {
+  border-right: none;
 }
 
 .syllabary-table td {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border-dim);
+  border-right: 1px solid var(--border-dim);
   font-family: var(--font-ethiopic);
-  font-size: 15px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.syllabary-table td:last-child {
+  border-right: none;
 }
 
 .syllabary-table td:first-child {
   font-family: var(--font-sans);
   font-weight: 700;
   color: #ffffff;
-  background-color: var(--bg-input);
-  font-size: 12.5px;
+  background-color: #0c0c10;
+  font-size: 13px;
   text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.syllabary-table td:nth-child(2) {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-mid);
+  text-align: left;
+  background-color: #09090c;
 }
 
 .syllabary-cell {
   cursor: pointer;
-  border-radius: 3px;
-  padding: 2px 5px;
+  border-radius: 4px;
+  padding: 4px 8px;
   transition: all 0.15s;
-  display: inline-block;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
 }
 
 .syllabary-cell:hover {
   background: #ffffff;
   color: #000000;
-  transform: scale(1.2);
+  transform: scale(1.08);
+}
+
+.syllabary-cell:hover span {
+  color: #333333 !important;
 }
 
 /* Switch List */
 .switch-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .switch-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
+  padding: 14px 16px;
   background-color: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
@@ -668,19 +709,19 @@ body::after {
 }
 
 .switch-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-pure);
 }
 
 .switch-desc {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text-muted);
 }
 
 .custom-toggle {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   accent-color: #ffffff;
   cursor: pointer;
 }
@@ -689,8 +730,8 @@ body::after {
 .save-footer {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-top: 10px;
+  gap: 16px;
+  padding-top: 12px;
 }
 
 .btn-save {
@@ -698,8 +739,8 @@ body::after {
   color: #000000;
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 13.5px;
+  padding: 11px 24px;
+  font-size: 14px;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -713,7 +754,7 @@ body::after {
 }
 
 .save-toast {
-  font-size: 13px;
+  font-size: 13.5px;
   color: #ffffff;
   font-weight: 500;
 }

@@ -7,7 +7,6 @@ export function isStandardEditable(el: Element | null): el is HTMLInputElement |
   if (el instanceof HTMLInputElement) {
     if (el.readOnly || el.disabled) return false;
     const type = (el.type || 'text').toLowerCase();
-    // Do not transliterate password or file inputs for safety
     if (type === 'password' || type === 'file' || type === 'checkbox' || type === 'radio') return false;
     return true;
   }
@@ -20,6 +19,7 @@ export function applyNativeValue(
   newSelectionStart: number,
   newSelectionEnd: number = newSelectionStart
 ): void {
+  const previousValue = el.value;
   const proto = el instanceof HTMLTextAreaElement
     ? window.HTMLTextAreaElement.prototype
     : window.HTMLInputElement.prototype;
@@ -31,6 +31,12 @@ export function applyNativeValue(
     el.value = newValue;
   }
 
+  // Synchronize React / Vue internal tracker to prevent rollback loops
+  const tracker = (el as unknown as { _valueTracker?: { setValue: (v: string) => void } })._valueTracker;
+  if (tracker) {
+    tracker.setValue(previousValue);
+  }
+
   // Restore caret position
   try {
     el.setSelectionRange(newSelectionStart, newSelectionEnd);
@@ -38,21 +44,18 @@ export function applyNativeValue(
     // Ignore inputs that do not support setSelectionRange
   }
 
-  // Dispatch comprehensive events for Google Search, React, Vue, Angular, Lit
+  // Dispatch standard bubbling InputEvent
   try {
     const inputEvent = new InputEvent('input', {
       bubbles: true,
       cancelable: true,
       inputType: 'insertText',
-      data: newValue
+      data: newValue.slice(newSelectionStart - 1, newSelectionStart) || undefined
     });
     el.dispatchEvent(inputEvent);
   } catch {
     el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
   }
-
-  el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-  el.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
 export class StandardInputHandler {
@@ -73,8 +76,15 @@ export class StandardInputHandler {
     if (!isStandardEditable(el)) return false;
 
     const session = this.sessionManager.getSession(el);
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
 
-    // Modifier keys check
+    // If caret position moved away from composition end, reset composition
+    if (session.lastSelectionStart !== null && session.lastSelectionStart !== start) {
+      session.engine.reset();
+    }
+
+    // Modifier keys check (Ctrl, Cmd, Alt)
     if (e.ctrlKey || e.metaKey || e.altKey) {
       if (session.engine.raw.length > 0 && e.key !== 'Shift') {
         session.engine.reset();
@@ -82,9 +92,12 @@ export class StandardInputHandler {
       return false;
     }
 
-    if (e.key === 'Escape' || e.key === 'Enter') {
+    // Navigation and submit keys commit/reset composition
+    if (['Escape', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
+        session.lastSelectionStart = null;
+        session.lastSelectionEnd = null;
       }
       return false;
     }
@@ -94,12 +107,11 @@ export class StandardInputHandler {
       if (session.engine.raw.length > 0) {
         e.preventDefault();
         e.stopPropagation();
-        const start = el.selectionStart ?? 0;
-        const end = el.selectionEnd ?? 0;
 
         // If user highlighted text, delete selection natively and reset
         if (start !== end) {
           session.engine.reset();
+          session.lastSelectionStart = null;
           const currentValue = el.value;
           const newValue = currentValue.slice(0, start) + currentValue.slice(end);
           applyNativeValue(el, newValue, start, start);
@@ -109,43 +121,38 @@ export class StandardInputHandler {
         const state = session.engine.backspace();
         const currentValue = el.value;
 
-        // When replaceLength is 0 and there is locked output,
-        // re-inserting would duplicate characters. Perform normal 1-char backspace and reset.
-        if (state.replaceLength === 0 && state.rendered.length > 0) {
+        // If replaceLength is 0 but raw is cleared or locked output exists,
+        // do not duplicate! Do a single character backspace and reset.
+        if (state.replaceLength === 0) {
+          session.engine.reset();
+          session.lastSelectionStart = null;
           const prefix = currentValue.slice(0, Math.max(0, start - 1));
           const suffix = currentValue.slice(start);
           const newValue = prefix + suffix;
           const newPos = Math.max(0, start - 1);
-          session.engine.reset();
           applyNativeValue(el, newValue, newPos, newPos);
           return true;
         }
 
-        if (state.replaceLength > 0) {
-          const prefix = currentValue.slice(0, Math.max(0, start - state.replaceLength));
-          const suffix = currentValue.slice(start);
-          const newValue = prefix + state.rendered + suffix;
-          const newPos = prefix.length + state.rendered.length;
-          applyNativeValue(el, newValue, newPos, newPos);
-          if (session.engine.raw.length === 0) {
-            session.engine.reset();
-          }
-          return true;
-        }
-
-        // Buffer cleared
-        session.engine.reset();
-        const prefix = currentValue.slice(0, Math.max(0, start - 1));
+        // Replace pending composition fragment
+        const prefix = currentValue.slice(0, Math.max(0, start - state.replaceLength));
         const suffix = currentValue.slice(start);
-        const newValue = prefix + suffix;
-        const newPos = Math.max(0, start - 1);
+        const newValue = prefix + state.rendered + suffix;
+        const newPos = prefix.length + state.rendered.length;
         applyNativeValue(el, newValue, newPos, newPos);
+
+        if (session.engine.raw.length === 0) {
+          session.engine.reset();
+          session.lastSelectionStart = null;
+        } else {
+          session.lastSelectionStart = newPos;
+        }
         return true;
       }
       return false;
     }
 
-    // Handle printable characters
+    // Handle printable single character
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
       if (!this.settings.enabled) return false;
 
@@ -155,12 +162,10 @@ export class StandardInputHandler {
       e.preventDefault();
       e.stopPropagation();
 
-      const start = el.selectionStart ?? 0;
-      const end = el.selectionEnd ?? 0;
       const currentValue = el.value;
-
       let baseText = currentValue;
       let insertPos = start;
+
       if (start !== end) {
         session.engine.reset();
         baseText = currentValue.slice(0, start) + currentValue.slice(end);
@@ -176,13 +181,14 @@ export class StandardInputHandler {
       const newPos = prefix.length + state.rendered.length;
 
       applyNativeValue(el, newValue, newPos, newPos);
-      return true;
-    }
 
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Tab'].includes(e.key)) {
-      if (session.engine.raw.length > 0) {
+      if (state.committed) {
         session.engine.reset();
+        session.lastSelectionStart = null;
+      } else {
+        session.lastSelectionStart = newPos;
       }
+      return true;
     }
 
     return false;

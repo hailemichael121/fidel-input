@@ -57,9 +57,9 @@ body::after {
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
   position: relative;
   z-index: 1;
 }
@@ -662,6 +662,7 @@ body::after {
 
 .matrix-table {
   width: 100%;
+  min-width: 1180px;
   border-collapse: collapse;
   text-align: center;
   font-size: 14px;
@@ -669,22 +670,34 @@ body::after {
 
 .matrix-table th {
   background-color: #121216;
-  padding: 10px;
-  font-size: 11px;
+  padding: 12px 14px;
+  font-size: 11.5px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid var(--border-dim);
+  border-right: 1px solid var(--border-dim);
   position: sticky;
   top: 0;
   z-index: 2;
+  white-space: nowrap;
+}
+
+.matrix-table th:last-child {
+  border-right: none;
 }
 
 .matrix-table td {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border-dim);
+  border-right: 1px solid var(--border-dim);
   font-family: var(--font-ethiopic);
   font-size: 16px;
+  white-space: nowrap;
+}
+
+.matrix-table td:last-child {
+  border-right: none;
 }
 
 .matrix-table td:first-child {
@@ -694,6 +707,17 @@ body::after {
   color: #ffffff;
   text-align: left;
   background-color: #121216;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.matrix-table td:nth-child(2) {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-mid);
+  text-align: left;
+  background-color: #09090c;
 }
 
 .matrix-char-cell {

@@ -35,27 +35,25 @@ export class ContentEditableHandler {
     this.settings = settings;
   }
 
-  private executeTextMutation(container: HTMLElement, text: string, replaceLength: number): void {
+  private executeAtomicMutation(container: HTMLElement, text: string, replaceLength: number): void {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) {
+      if (text.length > 0) document.execCommand('insertText', false, text);
+      return;
+    }
+
+    // Select backward replaceLength characters atomically
     if (replaceLength > 0) {
       for (let i = 0; i < replaceLength; i++) {
-        document.execCommand('delete', false);
+        sel.modify('extend', 'backward', 'character');
       }
     }
 
+    // Replace selected range cleanly in one atomic transaction
     if (text.length > 0) {
       document.execCommand('insertText', false, text);
-    }
-
-    try {
-      const ev = new InputEvent('input', {
-        bubbles: true,
-        cancelable: true,
-        inputType: replaceLength > 0 ? 'insertReplacementText' : 'insertText',
-        data: text
-      });
-      container.dispatchEvent(ev);
-    } catch {
-      container.dispatchEvent(new Event('input', { bubbles: true }));
+    } else if (replaceLength > 0) {
+      document.execCommand('delete', false);
     }
   }
 
@@ -69,7 +67,7 @@ export class ContentEditableHandler {
       return false;
     }
 
-    if (e.key === 'Escape' || e.key === 'Enter') {
+    if (['Escape', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
       }
@@ -83,15 +81,14 @@ export class ContentEditableHandler {
 
         const state = session.engine.backspace();
 
-        // When replaceLength is 0 and there is locked output,
-        // do not re-insert the locked text (which causes duplication). Just delete 1 char and reset.
-        if (state.replaceLength === 0 && state.rendered.length > 0) {
+        if (state.replaceLength === 0) {
           session.engine.reset();
           document.execCommand('delete', false);
           return true;
         }
 
-        this.executeTextMutation(editableElement, state.rendered, state.replaceLength);
+        this.executeAtomicMutation(editableElement, state.rendered, state.replaceLength);
+
         if (session.engine.raw.length === 0) {
           session.engine.reset();
         }
@@ -111,14 +108,12 @@ export class ContentEditableHandler {
       e.stopPropagation();
 
       const state = session.engine.feedChar(e.key);
-      this.executeTextMutation(editableElement, state.rendered, state.replaceLength);
-      return true;
-    }
+      this.executeAtomicMutation(editableElement, state.rendered, state.replaceLength);
 
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Tab'].includes(e.key)) {
-      if (session.engine.raw.length > 0) {
+      if (state.committed) {
         session.engine.reset();
       }
+      return true;
     }
 
     return false;
