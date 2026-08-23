@@ -306,6 +306,128 @@ function initLanding() {
       }
     });
   });
+
+  // 7. Interactive Multi-Browser Install Switcher
+  const browserTabBtns = document.querySelectorAll('.browser-tab-btn');
+  const instBrowserTitle = document.getElementById('inst-browser-title');
+  const instStep2 = document.getElementById('inst-step-2');
+  const instStep3 = document.getElementById('inst-step-3');
+  const instCmdCode = document.getElementById('inst-cmd-code');
+  const instCmdBtn = document.getElementById('inst-cmd-btn');
+  const instPrimaryBtn = document.getElementById('inst-primary-btn') as HTMLAnchorElement;
+  const instPrimaryText = document.getElementById('inst-primary-text');
+  const instSecondaryBtn = document.getElementById('inst-secondary-btn') as HTMLAnchorElement;
+
+  const BROWSER_CONFIGS: Record<string, {
+    title: string;
+    step2: string;
+    step3: string;
+    cmd: string;
+    fullCmd: string;
+    primaryLink: string;
+    primaryText: string;
+    secondaryLink: string;
+    secondaryText: string;
+  }> = {
+    chrome: {
+      title: 'Google Chrome • Manifest V3 (Direct Build)',
+      step2: 'Navigate to <code>chrome://extensions</code> in your address bar and turn on <strong>Developer mode</strong>.',
+      step3: 'Click <strong>Load unpacked</strong> and select the unzipped extension folder.',
+      cmd: 'bun install && bun run package:browser',
+      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
+      primaryLink: 'fidel-browser-extension.zip',
+      primaryText: 'Download Latest Build (.zip)',
+      secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
+      secondaryText: 'View Source on GitHub'
+    },
+    brave: {
+      title: 'Brave Browser • Manifest V3 (Direct Build)',
+      step2: 'Navigate to <code>brave://extensions</code> and turn on <strong>Developer mode</strong> in the top-right.',
+      step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
+      cmd: 'bun install && bun run package:browser',
+      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
+      primaryLink: 'fidel-browser-extension.zip',
+      primaryText: 'Download Latest Build (.zip)',
+      secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
+      secondaryText: 'View Source on GitHub'
+    },
+    edge: {
+      title: 'Microsoft Edge • Manifest V3 (Direct Build)',
+      step2: 'Navigate to <code>edge://extensions</code> and toggle <strong>Developer mode</strong> on the left panel.',
+      step3: 'Click <strong>Load unpacked</strong> and select the unzipped folder.',
+      cmd: 'bun install && bun run package:browser',
+      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
+      primaryLink: 'fidel-browser-extension.zip',
+      primaryText: 'Download Latest Build (.zip)',
+      secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
+      secondaryText: 'View Source on GitHub'
+    },
+    opera: {
+      title: 'Opera / Opera GX • Manifest V3 (Direct Build)',
+      step2: 'Navigate to <code>opera://extensions</code> and enable <strong>Developer mode</strong> (top-right).',
+      step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
+      cmd: 'bun install && bun run package:browser',
+      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
+      primaryLink: 'fidel-browser-extension.zip',
+      primaryText: 'Download Latest Build (.zip)',
+      secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
+      secondaryText: 'View Source on GitHub'
+    },
+    firefox: {
+      title: 'Mozilla Firefox • Temporary Add-on',
+      step2: 'Navigate to <code>about:debugging#/runtime/this-firefox</code> in the Firefox URL bar.',
+      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the extracted folder.',
+      cmd: 'bun install && bun run package:browser',
+      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
+      primaryLink: 'fidel-browser-extension.zip',
+      primaryText: 'Download Latest Build (.zip)',
+      secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
+      secondaryText: 'View Source on GitHub'
+    },
+    vscode: {
+      title: 'VS Code & Cursor IDE • Official Marketplace Extension',
+      step2: 'Press <kbd>Ctrl+Shift+X</kbd> (or <kbd>Cmd+Shift+X</kbd>) inside VS Code / Cursor to open Extensions.',
+      step3: 'Search for <strong>Fidel</strong> or type <code>ext install Yihun.fidel-amharic</code> to install instantly.',
+      cmd: 'ext install Yihun.fidel-amharic',
+      fullCmd: 'ext install Yihun.fidel-amharic',
+      primaryLink: 'https://marketplace.visualstudio.com/items?itemName=Yihun.fidel-amharic',
+      primaryText: 'VS Code Marketplace',
+      secondaryLink: 'https://open-vsx.org/extension/Yihun/fidel-amharic',
+      secondaryText: 'Open VSX (Cursor)'
+    }
+  };
+
+  browserTabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const browser = btn.getAttribute('data-browser') || 'chrome';
+      const config = BROWSER_CONFIGS[browser];
+      if (!config) return;
+
+      browserTabBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (instBrowserTitle) instBrowserTitle.textContent = config.title;
+      if (instStep2) instStep2.innerHTML = config.step2;
+      if (instStep3) instStep3.innerHTML = config.step3;
+      if (instCmdCode) instCmdCode.textContent = config.cmd;
+      if (instCmdBtn) instCmdBtn.setAttribute('data-copy', config.fullCmd);
+      if (instPrimaryBtn) {
+        instPrimaryBtn.href = config.primaryLink;
+        if (config.primaryLink.endsWith('.zip')) {
+          instPrimaryBtn.setAttribute('download', '');
+          instPrimaryBtn.removeAttribute('target');
+        } else {
+          instPrimaryBtn.removeAttribute('download');
+          instPrimaryBtn.setAttribute('target', '_blank');
+        }
+      }
+      if (instPrimaryText) instPrimaryText.textContent = config.primaryText;
+      if (instSecondaryBtn) {
+        instSecondaryBtn.href = config.secondaryLink;
+        instSecondaryBtn.textContent = config.secondaryText;
+      }
+    });
+  });
 }
 
 // Ensure execution regardless of script load timing

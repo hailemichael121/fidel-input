@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Fidel — Amharic Phonetic Input (ፊደል)",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Fast, real-time Amharic keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration for the web.",
   "icons": {
     "16": "icons/icon-16.png",

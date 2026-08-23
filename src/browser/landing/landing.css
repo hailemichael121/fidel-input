@@ -116,21 +116,40 @@ body {
 
 /* Wavy / Calligraphic Ethiopic Watermark */
 body::after {
-  content: "ፊ";
+  content: "ፊደል";
   position: fixed;
-  right: -20px;
-  top: 15%;
+  right: 40px;
+  bottom: 20px;
   font-family: var(--font-ethiopic);
-  font-size: 480px;
+  font-size: 260px;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.015);
   pointer-events: none;
   z-index: 0;
+  letter-spacing: -0.05em;
   line-height: 1;
 }
 
 [data-theme="light"] body::after {
   color: rgba(0, 0, 0, 0.02);
+}
+
+body::before {
+  content: "ፊ";
+  position: fixed;
+  left: -20px;
+  top: 15%;
+  font-family: var(--font-ethiopic);
+  font-size: 380px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.01);
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+}
+
+[data-theme="light"] body::before {
+  color: rgba(0, 0, 0, 0.015);
 }
 
 .container {
@@ -1238,89 +1257,158 @@ body::after {
   color: var(--text-muted);
 }
 
-/* Install Cards */
-.install-cards-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.install-card {
+/* Browser Chooser Tab Bar & Shell */
+.browser-chooser-shell {
   background-color: var(--bg-card);
   border: 1px solid var(--border-dim);
   border-radius: 6px;
-  padding: 24px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 14px;
 }
 
-.install-card-header {
+.browser-tab-nav {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  background-color: var(--bg-input);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.browser-tab-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-dim);
+  padding: 14px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s;
 }
 
-.install-icon {
-  width: 30px;
-  height: 30px;
+.browser-tab-btn:last-child {
+  border-right: none;
+}
+
+.browser-tab-btn:hover {
+  background-color: var(--bg-hover);
   color: var(--text-pure);
+}
+
+.browser-tab-btn.active {
+  background-color: var(--bg-card);
+  color: var(--text-pure);
+  border-bottom: 2px solid var(--text-pure);
+}
+
+.browser-logo {
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
 }
 
-.install-card-header h3 {
+.browser-install-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.browser-target-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.browser-brand-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inst-browser-title {
   font-size: 17px;
   font-weight: 800;
   color: var(--text-pure);
 }
 
-.install-sub {
-  font-size: 12px;
+.inst-version-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--bg-input);
+  color: var(--text-pure);
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border-mid);
+}
+
+.inst-package-tag {
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
-.install-desc {
-  font-size: 13.5px;
-  color: var(--text-mid);
+.install-steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-.install-steps-box {
+.step-card {
   background-color: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 12px 14px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 12.5px;
-}
-
-.step-row {
-  display: flex;
-  align-items: center;
   gap: 10px;
-  color: var(--text-high);
 }
 
-.step-num {
-  width: 18px;
-  height: 18px;
+.step-badge {
+  width: 24px;
+  height: 24px;
   background-color: var(--text-pure);
   color: var(--bg-black);
   border-radius: 50%;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+}
+
+.step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step-headline {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.step-sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
 }
 
 .code-snippet-box {
   background-color: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: 4px;
-  padding: 9px 12px;
+  padding: 10px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1342,8 +1430,8 @@ body::after {
 
 .install-actions {
   display: flex;
-  gap: 10px;
-  margin-top: auto;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .btn-install-primary {
@@ -1441,13 +1529,16 @@ body::after {
 @media (max-width: 900px) {
   .guide-nav-bar { grid-template-columns: 1fr 1fr; }
   .guide-pane-grid { grid-template-columns: 1fr; }
+  .browser-tab-nav { grid-template-columns: repeat(3, 1fr); }
+  .install-steps-container { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
   .hero-title { font-size: 32px; }
   .guide-nav-bar { grid-template-columns: 1fr; }
+  .browser-tab-nav { grid-template-columns: repeat(2, 1fr); }
   .features-grid { grid-template-columns: 1fr; }
   .sandbox-main { grid-template-columns: 1fr; }
-  .install-cards-grid { grid-template-columns: 1fr; }
+  .install-steps-container { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
 }
