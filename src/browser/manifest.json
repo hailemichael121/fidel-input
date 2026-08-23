@@ -26,6 +26,16 @@
   "content_scripts": [
     {
       "matches": [
+        "*://docs.google.com/*"
+      ],
+      "js": [
+        "docs_inject.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
         "<all_urls>"
       ],
       "js": [

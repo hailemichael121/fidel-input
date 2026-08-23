@@ -7,8 +7,14 @@ export function isStandardEditable(el: Element | null): el is HTMLInputElement |
   if (el instanceof HTMLInputElement) {
     if (el.readOnly || el.disabled) return false;
     const type = (el.type || 'text').toLowerCase();
-    if (type === 'password' || type === 'file' || type === 'checkbox' || type === 'radio' || type === 'button' || type === 'submit') return false;
+    if (type === 'password' || type === 'file' || type === 'checkbox' || type === 'radio' || type === 'button' || type === 'submit' || type === 'reset' || type === 'image') {
+      return false;
+    }
     return true;
+  }
+  if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+    const inputEl = el as HTMLInputElement;
+    return !inputEl.readOnly && !inputEl.disabled;
   }
   return false;
 }
@@ -44,18 +50,36 @@ export function applyNativeValue(
     // Ignore inputs that do not support setSelectionRange
   }
 
-  // Dispatch standard bubbling InputEvent
+  const insertedChar = newValue.slice(newSelectionStart - 1, newSelectionStart) || undefined;
+
+  // 1. Dispatch beforeinput
+  try {
+    const beforeInputEvent = new InputEvent('beforeinput', {
+      bubbles: true,
+      cancelable: true,
+      inputType: 'insertText',
+      data: insertedChar
+    });
+    el.dispatchEvent(beforeInputEvent);
+  } catch {}
+
+  // 2. Dispatch bubbling InputEvent
   try {
     const inputEvent = new InputEvent('input', {
       bubbles: true,
       cancelable: true,
       inputType: 'insertText',
-      data: newValue.slice(newSelectionStart - 1, newSelectionStart) || undefined
+      data: insertedChar
     });
     el.dispatchEvent(inputEvent);
   } catch {
     el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
   }
+
+  // 3. Dispatch change event for search bars / filters
+  try {
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  } catch {}
 }
 
 export class StandardInputHandler {
