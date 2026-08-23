@@ -78,12 +78,17 @@ jobs:
       - name: Build Production Bundle
         run: bun run build
 
+      - name: Package VSIX Archive
+        run: npx @vscode/vsce package --no-dependencies
+
       - name: Publish to Open VSX
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
           if [ -n "$OVSX_PAT" ]; then
-            npx ovsx publish -p "$OVSX_PAT"
+            VSIX_FILE=$(ls *.vsix | head -n 1)
+            echo "Publishing $VSIX_FILE to Open VSX..."
+            npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT"
           else
             echo "OVSX_PAT secret is not configured in repository secrets. Skipping Open VSX publish."
           fi
