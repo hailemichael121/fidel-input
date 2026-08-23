@@ -51,6 +51,16 @@ function initLanding() {
     localStorage.setItem('fidel_theme', next);
   });
 
+  // Scroll Progress Bar
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    if (!progressBar) return;
+    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    progressBar.style.width = `${scrolled}%`;
+  }, { passive: true });
+
   const simInput = document.getElementById('sim-input') as HTMLElement;
   const simOutput = document.getElementById('sim-output') as HTMLElement;
   const simFamily = document.getElementById('sim-family') as HTMLElement;
