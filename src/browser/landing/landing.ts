@@ -243,7 +243,57 @@ function initLanding() {
 
   renderMatrix();
 
-  // 4. Code snippet copy buttons
+  // 4. Guide Tabs Switcher
+  const guideNavBtns = document.querySelectorAll('.guide-nav-btn');
+  const guideTabPanes = document.querySelectorAll('.guide-tab-pane');
+
+  guideNavBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetGuide = btn.getAttribute('data-guide');
+      if (!targetGuide) return;
+
+      guideNavBtns.forEach((b) => b.classList.remove('active'));
+      guideTabPanes.forEach((p) => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById(targetGuide)?.classList.add('active');
+    });
+  });
+
+  // 5. Mini Browser Interactive Mockup
+  const miniSiteBtns = document.querySelectorAll('.mini-site-btn');
+  const miniUrlText = document.getElementById('mini-browser-url');
+  const miniStatusBadge = document.getElementById('mini-browser-status');
+  const miniSimInput = document.getElementById('mini-sim-input');
+  const miniSimOutput = document.getElementById('mini-sim-output');
+
+  miniSiteBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      miniSiteBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const url = btn.getAttribute('data-url') || 'twitter.com';
+      const mode = btn.getAttribute('data-mode') || 'active';
+      const inText = btn.getAttribute('data-input') || '';
+      const outText = btn.getAttribute('data-output') || '';
+
+      if (miniUrlText) miniUrlText.textContent = url;
+      if (miniSimInput) miniSimInput.textContent = inText;
+      if (miniSimOutput) miniSimOutput.textContent = outText;
+
+      if (miniStatusBadge) {
+        if (mode === 'bypass') {
+          miniStatusBadge.textContent = 'Latin Passthrough (Bypassed)';
+          miniStatusBadge.className = 'mini-status-badge badge-bypass';
+        } else {
+          miniStatusBadge.textContent = 'Amharic Active';
+          miniStatusBadge.className = 'mini-status-badge badge-active';
+        }
+      }
+    });
+  });
+
+  // 6. Code snippet copy buttons
   document.querySelectorAll('.btn-copy-snippet').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const code = btn.getAttribute('data-copy');

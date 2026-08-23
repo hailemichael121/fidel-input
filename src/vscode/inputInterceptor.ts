@@ -166,10 +166,15 @@ export class InputInterceptor implements vscode.Disposable {
         (editBuilder) => {
           if (state.replaceLength > 0) {
             const startPos = selection.active.translate(0, -state.replaceLength);
-            const deleteRange = new vscode.Range(startPos, selection.active);
-            editBuilder.delete(deleteRange);
+            const range = new vscode.Range(startPos, selection.active);
+            if (state.rendered.length > 0) {
+              editBuilder.replace(range, state.rendered);
+            } else {
+              editBuilder.delete(range);
+            }
+          } else if (state.rendered.length > 0) {
+            editBuilder.insert(selection.active, state.rendered);
           }
-          editBuilder.insert(selection.active, state.rendered);
         },
         {
           undoStopBefore: isFirstChar,
@@ -247,11 +252,12 @@ export class InputInterceptor implements vscode.Disposable {
       await editor.edit((editBuilder) => {
         if (state.replaceLength > 0) {
           const startPos = selection.active.translate(0, -state.replaceLength);
-          const deleteRange = new vscode.Range(startPos, selection.active);
-          editBuilder.delete(deleteRange);
-        }
-        if (state.rendered.length > 0) {
-          editBuilder.insert(selection.active, state.rendered);
+          const range = new vscode.Range(startPos, selection.active);
+          if (state.rendered.length > 0) {
+            editBuilder.replace(range, state.rendered);
+          } else {
+            editBuilder.delete(range);
+          }
         }
       });
       if (this.engine.raw.length === 0) {
