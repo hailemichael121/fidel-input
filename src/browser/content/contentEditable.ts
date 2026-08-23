@@ -36,19 +36,16 @@ export class ContentEditableHandler {
   }
 
   private executeTextMutation(container: HTMLElement, text: string, replaceLength: number): void {
-    // 1. Delete previous characters if merging into a new syllable
     if (replaceLength > 0) {
       for (let i = 0; i < replaceLength; i++) {
         document.execCommand('delete', false);
       }
     }
 
-    // 2. Insert new text via standard execCommand
     if (text.length > 0) {
       document.execCommand('insertText', false, text);
     }
 
-    // 3. Dispatch synthetic InputEvent for ProseMirror/Lexical/Slate/React reconcilers
     try {
       const ev = new InputEvent('input', {
         bubbles: true,
@@ -72,12 +69,9 @@ export class ContentEditableHandler {
       return false;
     }
 
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' || e.key === 'Enter') {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
-        e.preventDefault();
-        e.stopPropagation();
-        return true;
       }
       return false;
     }
@@ -86,8 +80,21 @@ export class ContentEditableHandler {
       if (session.engine.raw.length > 0) {
         e.preventDefault();
         e.stopPropagation();
+
         const state = session.engine.backspace();
+
+        // When replaceLength is 0 and there is locked output,
+        // do not re-insert the locked text (which causes duplication). Just delete 1 char and reset.
+        if (state.replaceLength === 0 && state.rendered.length > 0) {
+          session.engine.reset();
+          document.execCommand('delete', false);
+          return true;
+        }
+
         this.executeTextMutation(editableElement, state.rendered, state.replaceLength);
+        if (session.engine.raw.length === 0) {
+          session.engine.reset();
+        }
         return true;
       }
       return false;
@@ -108,7 +115,7 @@ export class ContentEditableHandler {
       return true;
     }
 
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Tab'].includes(e.key)) {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
       }

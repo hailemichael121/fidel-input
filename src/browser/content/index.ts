@@ -56,11 +56,30 @@ import { findContentEditable, ContentEditableHandler } from './contentEditable';
 
   // Global keydown event listener in capture phase
   window.addEventListener('keydown', (e: KeyboardEvent) => {
-    const target = getEventTarget(e);
-    if (!target) return;
+    // 1. In-page shortcut fallback for Alt+Shift+A or Alt+A to toggle Fidel input mode
+    if ((e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) ||
+        (e.altKey && (e.key === 'a' || e.key === 'A') && !e.ctrlKey && !e.metaKey)) {
+      e.preventDefault();
+      e.stopPropagation();
+      chrome.runtime.sendMessage({ type: 'TOGGLE_ENABLED' }, (updated) => {
+        if (updated) updateAllSettings(updated);
+      });
+      return;
+    }
+
+    const rawTarget = getEventTarget(e);
+    if (!rawTarget) return;
+
+    // Resolve target element (handling Google Search auto-focus and active element)
+    let target = rawTarget;
+    if (!isStandardEditable(target) && !findContentEditable(target) && document.activeElement) {
+      if (isStandardEditable(document.activeElement) || findContentEditable(document.activeElement)) {
+        target = document.activeElement;
+      }
+    }
 
     if (isStandardEditable(target)) {
-      standardInput.handleKeyDown(e);
+      standardInput.handleKeyDown(e, target);
     } else {
       const richContainer = findContentEditable(target);
       if (richContainer) {
