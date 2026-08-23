@@ -4,6 +4,11 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-08-23
+
+### Changed & Improved
+- **Marketplace SEO & Discoverability**: Optimized extension display name, description, and high-intent search keywords (including Amharic script terms `ፊደል`, `አማርኛ`, `ግዕዝ`) for higher search ranking in VS Code Marketplace and Cursor (Open VSX).
+
 ## [0.3.1] - 2026-08-23
 
 ### Fixed
