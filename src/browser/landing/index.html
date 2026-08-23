@@ -506,21 +506,32 @@
           <div class="install-card-header">
             <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <div>
-              <h3>Browser Extension</h3>
-              <span class="install-sub">Manifest V3 &bull; Chrome, Edge, Brave, Firefox</span>
+              <h3>Browser Extension (Direct Build)</h3>
+              <span class="install-sub">Manifest V3 &bull; Chrome, Brave, Edge, Opera, Firefox</span>
             </div>
           </div>
-          <p class="install-desc">Type Amharic across Twitter/X, Gmail, Google Docs, Slack, Notion, and any web form effortlessly.</p>
-          <div class="code-snippet-box">
-            <code>Shortcut: Alt + A (or Alt + Shift + A)</code>
+          <p class="install-desc">Distributed directly as a free &amp; open-source standalone package (not on Web Store). Works natively across all web inputs and AI portals.</p>
+          
+          <div class="install-steps-box">
+            <div class="step-row"><span class="step-num">1</span><span>Download &amp; extract <code>fidel-browser-extension.zip</code></span></div>
+            <div class="step-row"><span class="step-num">2</span><span>Open <code>chrome://extensions</code> &amp; enable <strong>Developer mode</strong></span></div>
+            <div class="step-row"><span class="step-num">3</span><span>Click <strong>Load unpacked</strong> &amp; select the extracted folder</span></div>
           </div>
+
+          <div class="code-snippet-box">
+            <code>bun install && bun run package:browser</code>
+            <button type="button" class="btn-copy-snippet" data-copy="git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser" title="Copy build command">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+
           <div class="install-actions">
             <a href="fidel-browser-extension.zip" download class="btn-install-primary">
               <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>Download ZIP (.zip)</span>
+              <span>Download Latest Build (.zip)</span>
             </a>
-            <a href="options.html" target="_blank" class="btn-install-secondary">
-              <span>Open Settings</span>
+            <a href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="btn-install-secondary">
+              <span>View Source on GitHub</span>
             </a>
           </div>
         </div>
