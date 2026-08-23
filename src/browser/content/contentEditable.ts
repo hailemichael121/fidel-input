@@ -1,6 +1,20 @@
 import type { SessionManager } from './sessionManager';
 import type { FidelBrowserSettings } from '../storage/types';
 
+export function isGoogleDocs(): boolean {
+  return window.location.hostname === 'docs.google.com' ||
+         (window.location.hostname.endsWith('.google.com') && window.location.pathname.includes('/document/'));
+}
+
+export function getGoogleDocsTarget(): HTMLElement | null {
+  const iframe = document.querySelector('iframe.docs-texteventtarget-iframe') as HTMLIFrameElement;
+  if (iframe && iframe.contentDocument) {
+    const el = (iframe.contentDocument.querySelector('[contenteditable="true"], textarea, body') as HTMLElement) || iframe.contentDocument.body;
+    return el;
+  }
+  return null;
+}
+
 export function findContentEditable(target: EventTarget | null): HTMLElement | null {
   if (!target) return null;
   
@@ -11,12 +25,22 @@ export function findContentEditable(target: EventTarget | null): HTMLElement | n
   
   if (!node || !(node instanceof HTMLElement)) return null;
 
+  // Google Docs Support: match iframe or internal canvas container
+  if (node.classList.contains('docs-texteventtarget-iframe') || 
+      node.closest('.docs-texteventtarget-iframe') ||
+      node.closest('.kix-appview-editor, .kix-canvas-tile-content, [class*="docs-texteventtarget"]')) {
+    const docsTarget = getGoogleDocsTarget();
+    if (docsTarget) return docsTarget;
+    if (node.isContentEditable) return node;
+    return node;
+  }
+
   if (node.isContentEditable) {
     return (node.closest('[contenteditable="true"]') as HTMLElement) || node;
   }
 
   const richContainer = node.closest(
-    '[contenteditable="true"], [role="textbox"], [role="combobox"], [data-lexical-editor="true"], [data-slate-editor="true"], .ProseMirror, .cm-content, [data-editor]'
+    '[contenteditable="true"], [role="textbox"], [role="combobox"], [data-lexical-editor="true"], [data-slate-editor="true"], .ProseMirror, .cm-content, [data-editor], .kix-appview-editor, .docs-texteventtarget-iframe'
   );
 
   return (richContainer as HTMLElement) || null;
@@ -36,9 +60,12 @@ export class ContentEditableHandler {
   }
 
   private executeAtomicMutation(container: HTMLElement, text: string, replaceLength: number): void {
-    const sel = window.getSelection();
+    const doc = container.ownerDocument || document;
+    const win = doc.defaultView || window;
+    const sel = win.getSelection();
+
     if (!sel || sel.rangeCount === 0) {
-      if (text.length > 0) document.execCommand('insertText', false, text);
+      if (text.length > 0) doc.execCommand('insertText', false, text);
       return;
     }
 
@@ -51,9 +78,9 @@ export class ContentEditableHandler {
 
     // Replace selected range cleanly in one atomic transaction
     if (text.length > 0) {
-      document.execCommand('insertText', false, text);
+      doc.execCommand('insertText', false, text);
     } else if (replaceLength > 0) {
-      document.execCommand('delete', false);
+      doc.execCommand('delete', false);
     }
   }
 
@@ -83,7 +110,8 @@ export class ContentEditableHandler {
 
         if (state.replaceLength === 0) {
           session.engine.reset();
-          document.execCommand('delete', false);
+          const doc = editableElement.ownerDocument || document;
+          doc.execCommand('delete', false);
           return true;
         }
 

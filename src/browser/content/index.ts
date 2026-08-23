@@ -2,7 +2,7 @@ import { BrowserStorageAdapter } from '../storage/storageAdapter';
 import type { BrowserMessage, FidelBrowserSettings } from '../storage/types';
 import { SessionManager } from './sessionManager';
 import { isStandardEditable, StandardInputHandler, applyNativeValue } from './standardInput';
-import { findContentEditable, ContentEditableHandler } from './contentEditable';
+import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDocsTarget } from './contentEditable';
 
 (async function initFidelContentScript() {
   if ((window as unknown as { __FIDEL_LOADED__?: boolean }).__FIDEL_LOADED__) return;
@@ -35,9 +35,10 @@ import { findContentEditable, ContentEditableHandler } from './contentEditable';
         const newPos = start + message.text.length;
         applyNativeValue(active, updated, newPos, newPos);
       } else {
-        const rich = findContentEditable(active);
+        const rich = findContentEditable(active) || (isGoogleDocs() ? getGoogleDocsTarget() : null);
         if (rich) {
-          document.execCommand('insertText', false, message.text);
+          const doc = rich.ownerDocument || document;
+          doc.execCommand('insertText', false, message.text);
         }
       }
     }
@@ -70,18 +71,25 @@ import { findContentEditable, ContentEditableHandler } from './contentEditable';
     const rawTarget = getEventTarget(e);
     if (!rawTarget) return;
 
-    // Resolve target element (handling Google Search auto-focus and active element)
+    // Resolve target element (handling Google Search, Google Docs, and active element)
     let target = rawTarget;
-    if (!isStandardEditable(target) && !findContentEditable(target) && document.activeElement) {
-      if (isStandardEditable(document.activeElement) || findContentEditable(document.activeElement)) {
-        target = document.activeElement;
+    if (!isStandardEditable(target) && !findContentEditable(target)) {
+      if (isGoogleDocs()) {
+        const docsTarget = getGoogleDocsTarget();
+        if (docsTarget) {
+          target = docsTarget;
+        }
+      } else if (document.activeElement) {
+        if (isStandardEditable(document.activeElement) || findContentEditable(document.activeElement)) {
+          target = document.activeElement;
+        }
       }
     }
 
     if (isStandardEditable(target)) {
       standardInput.handleKeyDown(e, target);
     } else {
-      const richContainer = findContentEditable(target);
+      const richContainer = findContentEditable(target) || (isGoogleDocs() ? getGoogleDocsTarget() : null);
       if (richContainer) {
         contentEditable.handleKeyDown(e, richContainer);
       }
