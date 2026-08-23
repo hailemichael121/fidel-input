@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidel Amharic Input — Settings & Dictionary</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">ፊ</div>
+      <div>
+        <h1>Fidel Settings</h1>
+        <p class="subtitle">Amharic Phonetic Input (ፊደል) & Ethiopic Transliteration</p>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- General Settings -->
+      <section class="card">
+        <h2>General Typing Behavior</h2>
+        
+        <div class="form-group">
+          <label for="syllable-merging">Default Syllable Merging Mode</label>
+          <select id="syllable-merging">
+            <option value="merge">Merge Mode (e.g. 'te' -> ተ, 't-e' -> ትእ)</option>
+            <option value="standalone">Standalone Mode (e.g. 'te' -> ትእ, 't+e' -> ተ)</option>
+          </select>
+          <span class="help-text">Controls how ambiguous consonant+vowel sequences are automatically resolved.</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="boundary-char">Syllable Boundary Character</label>
+            <input type="text" id="boundary-char" maxlength="2" value="-">
+            <span class="help-text">Forces separate 6th-order syllable (e.g. t-e -> ትእ).</span>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="merge-char">Syllable Merge Character</label>
+            <input type="text" id="merge-char" maxlength="2" value="+">
+            <span class="help-text">Forces syllable merge under standalone mode (e.g. t+e -> ተ).</span>
+          </div>
+        </div>
+
+        <div class="checkbox-list">
+          <label class="checkbox-row">
+            <input type="checkbox" id="check-numbers">
+            <div>
+              <strong>Convert Arabic Numerals to Ethiopic</strong>
+              <p>Converts 1, 2, 3... into ፩, ፪, ፫...</p>
+            </div>
+          </label>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="check-punctuation">
+            <div>
+              <strong>Convert Ethiopic Punctuation</strong>
+              <p>Converts :: to ።, , to ፣, ; to ፤, ? to ፧</p>
+            </div>
+          </label>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="check-corrector">
+            <div>
+              <strong>Smart Phonetic Typo Correction</strong>
+              <p>Normalizes double consonants (e.g. 'selamm' -> ሰላም)</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Personal Dictionary -->
+      <section class="card">
+        <h2>Personal Dictionary</h2>
+        <p class="section-desc">Add custom phonetic mappings that take immediate priority over standard transliteration.</p>
+
+        <form id="form-add-dict" class="dict-add-form">
+          <input type="text" id="dict-key" placeholder="Phonetic Key (e.g. myname)" required>
+          <input type="text" id="dict-val" placeholder="Ethiopic Output (e.g. ይሁን)" required>
+          <button type="submit" class="btn btn-primary">Add Entry</button>
+        </form>
+
+        <div class="dict-table-container">
+          <table class="dict-table">
+            <thead>
+              <tr>
+                <th>Latin Input</th>
+                <th>Ethiopic Output</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="dict-table-body">
+              <tr>
+                <td colspan="3" class="empty-state">No custom entries yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Disabled Websites -->
+      <section class="card">
+        <h2>Disabled Websites</h2>
+        <p class="section-desc">Specify domains where Fidel input should be automatically bypassed (one per line):</p>
+        <textarea id="disabled-domains" rows="3" placeholder="github.com&#10;figma.com"></textarea>
+      </section>
+
+      <div class="save-bar">
+        <button id="btn-save" class="btn btn-success">Save Settings</button>
+        <span id="save-status" class="save-status"></span>
+      </div>
+    </main>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

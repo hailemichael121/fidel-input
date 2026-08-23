@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidel Amharic Input</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo-badge">ፊ</div>
+        <div class="title-group">
+          <h1>Fidel</h1>
+          <span class="subtitle">Amharic Phonetic Input</span>
+        </div>
+      </div>
+      <label class="switch" title="Toggle Fidel Input (Alt+Shift+A)">
+        <input type="checkbox" id="toggle-enabled" checked>
+        <span class="slider round"></span>
+      </label>
+    </header>
+
+    <div class="status-banner" id="status-banner">
+      <span class="status-dot"></span>
+      <span id="status-text">Fidel Input Active</span>
+      <span class="shortcut-tip">Alt+Shift+A</span>
+    </div>
+
+    <section class="quick-converter">
+      <label for="quick-input" class="section-label">Quick Transliterate</label>
+      <div class="converter-box">
+        <input type="text" id="quick-input" placeholder="Type phonetically (e.g. selam yihun)..." autofocus>
+        <div class="output-row">
+          <div id="quick-output" class="output-preview">ሰላም ይሁን</div>
+          <button id="btn-copy" class="btn-icon" title="Copy to clipboard">📋</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="toggles-group">
+      <label class="toggle-row">
+        <span>Ethiopic Numerals (፩, ፪, ፫)</span>
+        <input type="checkbox" id="opt-numbers">
+      </label>
+      <label class="toggle-row">
+        <span>Ethiopic Punctuation (።, ፤)</span>
+        <input type="checkbox" id="opt-punctuation">
+      </label>
+      <label class="toggle-row">
+        <span>Smart Phonetic Correction</span>
+        <input type="checkbox" id="opt-corrector">
+      </label>
+    </section>
+
+    
+    <footer class="footer">
+      <a href="options.html" target="_blank" class="footer-link">⚙️ Options & Dictionary</a>
+      <a href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="footer-link">GitHub</a>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

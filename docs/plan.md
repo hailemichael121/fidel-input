@@ -6,34 +6,25 @@ Fidel is a native Visual Studio Code extension designed for phonetic Amharic lan
 
 ---
 
-## 1. System Architecture
+## 1. System Architecture (Unified Multi-Platform)
 
 ```text
-                    VS Code Text Editor Host
-                               │
-               ┌───────────────┴───────────────┐
-               │                               │
-    VS Code Integration Layer           User Interface & Commands
-               │                               │
-        InputInterceptor                 Status Bar Widget
-               │                         Sidebar Tree View Provider
-               │                         Dictionary Command Handlers
-               ▼                               │
-        CompositionEngine ◄────────────────────┘
-               │
-               ▼
-         Transliterator ───► PersonalDictionary
-               │          ───► SmartCorrector
-        ┌──────┴───────┐  ───► SuggestionEngine
-        │              │
-    FidelTrie     FIDEL_FAMILIES
-        │              │
-        └──────┬───────┘
-               ▼
-        Ethiopic Unicode Output
+                           Shared Fidel Engine Core
+                            (src/engine/ - Zero deps)
+                                       │
+                 ┌─────────────────────┴─────────────────────┐
+                 │                                           │
+                 ▼                                           ▼
+      [ VS Code Extension Host ]                [ Browser Extension (MV3) ]
+       (src/vscode/ & extension.ts)              (src/browser/)
+                 │                                           │
+         • InputInterceptor                          • Content Script (DOM & React setter)
+         • StatusBar Widget                          • Background Service Worker
+         • ActivityBar Sidebar                       • Popup Toolbar UI & Quick Converter
+         • Text Disambiguation Hover                 • Options Page & Synced Dictionary
 ```
 
-The core engine components ([`src/engine/`](file:///home/yihun/Desktop/fidel/src/engine)) maintain no dependencies on VS Code APIs, allowing the transliteration system to be reused across web applications, desktop editors, command-line interfaces, or mobile software.
+The core engine components ([`src/engine/`](file:///home/yihun/Desktop/fidel/src/engine)) maintain zero dependencies on host environment APIs, allowing 100% code reuse between the VS Code extension and the Manifest V3 Browser Extension.
 
 ---
 
@@ -42,9 +33,11 @@ The core engine components ([`src/engine/`](file:///home/yihun/Desktop/fidel/src
 ```text
 fidel-input/
 ├── docs/
-│   └── plan.md                  # System architecture & engineering roadmap
+│   ├── plan.md                  # System architecture & core roadmap
+│   └── browser-extension-plan.md# Browser extension architecture & roadmap
+│
 ├── src/
-│   ├── engine/                  # Standalone Transliteration Engine
+│   ├── engine/                  # Standalone Transliteration Engine (Shared)
 │   │   ├── types.ts             # Type definitions & match interfaces
 │   │   ├── mapping.ts           # 33 Ethiopic families, orders & diqala rules
 │   │   ├── numbers.ts           # Ethiopic numeral converter system
@@ -53,15 +46,39 @@ fidel-input/
 │   │   ├── suggestions.ts       # Candidate suggestion generator
 │   │   ├── trie.ts              # Trie prefix data structure for O(K) lookup
 │   │   ├── transliterator.ts    # Tokenizer & stream transliteration logic
-│   │   └── composition.ts       # Live composition buffer state machine
+│   │   ├── composition.ts       # Live composition buffer state machine
+│   │   ├── ambiguity.ts         # Ambiguity span tracker
+│   │   └── profiles.ts          # Multi-language profiles
 │   │
-│   ├── vscode/                  # VS Code Extension Integration Layer
+│   ├── vscode/                  # VS Code Integration Layer
 │   │   ├── inputInterceptor.ts  # 'type' and 'deleteLeft' command interceptor
 │   │   ├── statusBar.ts         # Status bar state indicator widget
 │   │   ├── activityBar.ts       # Sidebar activity bar tree view provider
-│   │   └── commands.ts          # Extension command handlers (Toggle, Convert Selection, Personal Dictionary)
+│   │   ├── commands.ts          # Extension command handlers
+│   │   ├── hoverProvider.ts     # Post-commit syllable disambiguation hover
+│   │   └── completionProvider.ts# IntelliSense candidate completions
 │   │
-│   └── extension.ts             # Extension lifecycle entry point
+│   └── browser/                 # Browser Extension Layer (Manifest V3)
+│       ├── manifest.json        # Manifest V3 specification
+│       ├── background/          # Background service worker (badge, shortcuts)
+│       │   └── serviceWorker.ts
+│       ├── content/             # In-page DOM interception (all_frames)
+│       │   ├── index.ts
+│       │   ├── sessionManager.ts# WeakMap<Element, ElementSession>
+│       │   ├── standardInput.ts # <input> and <textarea> handler (React setter fix)
+│       │   └── contentEditable.ts# Rich text & contenteditable Range handler
+│       ├── popup/               # Extension popup UI & quick converter
+│       ├── options/             # Options page & personal dictionary manager
+│       └── storage/             # chrome.storage.sync typed adapter
+│
+├── dist/
+│   ├── extension.cjs            # Bundled VS Code extension
+│   └── browser/                 # Unpacked Chrome/Edge/Firefox extension
+│
+├── fidel-browser-extension.zip  # Packaged Chrome Web Store ZIP
+├── fidel-amharic-0.3.2.vsix     # Packaged VS Code / Cursor VSIX release
+└── esbuild.js                   # Dual-target compiler (VS Code + Browser)
+```
 │
 ├── test/
 │   ├── engine.test.ts           # Core transliterator unit tests

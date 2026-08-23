@@ -323,9 +323,15 @@
     "watch": "node esbuild.js --watch",
     "check": "tsc --noEmit",
     "build": "bun run compile",
+    "build:vscode": "tsc --noEmit && node esbuild.js --target=vscode",
+    "build:browser": "tsc --noEmit && node esbuild.js --target=browser",
+    "watch:browser": "node esbuild.js --target=browser --watch",
+    "watch:vscode": "node esbuild.js --target=vscode --watch",
+    "package:browser": "bun run build:browser && cd dist/browser && zip -r ../../fidel-browser-extension.zip . && cd ../..",
     "test": "bun test"
   },
   "devDependencies": {
+    "@types/chrome": "^0.2.7",
     "@types/node": "^26.2.0",
     "@types/vscode": "^1.125.0",
     "esbuild": "^0.28.2",
