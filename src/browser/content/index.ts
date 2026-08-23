@@ -2,10 +2,9 @@ import { BrowserStorageAdapter } from '../storage/storageAdapter';
 import type { BrowserMessage, FidelBrowserSettings } from '../storage/types';
 import { SessionManager } from './sessionManager';
 import { isStandardEditable, StandardInputHandler, applyNativeValue } from './standardInput';
-import { isContentEditable, ContentEditableHandler } from './contentEditable';
+import { findContentEditable, ContentEditableHandler } from './contentEditable';
 
 (async function initFidelContentScript() {
-  // Avoid double initialization
   if ((window as unknown as { __FIDEL_LOADED__?: boolean }).__FIDEL_LOADED__) return;
   (window as unknown as { __FIDEL_LOADED__?: boolean }).__FIDEL_LOADED__ = true;
 
@@ -21,10 +20,8 @@ import { isContentEditable, ContentEditableHandler } from './contentEditable';
     contentEditable.updateSettings(newSettings);
   }
 
-  // Listen for storage updates
   BrowserStorageAdapter.onSettingsChange(updateAllSettings);
 
-  // Listen for runtime background messages
   chrome.runtime.onMessage.addListener((message: BrowserMessage) => {
     if (message.type === 'STATE_UPDATE') {
       updateAllSettings(message.state);
@@ -37,32 +34,49 @@ import { isContentEditable, ContentEditableHandler } from './contentEditable';
         const updated = cur.slice(0, start) + message.text + cur.slice(end);
         const newPos = start + message.text.length;
         applyNativeValue(active, updated, newPos, newPos);
-      } else if (isContentEditable(active)) {
-        document.execCommand('insertText', false, message.text);
+      } else {
+        const rich = findContentEditable(active);
+        if (rich) {
+          document.execCommand('insertText', false, message.text);
+        }
       }
     }
   });
 
+  function getEventTarget(e: Event): Element | null {
+    const path = e.composedPath ? e.composedPath() : [];
+    if (path.length > 0 && path[0] instanceof Element) {
+      return path[0];
+    }
+    if (e.target instanceof Element) {
+      return e.target;
+    }
+    return document.activeElement;
+  }
+
   // Global keydown event listener in capture phase
   window.addEventListener('keydown', (e: KeyboardEvent) => {
-    const target = e.target as Element | null;
+    const target = getEventTarget(e);
     if (!target) return;
 
     if (isStandardEditable(target)) {
       standardInput.handleKeyDown(e);
-    } else if (isContentEditable(target)) {
-      contentEditable.handleKeyDown(e);
+    } else {
+      const richContainer = findContentEditable(target);
+      if (richContainer) {
+        contentEditable.handleKeyDown(e, richContainer);
+      }
     }
   }, true);
 
   // Reset composition session when clicking or blurring
   window.addEventListener('blur', (e: FocusEvent) => {
-    const target = e.target as Element | null;
+    const target = getEventTarget(e);
     if (target) sessionManager.resetSession(target);
   }, true);
 
   window.addEventListener('click', (e: MouseEvent) => {
-    const target = e.target as Element | null;
+    const target = getEventTarget(e);
     if (target) sessionManager.resetSession(target);
   }, true);
 })();

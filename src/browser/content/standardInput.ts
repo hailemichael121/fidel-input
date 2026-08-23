@@ -7,7 +7,9 @@ export function isStandardEditable(el: Element | null): el is HTMLInputElement |
   if (el instanceof HTMLInputElement) {
     if (el.readOnly || el.disabled) return false;
     const type = (el.type || 'text').toLowerCase();
-    const supportedTypes = ['text', 'search', 'url', 'email', 'tel', ''];
+    const supportedTypes = ['text', 'search', 'url', 'email', 'tel', '', 'password'];
+    // Do not transliterate password fields for security
+    if (type === 'password') return false;
     return supportedTypes.includes(type);
   }
   return false;
@@ -34,16 +36,23 @@ export function applyNativeValue(
   try {
     el.setSelectionRange(newSelectionStart, newSelectionEnd);
   } catch {
-    // Ignore elements that do not support selection ranges
+    // Ignore inputs that do not support setSelectionRange
   }
 
-  // Dispatch bubbling InputEvent so React/Vue/Angular update internal state
-  const inputEvent = new InputEvent('input', {
-    bubbles: true,
-    cancelable: true,
-    inputType: 'insertCompositionText'
-  });
-  el.dispatchEvent(inputEvent);
+  // Dispatch both InputEvent and generic input/change events for modern frameworks (React, Vue, Angular, Lit)
+  try {
+    const inputEvent = new InputEvent('input', {
+      bubbles: true,
+      cancelable: true,
+      inputType: 'insertText',
+      data: newValue
+    });
+    el.dispatchEvent(inputEvent);
+  } catch {
+    el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+  }
+
+  el.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
 export class StandardInputHandler {
@@ -65,7 +74,7 @@ export class StandardInputHandler {
 
     const session = this.sessionManager.getSession(el);
 
-    // If modifier keys like Ctrl, Cmd, Alt are pressed (except Shift for uppercase), pass through
+    // Modifier keys check
     if (e.ctrlKey || e.metaKey || e.altKey) {
       if (session.engine.raw.length > 0 && e.key !== 'Shift') {
         session.engine.reset();
@@ -73,11 +82,11 @@ export class StandardInputHandler {
       return false;
     }
 
-    // Escape resets the active composition
     if (e.key === 'Escape') {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
         e.preventDefault();
+        e.stopPropagation();
         return true;
       }
       return false;
@@ -87,10 +96,10 @@ export class StandardInputHandler {
     if (e.key === 'Backspace') {
       if (session.engine.raw.length > 0) {
         e.preventDefault();
+        e.stopPropagation();
         const start = el.selectionStart ?? 0;
         const end = el.selectionEnd ?? 0;
 
-        // If user highlighted text, delete selection natively and reset
         if (start !== end) {
           session.engine.reset();
           const currentValue = el.value;
@@ -104,14 +113,12 @@ export class StandardInputHandler {
         const replaceLen = state.replaceLength;
 
         if (state.rendered.length > 0) {
-          // Replace previous output with updated partial syllable
           const prefix = currentValue.slice(0, Math.max(0, start - replaceLen));
           const suffix = currentValue.slice(start);
           const newValue = prefix + state.rendered + suffix;
           const newPos = prefix.length + state.rendered.length;
           applyNativeValue(el, newValue, newPos, newPos);
         } else {
-          // Cleared entire composition fragment
           const prefix = currentValue.slice(0, Math.max(0, start - replaceLen));
           const suffix = currentValue.slice(start);
           const newValue = prefix + suffix;
@@ -123,21 +130,20 @@ export class StandardInputHandler {
       return false;
     }
 
-    // Handle printable single characters
+    // Handle printable characters
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
       if (!this.settings.enabled) return false;
 
-      // Check if current domain is disabled
       const currentHost = window.location.hostname;
       if (this.settings.disabledDomains?.includes(currentHost)) return false;
 
       e.preventDefault();
+      e.stopPropagation();
 
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? 0;
       const currentValue = el.value;
 
-      // If user had a highlighted range, replace that range first
       let baseText = currentValue;
       let insertPos = start;
       if (start !== end) {
@@ -158,7 +164,6 @@ export class StandardInputHandler {
       return true;
     }
 
-    // Navigation keys (Arrow keys, Home, End, PageUp, PageDown) commit/reset composition
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
       if (session.engine.raw.length > 0) {
         session.engine.reset();

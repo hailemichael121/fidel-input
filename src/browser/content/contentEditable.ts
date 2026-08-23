@@ -1,12 +1,25 @@
 import type { SessionManager } from './sessionManager';
 import type { FidelBrowserSettings } from '../storage/types';
 
-export function isContentEditable(el: Element | null): boolean {
-  if (!el) return false;
-  if ((el as HTMLElement).isContentEditable) return true;
-  const role = el.getAttribute('role');
-  if (role === 'textbox' || role === 'combobox') return true;
-  return false;
+export function findContentEditable(target: EventTarget | null): HTMLElement | null {
+  if (!target) return null;
+  
+  let node: Node | null = target as Node;
+  if (node.nodeType === Node.TEXT_NODE) {
+    node = node.parentElement;
+  }
+  
+  if (!node || !(node instanceof HTMLElement)) return null;
+
+  if (node.isContentEditable) {
+    return (node.closest('[contenteditable="true"]') as HTMLElement) || node;
+  }
+
+  const richContainer = node.closest(
+    '[contenteditable="true"], [role="textbox"], [role="combobox"], [data-lexical-editor="true"], [data-slate-editor="true"], .ProseMirror, .cm-content, [data-editor]'
+  );
+
+  return (richContainer as HTMLElement) || null;
 }
 
 export class ContentEditableHandler {
@@ -22,29 +35,35 @@ export class ContentEditableHandler {
     this.settings = settings;
   }
 
-  private insertTextViaExecCommand(text: string, replaceLength: number): void {
-    const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return;
-
-    // If replaceLength > 0, expand range backward to select characters that need replacement
+  private executeTextMutation(container: HTMLElement, text: string, replaceLength: number): void {
+    // 1. Delete previous characters if merging into a new syllable
     if (replaceLength > 0) {
       for (let i = 0; i < replaceLength; i++) {
-        sel.modify('extend', 'backward', 'character');
+        document.execCommand('delete', false);
       }
     }
 
+    // 2. Insert new text via standard execCommand
     if (text.length > 0) {
       document.execCommand('insertText', false, text);
-    } else {
-      document.execCommand('delete', false);
+    }
+
+    // 3. Dispatch synthetic InputEvent for ProseMirror/Lexical/Slate/React reconcilers
+    try {
+      const ev = new InputEvent('input', {
+        bubbles: true,
+        cancelable: true,
+        inputType: replaceLength > 0 ? 'insertReplacementText' : 'insertText',
+        data: text
+      });
+      container.dispatchEvent(ev);
+    } catch {
+      container.dispatchEvent(new Event('input', { bubbles: true }));
     }
   }
 
-  handleKeyDown(e: KeyboardEvent): boolean {
-    const el = e.target as Element;
-    if (!isContentEditable(el)) return false;
-
-    const session = this.sessionManager.getSession(el);
+  handleKeyDown(e: KeyboardEvent, editableElement: HTMLElement): boolean {
+    const session = this.sessionManager.getSession(editableElement);
 
     if (e.ctrlKey || e.metaKey || e.altKey) {
       if (session.engine.raw.length > 0 && e.key !== 'Shift') {
@@ -57,6 +76,7 @@ export class ContentEditableHandler {
       if (session.engine.raw.length > 0) {
         session.engine.reset();
         e.preventDefault();
+        e.stopPropagation();
         return true;
       }
       return false;
@@ -65,13 +85,15 @@ export class ContentEditableHandler {
     if (e.key === 'Backspace') {
       if (session.engine.raw.length > 0) {
         e.preventDefault();
+        e.stopPropagation();
         const state = session.engine.backspace();
-        this.insertTextViaExecCommand(state.rendered, state.replaceLength);
+        this.executeTextMutation(editableElement, state.rendered, state.replaceLength);
         return true;
       }
       return false;
     }
 
+    // Printable single character
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
       if (!this.settings.enabled) return false;
 
@@ -79,8 +101,10 @@ export class ContentEditableHandler {
       if (this.settings.disabledDomains?.includes(currentHost)) return false;
 
       e.preventDefault();
+      e.stopPropagation();
+
       const state = session.engine.feedChar(e.key);
-      this.insertTextViaExecCommand(state.rendered, state.replaceLength);
+      this.executeTextMutation(editableElement, state.rendered, state.replaceLength);
       return true;
     }
 
