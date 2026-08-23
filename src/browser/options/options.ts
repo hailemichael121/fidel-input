@@ -39,7 +39,19 @@ export const README_SYLLABARY_DATA = [
   { name: "Pa (ፐ)", triggers: "p", orders: ["ፐ (pe)", "ፑ (pu)", "ፒ (pi)", "ፓ (pa)", "ፔ (pee)", "ፕ (p)", "ፖ (po)", "ፗ (pwa)"] }
 ];
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function initOptions() {
+  // Theme Management
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('fidel_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  themeToggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('fidel_theme', next);
+  });
+
   const tabButtons = document.querySelectorAll('.nav-tab');
   const tabPanes = document.querySelectorAll('.tab-pane');
 
@@ -80,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     dictionary: currentSettings.dictionary
   });
 
-  // Tab Switching
+  // Tab Navigation
   tabButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
@@ -96,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Interactive Typing Tester
   function updateTestTyping() {
+    if (!testInput || !testOutput) return;
     const raw = testInput.value;
     testEngine.reset();
     let lastState = { raw: '', rendered: '', replaceLength: 0 };
@@ -121,14 +134,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       r.checked = r.value === settings.defaultSyllableMerging;
     });
 
-    boundaryChar.value = settings.compositionBoundaryChar || '-';
-    mergeChar.value = settings.compositionMergeChar || '+';
+    if (boundaryChar) boundaryChar.value = settings.compositionBoundaryChar || '-';
+    if (mergeChar) mergeChar.value = settings.compositionMergeChar || '+';
 
-    checkNumbers.checked = settings.convertNumbers;
-    checkPunctuation.checked = settings.convertPunctuation;
-    checkCorrector.checked = settings.smartCorrection;
+    if (checkNumbers) checkNumbers.checked = settings.convertNumbers;
+    if (checkPunctuation) checkPunctuation.checked = settings.convertPunctuation;
+    if (checkCorrector) checkCorrector.checked = settings.smartCorrection;
 
-    disabledDomains.value = (settings.disabledDomains || []).join('\n');
+    if (disabledDomains) disabledDomains.value = (settings.disabledDomains || []).join('\n');
 
     testEngine = new CompositionEngine({
       convertPunctuation: settings.convertPunctuation,
@@ -145,6 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Dictionary Management
   function renderDictionaryTable(filter = '') {
+    if (!dictRows) return;
     dictRows.innerHTML = '';
     const entries = Object.entries(currentSettings.dictionary || {});
     const filtered = entries.filter(([k, v]) => 
@@ -162,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td><code>${escapeHtml(key)}</code></td>
         <td><strong class="font-ethiopic">${escapeHtml(val)}</strong></td>
         <td class="td-actions">
-          <button class="btn-del" data-key="${escapeHtml(key)}" title="Delete entry">
+          <button type="button" class="btn-del" data-key="${escapeHtml(key)}" title="Delete entry">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
           </button>
         </td>
@@ -237,8 +251,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     reader.readAsText(file);
   });
 
-  // 33 Families Syllabary Renderer
+  // 33 Families Syllabary Renderer with Click-to-Copy Notice
   function renderSyllabary(filter = '') {
+    if (!syllabaryTbody) return;
     syllabaryTbody.innerHTML = '';
     const q = filter.trim().toLowerCase();
 
@@ -251,12 +266,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const parts = order.split(' ');
         const glyph = parts[0];
         const ph = parts.slice(1).join(' ');
-        return `<td><span class="syllabary-cell" data-char="${glyph}"><strong>${glyph}</strong> <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-sans)">${ph}</span></span></td>`;
+        if (glyph === '—') {
+          return `<td><span class="matrix-dash">—</span></td>`;
+        }
+        return `<td><button type="button" class="syllabary-cell" data-char="${glyph}" title="Click to copy ${glyph}">
+          <span class="cell-glyph">${glyph}</span>
+          <span class="cell-ph">${ph}</span>
+          <span class="cell-toast">Copied! ✓</span>
+        </button></td>`;
       }).join('');
 
       tr.innerHTML = `
-        <td><strong>${row.name}</strong></td>
-        <td><code>${escapeHtml(row.triggers)}</code></td>
+        <td class="family-name-cell"><strong>${row.name}</strong></td>
+        <td class="family-trigger-cell"><code>${escapeHtml(row.triggers)}</code></td>
         ${orderCells}
       `;
       syllabaryTbody.appendChild(tr);
@@ -264,10 +286,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     syllabaryTbody.querySelectorAll('.syllabary-cell').forEach((cell) => {
       cell.addEventListener('click', async (e) => {
-        const ch = (e.currentTarget as HTMLElement).getAttribute('data-char');
+        const targetBtn = (e.currentTarget as HTMLElement);
+        const ch = targetBtn.getAttribute('data-char');
         if (ch && ch !== '—') {
           await navigator.clipboard.writeText(ch);
-          showToast(`Copied ${ch} to clipboard!`);
+          targetBtn.classList.add('copied');
+          setTimeout(() => {
+            targetBtn.classList.remove('copied');
+          }, 1200);
+
+          if (testInput) {
+            testInput.value = ch;
+            updateTestTyping();
+          }
+          showToast(`Copied ${ch} to clipboard! ✓`);
         }
       });
     });
@@ -304,6 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   function showToast(msg: string) {
+    if (!saveStatus) return;
     saveStatus.textContent = msg;
     setTimeout(() => {
       if (saveStatus.textContent === msg) saveStatus.textContent = '';
@@ -323,4 +356,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initial populate
   populateUi(currentSettings);
   renderSyllabary();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initOptions);
+} else {
+  initOptions();
+}

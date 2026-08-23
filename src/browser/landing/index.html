@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +12,10 @@
     <div class="header-inner">
       <div class="brand">
         <svg viewBox="0 0 512 512" fill="none" class="brand-logo-svg">
-          <rect width="512" height="512" rx="110" fill="#0c111a" stroke="#222f42" stroke-width="16" />
-          <path d="M186 410 L326 410" stroke="#10b981" stroke-width="14" stroke-linecap="round" />
+          <rect width="512" height="512" rx="110" fill="#000000" stroke="#33333e" stroke-width="16" />
+          <path d="M186 410 L326 410" stroke="#ffffff" stroke-width="14" stroke-linecap="round" />
           <g transform="translate(111.61, 372) scale(0.34626, -0.34626)">
-            <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="#f8fafc" />
+            <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="#ffffff" />
           </g>
         </svg>
         <span class="brand-title">Fidel <span class="brand-ethiopic">ፊደል</span></span>
@@ -26,6 +26,13 @@
         <a href="#features" class="nav-link">Architecture</a>
         <a href="#cheatsheet" class="nav-link">Syllabary Matrix</a>
         <a href="#install" class="nav-link">Downloads</a>
+        
+        <!-- Theme Switcher -->
+        <button id="theme-toggle" class="btn-theme-toggle" title="Toggle Light/Dark Theme">
+          <svg class="icon-theme icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="icon-theme icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+
         <a href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="nav-btn-github">
           <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           <span>GitHub</span>
@@ -58,81 +65,73 @@
           <span>Get Extension</span>
         </a>
         <a href="#sandbox" class="btn-cta-secondary">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
           <span>Try Live Demo</span>
         </a>
       </div>
 
-      <!-- Live Typing Simulator Terminal -->
+      <!-- Animated Simulator Terminal -->
       <div class="hero-terminal-shell">
         <div class="terminal-bar">
           <div class="terminal-dots">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
           </div>
-          <div class="terminal-title">fidel-composition-engine &mdash; live stream</div>
-          <div class="terminal-chip">O(1) Buffer</div>
+          <span class="terminal-title">fidel-composition-engine &mdash; live stream</span>
+          <span class="terminal-chip">O(1) Buffer</span>
         </div>
         <div class="terminal-body">
           <div class="sim-row">
             <span class="sim-prompt">&gt;</span>
             <span class="sim-label">Latin Input:</span>
-            <span id="sim-input" class="sim-text-input">selam yihun</span>
+            <span class="sim-text-input" id="sim-input">selam yihun</span>
             <span class="sim-cursor"></span>
           </div>
-          <div class="sim-divider"></div>
           <div class="sim-row">
             <span class="sim-prompt">&gt;</span>
             <span class="sim-label">Ethiopic Output:</span>
-            <span id="sim-output" class="sim-text-output">ሰላም ይሁን</span>
+            <span class="sim-text-output" id="sim-output">ሰላም ይሁን</span>
           </div>
+          <div class="sim-divider"></div>
           <div class="sim-meta-row">
             <span class="meta-tag" id="sim-family">Family: s (Sat) &rarr; y (Yaman)</span>
-            <span class="meta-tag" id="sim-speed">Latency: &lt; 0.1ms</span>
+            <span class="meta-tag">Latency: &lt; 0.1ms</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Sandbox Section -->
-  <section id="sandbox" class="section-block section-darker">
+  <!-- Interactive Sandbox -->
+  <section id="sandbox" class="section-block">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Try It Yourself</span>
         <h2 class="section-title">Interactive Composition Sandbox</h2>
-        <p class="section-desc">Type below using standard QWERTY phonetic input to see real-time character resolution and phoneme segmentation.</p>
+        <p class="section-desc">Type below using standard QWERTY phonetic input on the left to see real-time Ethiopic resolution and syllable metrics on the right.</p>
       </div>
 
       <div class="sandbox-widget">
         <div class="sandbox-topbar">
-          <div class="sandbox-tabs">
-            <span class="sandbox-tab active">Live IME</span>
-          </div>
-          <div class="sandbox-tips">
-            <span>Try: <code>gEz</code> &rarr; <strong>ግእዝ</strong> &bull; <code>t-e</code> &rarr; <strong>ትእ</strong> &bull; <code>k'idus</code> &rarr; <strong>ቅዱስ</strong></span>
-          </div>
+          <span class="sandbox-tab">Live IME</span>
+          <span class="sandbox-tips">Try: <code>gEz</code> &rarr; <strong>ግእዝ</strong> &bull; <code>t-e</code> &rarr; <strong>ትእ</strong> &bull; <code>k'idus</code> &rarr; <strong>ቅዱስ</strong></span>
         </div>
-
         <div class="sandbox-main">
           <div class="sandbox-input-col">
-            <label for="sandbox-input" class="col-label">QWERTY Input (Latin)</label>
-            <textarea id="sandbox-input" placeholder="Type here... e.g. Selam! Enkwan wede fidel be-selam met'ahu." rows="4" autofocus spellcheck="false"></textarea>
+            <span class="col-label">QWERTY Input (Latin)</span>
+            <textarea id="sandbox-input" placeholder="Type here... e.g. Selam! Enkwan wede fidel be-selam met'ahu." spellcheck="false" autocomplete="off"></textarea>
           </div>
-
           <div class="sandbox-output-col">
             <div class="col-header-row">
-              <label class="col-label">Ethiopic Unicode Output</label>
-              <button id="btn-copy-sandbox" class="btn-copy-inline">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="col-label">Ethiopic Unicode Output</span>
+              <button type="button" id="btn-copy-sandbox" class="btn-copy-inline" title="Copy to clipboard">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy</span>
               </button>
             </div>
             <div id="sandbox-rendered" class="sandbox-rendered-area">ሰላም! እንኳን ወደ ፊደል በሰላም መጣሁ።</div>
           </div>
         </div>
-
         <div class="sandbox-footer">
           <div class="stats-item">
             <span class="stats-label">Characters:</span>
@@ -151,8 +150,8 @@
     </div>
   </section>
 
-  <!-- Core Architecture Highlights -->
-  <section id="features" class="section-block">
+  <!-- Architectural Features -->
+  <section id="features" class="section-block section-darker">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Engineering Precision</span>
@@ -163,7 +162,7 @@
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
           </div>
           <h3>Segmented Buffer Architecture</h3>
           <p>Decouples immutable committed syllables (<code>lockedOutput</code>) from active bounded matching (<code>pendingFragment</code>) for O(1) performance per keystroke.</p>
@@ -171,7 +170,7 @@
 
         <div class="feature-card">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
           </div>
           <h3>Modern Framework Compatible</h3>
           <p>Bypasses React / Vue / Angular <code>_valueTracker</code> overriding issues on web inputs by invoking native prototype setters directly.</p>
@@ -179,7 +178,7 @@
 
         <div class="feature-card">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           </div>
           <h3>Syllable Disambiguation</h3>
           <p>Seamlessly handles ambiguous sequences with capital-vowel splitting (<code>tE</code> &rarr; <strong>ትእ</strong>, <code>gEz</code> &rarr; <strong>ግእዝ</strong>) and boundary overrides.</p>
@@ -213,12 +212,12 @@
   </section>
 
   <!-- Interactive Syllabary Reference Matrix -->
-  <section id="cheatsheet" class="section-block section-darker">
+  <section id="cheatsheet" class="section-block">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Phonetic Matrix</span>
-        <h2 class="section-title">Ethiopic Syllabary Reference (ፊደል ገበታ)</h2>
-        <p class="section-desc">Search across 33 Ethiopic consonant families and 7 vowel orders. Click any character to copy it.</p>
+        <h2 class="section-title">Ethiopic Syllabary Reference (33 Families &amp; Compounds)</h2>
+        <p class="section-desc">Search across all 33 Ethiopic consonant families and 7 vowel orders. Click any character to copy it instantly.</p>
       </div>
 
       <div class="matrix-card">
@@ -255,8 +254,8 @@
     </div>
   </section>
 
-  <!-- Downloads & Installation Section -->
-  <section id="install" class="section-block">
+  <!-- Installation / Downloads -->
+  <section id="install" class="section-block section-darker">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Installation</span>
@@ -265,10 +264,10 @@
       </div>
 
       <div class="install-cards-grid">
-        <!-- VS Code / Cursor Card -->
+        <!-- VS Code Extension Card -->
         <div class="install-card">
           <div class="install-card-header">
-            <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
             <div>
               <h3>VS Code &amp; Cursor IDE</h3>
               <span class="install-sub">Marketplace Release v0.3.2</span>
@@ -277,14 +276,13 @@
           <p class="install-desc">Native extension with activity bar tree view, live status bar indicator, and hover disambiguation.</p>
           <div class="code-snippet-box">
             <code>ext install Yihun.fidel-amharic</code>
-            <button class="btn-copy-snippet" data-copy="ext install Yihun.fidel-amharic" title="Copy install command">
+            <button type="button" class="btn-copy-snippet" data-copy="ext install Yihun.fidel-amharic" title="Copy install command">
               <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             </button>
           </div>
           <div class="install-actions">
             <a href="https://marketplace.visualstudio.com/items?itemName=Yihun.fidel-amharic" target="_blank" class="btn-install-primary">
               <span>VS Code Marketplace</span>
-              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
             <a href="https://open-vsx.org/extension/Yihun/fidel-amharic" target="_blank" class="btn-install-secondary">
               <span>Open VSX (Cursor)</span>

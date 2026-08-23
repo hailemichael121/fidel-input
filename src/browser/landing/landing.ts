@@ -14,7 +14,7 @@ export const README_SYLLABARY_DATA = [
   { name: "Ba (በ)", triggers: "b", orders: ["በ (be)", "ቡ (bu)", "ቢ (bi)", "ባ (ba/baa)", "ቤ (bee)", "ብ (b)", "ቦ (bo)", "ቧ (bwa)"] },
   { name: "Va (ቨ)", triggers: "v, V, B, b'", orders: ["ቨ (ve/Be)", "ቩ (vu/Bu)", "ቪ (vi/Bi)", "ቫ (va/Ba)", "ቬ (vee/Bee)", "ቭ (v/B)", "ቮ (vo/Bo)", "ቯ (vwa/Bwa)"] },
   { name: "Ta (ተ)", triggers: "t", orders: ["ተ (te)", "ቱ (tu)", "ቲ (ti)", "ታ (ta/taa)", "ቴ (tee)", "ት (t)", "ቶ (to)", "ቷ (twa)"] },
-  { name: "Cha (ቸ)", triggers: "ch, c", orders: ["ቸ (che/ce)", "蹰 (chu/cu)", "ቺ (chi/ci)", "ቻ (cha/ca)", "ቼ (chee/cee)", "ች (ch/c)", "ቾ (cho/co)", "ቿ (chwa/cwa)"] },
+  { name: "Cha (ቸ)", triggers: "ch, c", orders: ["ቸ (che/ce)", "ቹ (chu/cu)", "ቺ (chi/ci)", "ቻ (cha/ca)", "ቼ (chee/cee)", "ች (ch/c)", "ቾ (cho/co)", "ቿ (chwa/cwa)"] },
   { name: "H'a (ኀ)", triggers: "h', xh, hx", orders: ["ኀ (xha/h'a)", "ኁ (xhu/h'u)", "ኂ (xhi/h'i)", "ኃ (xhaa/h'aa)", "ኄ (xhe/h'e)", "ኅ (xh/h')", "ኆ (xho/h'o)", "ኋ (xhwa/h'wa)"] },
   { name: "Na (ነ)", triggers: "n", orders: ["ነ (ne)", "ኑ (nu)", "ኒ (ni)", "ና (na/naa)", "ኔ (nee)", "ን (n)", "ኖ (no)", "ኗ (nwa)"] },
   { name: "Nya (ኘ)", triggers: "ny, N, GN, n'", orders: ["ኘ (nye/Ne)", "ኙ (nyu/Nu)", "ኚ (nyi/Ni)", "ኛ (nya/Na)", "ጜ (nyee/Nee)", "ኝ (ny/N)", "ኞ (nyo/No)", "፝ (nywa/Nwa)"] },
@@ -38,7 +38,19 @@ export const README_SYLLABARY_DATA = [
   { name: "Pa (ፐ)", triggers: "p", orders: ["ፐ (pe)", "ፑ (pu)", "ፒ (pi)", "ፓ (pa)", "ፔ (pee)", "ፕ (p)", "ፖ (po)", "ፗ (pwa)"] }
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLanding() {
+  // Theme management
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('fidel_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  themeToggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('fidel_theme', next);
+  });
+
   const simInput = document.getElementById('sim-input') as HTMLElement;
   const simOutput = document.getElementById('sim-output') as HTMLElement;
   const simFamily = document.getElementById('sim-family') as HTMLElement;
@@ -73,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const engine = new CompositionEngine();
 
   function tickSimulator() {
+    if (!simInput || !simOutput || !simFamily) return;
     const current = demoPhrases[phraseIdx];
     
     if (!isDeleting) {
@@ -111,38 +124,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   tickSimulator();
 
-  // 2. Interactive Sandbox
+  // 2. Interactive Sandbox (Left Latin -> Right Ethiopic)
   function updateSandbox() {
+    if (!sandboxInput || !sandboxRendered) return;
     const text = sandboxInput.value;
     if (!text.trim()) {
       sandboxRendered.textContent = 'ሰላም! እንኳን ወደ ፊደል በሰላም መጣሁ።';
-      statChars.textContent = '0';
-      statSyllables.textContent = '0';
+      if (statChars) statChars.textContent = '0';
+      if (statSyllables) statSyllables.textContent = '0';
       return;
     }
 
     const res = transliterator.transliterate(text);
     sandboxRendered.textContent = res;
-    statChars.textContent = text.length.toString();
-    statSyllables.textContent = res.length.toString();
+    if (statChars) statChars.textContent = text.length.toString();
+    if (statSyllables) statSyllables.textContent = res.length.toString();
   }
 
   sandboxInput?.addEventListener('input', updateSandbox);
+  updateSandbox();
 
   btnCopySandbox?.addEventListener('click', async () => {
-    const text = sandboxRendered.textContent || '';
+    const text = sandboxRendered?.textContent || '';
     if (text) {
       await navigator.clipboard.writeText(text);
       const span = btnCopySandbox.querySelector('span');
       if (span) span.textContent = 'Copied! ✓';
+      btnCopySandbox.style.background = '#ffffff';
+      btnCopySandbox.style.color = '#000000';
       setTimeout(() => {
         if (span) span.textContent = 'Copy';
+        btnCopySandbox.style.background = '';
+        btnCopySandbox.style.color = '';
       }, 1500);
     }
   });
 
-  // 3. Render 33 Families Matrix
+  // 3. Render 33 Families Matrix Table with Click-to-Copy Notice
   function renderMatrix(filter = '') {
+    if (!matrixTbody) return;
     matrixTbody.innerHTML = '';
     const q = filter.trim().toLowerCase();
 
@@ -155,12 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const parts = order.split(' ');
         const glyph = parts[0];
         const ph = parts.slice(1).join(' ');
-        return `<td><span class="matrix-char-cell" data-char="${glyph}"><strong>${glyph}</strong> <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-sans)">${ph}</span></span></td>`;
+        if (glyph === '—') {
+          return `<td><span class="matrix-dash">—</span></td>`;
+        }
+        return `<td><button type="button" class="matrix-char-cell" data-char="${glyph}" title="Click to copy ${glyph}">
+          <span class="cell-glyph">${glyph}</span>
+          <span class="cell-ph">${ph}</span>
+          <span class="cell-toast">Copied! ✓</span>
+        </button></td>`;
       }).join('');
 
       tr.innerHTML = `
-        <td><strong>${row.name}</strong></td>
-        <td><code>${escapeHtml(row.triggers)}</code></td>
+        <td class="family-name-cell"><strong>${row.name}</strong></td>
+        <td class="family-trigger-cell"><code>${escapeHtml(row.triggers)}</code></td>
         ${orderCells}
       `;
       matrixTbody.appendChild(tr);
@@ -168,15 +195,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     matrixTbody.querySelectorAll('.matrix-char-cell').forEach((cell) => {
       cell.addEventListener('click', async (e) => {
-        const ch = (e.currentTarget as HTMLElement).getAttribute('data-char');
+        const targetBtn = (e.currentTarget as HTMLElement);
+        const ch = targetBtn.getAttribute('data-char');
         if (ch && ch !== '—') {
           await navigator.clipboard.writeText(ch);
-          (e.currentTarget as HTMLElement).style.color = '#ffffff';
-          (e.currentTarget as HTMLElement).style.background = '#33333e';
+          targetBtn.classList.add('copied');
           setTimeout(() => {
-            (e.currentTarget as HTMLElement).style.color = '';
-            (e.currentTarget as HTMLElement).style.background = '';
-          }, 600);
+            targetBtn.classList.remove('copied');
+          }, 1200);
+
+          // If matrixSearch or sandbox input is available, flash value
+          if (matrixSearch) {
+            const originalPlaceholder = matrixSearch.placeholder;
+            matrixSearch.placeholder = `Copied "${ch}" to clipboard!`;
+            setTimeout(() => {
+              matrixSearch.placeholder = originalPlaceholder;
+            }, 1800);
+          }
         }
       });
     });
@@ -204,11 +239,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const code = btn.getAttribute('data-copy');
       if (code) {
         await navigator.clipboard.writeText(code);
-        btn.innerHTML = '<span style="color:#ffffff;font-size:11px;">Copied!</span>';
+        btn.innerHTML = '<span style="font-size:11px;font-weight:700;">Copied! ✓</span>';
         setTimeout(() => {
           btn.innerHTML = '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
         }, 1500);
       }
     });
   });
-});
+}
+
+// Ensure execution regardless of script load timing
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLanding);
+} else {
+  initLanding();
+}
