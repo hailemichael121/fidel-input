@@ -9,8 +9,7 @@ function updateBadge(enabled: boolean): void {
     chrome.action.setBadgeText({ text: 'ፊ' });
     chrome.action.setBadgeBackgroundColor({ color: '#2ea043' }); // Green
   } else {
-    chrome.action.setBadgeText({ text: 'OFF' });
-    chrome.action.setBadgeBackgroundColor({ color: '#6e7681' }); // Gray
+    chrome.action.setBadgeText({ text: '' });
   }
 }
 

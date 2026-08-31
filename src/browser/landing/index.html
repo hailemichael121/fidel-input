@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,11 +25,11 @@
       </div>
 
       <nav class="header-nav">
-        <a href="#sandbox" class="nav-link">Interactive Sandbox</a>
-        <a href="#user-guide" class="nav-link">User Guide</a>
-        <a href="#cheatsheet" class="nav-link">Syllabary Matrix</a>
-        <a href="#developer-docs" class="nav-link">Developer Docs</a>
-        <a href="#install" class="nav-link">Downloads</a>
+        <a href="#install" class="nav-link">Install</a>
+        <a href="#sandbox" class="nav-link">Try it</a>
+        <a href="#user-guide" class="nav-link">How it works</a>
+        <a href="#cheatsheet" class="nav-link">Letter chart</a>
+        <a href="#developer-docs" class="nav-link">For developers</a>
         
         <!-- Theme Switcher -->
         <button id="theme-toggle" class="btn-theme-toggle" title="Toggle Light/Dark Theme">
@@ -49,13 +49,12 @@
   <section class="hero-section">
     <div class="hero-container">
       <h1 class="hero-title">
-        Fast, Native Amharic Typing.<br>
-        <span class="gradient-text">Zero Friction.</span>
+        Write Amharic with an<br>
+        <span class="gradient-text">English keyboard.</span>
       </h1>
 
       <p class="hero-subtitle">
-        Type fluent Amharic everywhere you work. Live phonetic transliteration, instant syllable resolution, 
-        and full support for all 33 Ethiopic consonant families.
+        Type how a word sounds — <em>selam</em> becomes <strong>ሰላም</strong>. Fidel is a phonetic keyboard for Amharic (ፊደል) in your browser and in VS Code.
       </p>
 
       <div class="hero-cta-group">
@@ -64,7 +63,7 @@
           <span>Get Extension</span>
         </a>
         <a href="#sandbox" class="btn-cta-secondary">
-          <span>Try Live Demo</span>
+          <span>Try it here</span>
         </a>
       </div>
 
@@ -76,52 +75,152 @@
             <span class="dot"></span>
             <span class="dot"></span>
           </div>
-          <span class="terminal-title">fidel-live-stream &mdash; phonetic transliterator</span>
-          <span class="terminal-chip">O(1) Buffer</span>
+          <span class="terminal-title">example</span>
+          <span class="terminal-chip">as you type</span>
         </div>
         <div class="terminal-body">
           <div class="sim-row">
             <span class="sim-prompt">&gt;</span>
-            <span class="sim-label">Latin Input:</span>
+            <span class="sim-label">You type:</span>
             <span class="sim-text-input" id="sim-input">selam yihun</span>
             <span class="sim-cursor"></span>
           </div>
           <div class="sim-row">
             <span class="sim-prompt">&gt;</span>
-            <span class="sim-label">Ethiopic Output:</span>
+            <span class="sim-label">Amharic:</span>
             <span class="sim-text-output font-ethiopic" id="sim-output">ሰላም ይሁን</span>
           </div>
           <div class="sim-divider"></div>
           <div class="sim-meta-row">
-            <span class="meta-tag" id="sim-family">Greeting: selam yihun &rarr; ሰላም ይሁን</span>
-            <span class="meta-tag">Latency: &lt; 0.1ms</span>
+            <span class="meta-tag" id="sim-family">selam yihun &rarr; ሰላም ይሁን</span>
+            <span class="meta-tag">in the page</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Sandbox -->
-  <section id="sandbox" class="section-block">
+  <!-- Installation / Downloads -->
+  <section id="install" class="section-block">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Interactive Composition Sandbox</h2>
-        <p class="section-desc">Type below using standard QWERTY phonetic input on the left to see real-time Ethiopic resolution and syllable metrics on the right.</p>
+        <h2 class="section-title">Install Fidel</h2>
+        <p class="section-desc">Pick your browser. On Chrome you must turn on Developer mode before you can load the extension.</p>
+      </div>
+
+      <!-- Browser Chooser Tab Bar -->
+      <div class="browser-chooser-shell">
+        <div class="browser-tab-nav">
+          <button type="button" class="browser-tab-btn active" data-browser="chrome">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="21.17" y1="8" x2="12" y2="8"></line><line x1="3.95" y1="6.06" x2="8.54" y2="14"></line><line x1="10.88" y1="21.94" x2="15.46" y2="14"></line></svg>
+            <span>Chrome</span>
+          </button>
+
+          <button type="button" class="browser-tab-btn" data-browser="brave">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V7l-8-5z"></path></svg>
+            <span>Brave</span>
+          </button>
+
+          <button type="button" class="browser-tab-btn" data-browser="edge">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+            <span>Edge</span>
+          </button>
+
+          <button type="button" class="browser-tab-btn" data-browser="opera">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6a4 6 0 0 0 0 12 4 6 0 0 0 0-12z"></path></svg>
+            <span>Opera</span>
+          </button>
+
+          <button type="button" class="browser-tab-btn" data-browser="firefox">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-7.54 16.59c.28.32.74.34 1.05.06.31-.28.33-.74.06-1.05A8.5 8.5 0 0 1 12 3.5c4.7 0 8.5 3.8 8.5 8.5 0 3.32-1.9 6.2-4.66 7.6-.4.2-.55.68-.35 1.08.2.4.68.55 1.08.35A10 10 0 0 0 12 2z"></path></svg>
+            <span>Firefox</span>
+          </button>
+
+          <button type="button" class="browser-tab-btn" data-browser="vscode">
+            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>VS Code &amp; Cursor</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Install Pane -->
+        <div class="browser-install-body">
+          <div class="browser-target-header">
+            <div class="browser-brand-info">
+              <span id="inst-browser-title" class="inst-browser-title">Google Chrome</span>
+              <span class="inst-version-tag">Latest v0.4.0</span>
+            </div>
+            <span id="inst-package-tag" class="inst-package-tag">Free &amp; Open Source</span>
+          </div>
+
+          <div class="install-steps-container">
+            <div class="step-card">
+              <div class="step-badge">1</div>
+              <div class="step-text">
+                <span class="step-headline">Download &amp; unzip</span>
+                <span class="step-sub">Download <code>fidel-browser-extension.zip</code> and unzip it to a folder on your computer.</span>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-badge">2</div>
+              <div class="step-text">
+                <span class="step-headline">Turn on Developer mode</span>
+                <span class="step-sub" id="inst-step-2">In Chrome, open <code>chrome://extensions</code>. Turn on <strong>Developer mode</strong> in the top-right. You cannot load Fidel until this switch is on.</span>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-badge">3</div>
+              <div class="step-text">
+                <span class="step-headline">Load the folder</span>
+                <span class="step-sub" id="inst-step-3">Click <strong>Load unpacked</strong> and select the unzipped folder. Fidel is ready to use on web pages.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Build Command / Shortcut Row -->
+          <div class="code-snippet-box">
+            <code id="inst-cmd-code">bun install && bun run package:browser</code>
+            <button type="button" class="btn-copy-snippet" id="inst-cmd-btn" data-copy="git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser" title="Copy build command">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+
+          <div class="install-actions">
+            <a id="inst-primary-btn" href="fidel-browser-extension.zip" download class="btn-install-primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span id="inst-primary-text">Download Latest Build (.zip)</span>
+            </a>
+            <a id="inst-secondary-btn" href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="btn-install-secondary">
+              <span>View Source on GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Try it -->
+  <section id="sandbox" class="section-block section-darker">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Try it in the page</h2>
+        <p class="section-desc">Type English letters on the left. Amharic shows up on the right as you type.</p>
       </div>
 
       <div class="sandbox-widget">
         <div class="sandbox-topbar">
-          <span class="sandbox-tab">Live IME</span>
+          <span class="sandbox-tab">Try it</span>
           <span class="sandbox-tips">Try: <code>gEz</code> &rarr; <strong>ግእዝ</strong> &bull; <code>t-e</code> &rarr; <strong>ትእ</strong> &bull; <code>k'idus</code> &rarr; <strong>ቅዱስ</strong> &bull; <code>qwanqwa</code> &rarr; <strong>ቋንቋ</strong></span>
         </div>
         <div class="sandbox-main">
           <div class="sandbox-input-col">
-            <span class="col-label">QWERTY Input (Latin)</span>
+            <span class="col-label">English letters</span>
             <textarea id="sandbox-input" placeholder="Type here... e.g. Selam! Enkwan wede fidel be-selam met'ahu." spellcheck="false" autocomplete="off"></textarea>
           </div>
           <div class="sandbox-output-col">
             <div class="col-header-row">
-              <span class="col-label">Ethiopic Unicode Output</span>
+              <span class="col-label">Amharic</span>
               <button type="button" id="btn-copy-sandbox" class="btn-copy-inline" title="Copy to clipboard">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy</span>
@@ -132,16 +231,16 @@
         </div>
         <div class="sandbox-footer">
           <div class="stats-item">
-            <span class="stats-label">Characters:</span>
+            <span class="stats-label">Letters:</span>
             <span id="stat-chars" class="stats-val">0</span>
           </div>
           <div class="stats-item">
-            <span class="stats-label">Syllables:</span>
+            <span class="stats-label">Fidel letters:</span>
             <span id="stat-syllables" class="stats-val">0</span>
           </div>
           <div class="stats-item">
-            <span class="stats-label">Engine Status:</span>
-            <span class="stats-val text-emerald">Active &bull; Ready</span>
+            <span class="stats-label">Status:</span>
+            <span class="stats-val text-emerald">Ready</span>
           </div>
         </div>
       </div>
@@ -149,7 +248,7 @@
   </section>
 
   <!-- User Guide & Visual Feature Walkthrough -->
-  <section id="user-guide" class="section-block section-darker">
+  <section id="user-guide" class="section-block">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">What You Can Do With Fidel</h2>
@@ -461,106 +560,6 @@
           </div>
           <h3>Prefix-Trie Mapping</h3>
           <p>O(k) longest-prefix match trie supporting 33 consonant roots, all 7 orders, and diqala compounds without regular expression overhead.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Installation / Downloads -->
-  <section id="install" class="section-block">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Install Fidel Everywhere</h2>
-        <p class="section-desc">Choose your browser or editor below for tailored 1-click install instructions.</p>
-      </div>
-
-      <!-- Browser Chooser Tab Bar -->
-      <div class="browser-chooser-shell">
-        <div class="browser-tab-nav">
-          <button type="button" class="browser-tab-btn active" data-browser="chrome">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="21.17" y1="8" x2="12" y2="8"></line><line x1="3.95" y1="6.06" x2="8.54" y2="14"></line><line x1="10.88" y1="21.94" x2="15.46" y2="14"></line></svg>
-            <span>Chrome</span>
-          </button>
-
-          <button type="button" class="browser-tab-btn" data-browser="brave">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V7l-8-5z"></path></svg>
-            <span>Brave</span>
-          </button>
-
-          <button type="button" class="browser-tab-btn" data-browser="edge">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-            <span>Edge</span>
-          </button>
-
-          <button type="button" class="browser-tab-btn" data-browser="opera">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6a4 6 0 0 0 0 12 4 6 0 0 0 0-12z"></path></svg>
-            <span>Opera</span>
-          </button>
-
-          <button type="button" class="browser-tab-btn" data-browser="firefox">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-7.54 16.59c.28.32.74.34 1.05.06.31-.28.33-.74.06-1.05A8.5 8.5 0 0 1 12 3.5c4.7 0 8.5 3.8 8.5 8.5 0 3.32-1.9 6.2-4.66 7.6-.4.2-.55.68-.35 1.08.2.4.68.55 1.08.35A10 10 0 0 0 12 2z"></path></svg>
-            <span>Firefox</span>
-          </button>
-
-          <button type="button" class="browser-tab-btn" data-browser="vscode">
-            <svg class="browser-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            <span>VS Code &amp; Cursor</span>
-          </button>
-        </div>
-
-        <!-- Dynamic Install Pane -->
-        <div class="browser-install-body">
-          <div class="browser-target-header">
-            <div class="browser-brand-info">
-              <span id="inst-browser-title" class="inst-browser-title">Google Chrome &bull; Manifest V3 (Direct Build)</span>
-              <span class="inst-version-tag">Latest v0.4.0</span>
-            </div>
-            <span id="inst-package-tag" class="inst-package-tag">Free &amp; Open Source</span>
-          </div>
-
-          <div class="install-steps-container">
-            <div class="step-card">
-              <div class="step-badge">1</div>
-              <div class="step-text">
-                <span class="step-headline">Download &amp; Extract</span>
-                <span class="step-sub">Download <code>fidel-browser-extension.zip</code> and unzip it to any local folder on your computer.</span>
-              </div>
-            </div>
-
-            <div class="step-card">
-              <div class="step-badge">2</div>
-              <div class="step-text">
-                <span class="step-headline">Open Extensions Page</span>
-                <span class="step-sub" id="inst-step-2">Navigate to <code id="inst-ext-url">chrome://extensions</code> in your browser and toggle <strong>Developer mode</strong> in the top-right corner.</span>
-              </div>
-            </div>
-
-            <div class="step-card">
-              <div class="step-badge">3</div>
-              <div class="step-text">
-                <span class="step-headline">Load Extension</span>
-                <span class="step-sub" id="inst-step-3">Click <strong>Load unpacked</strong> and select the extracted folder. Fidel is instantly active!</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Build Command / Shortcut Row -->
-          <div class="code-snippet-box">
-            <code id="inst-cmd-code">bun install && bun run package:browser</code>
-            <button type="button" class="btn-copy-snippet" id="inst-cmd-btn" data-copy="git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser" title="Copy build command">
-              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-          </div>
-
-          <div class="install-actions">
-            <a id="inst-primary-btn" href="fidel-browser-extension.zip" download class="btn-install-primary">
-              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span id="inst-primary-text">Download Latest Build (.zip)</span>
-            </a>
-            <a id="inst-secondary-btn" href="https://github.com/Hailemichael121/fidel-input" target="_blank" class="btn-install-secondary">
-              <span>View Source on GitHub</span>
-            </a>
-          </div>
         </div>
       </div>
     </div>

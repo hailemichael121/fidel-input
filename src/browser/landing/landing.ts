@@ -41,11 +41,11 @@ export const README_SYLLABARY_DATA = [
 function initLanding() {
   // Theme management
   const themeToggle = document.getElementById('theme-toggle');
-  const savedTheme = localStorage.getItem('fidel_theme') || 'dark';
+  const savedTheme = localStorage.getItem('fidel_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
   themeToggle?.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('fidel_theme', next);
@@ -330,9 +330,9 @@ function initLanding() {
     secondaryText: string;
   }> = {
     chrome: {
-      title: 'Google Chrome • Manifest V3 (Direct Build)',
-      step2: 'Navigate to <code>chrome://extensions</code> in your address bar and turn on <strong>Developer mode</strong>.',
-      step3: 'Click <strong>Load unpacked</strong> and select the unzipped extension folder.',
+      title: 'Google Chrome',
+      step2: 'Open <code>chrome://extensions</code> in the address bar. In the top-right, turn on <strong>Developer mode</strong>. Chrome will not let you load Fidel until this is on.',
+      step3: 'Click <strong>Load unpacked</strong> and select the unzipped folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
       primaryLink: 'fidel-browser-extension.zip',
@@ -341,8 +341,8 @@ function initLanding() {
       secondaryText: 'View Source on GitHub'
     },
     brave: {
-      title: 'Brave Browser • Manifest V3 (Direct Build)',
-      step2: 'Navigate to <code>brave://extensions</code> and turn on <strong>Developer mode</strong> in the top-right.',
+      title: 'Brave',
+      step2: 'Open <code>brave://extensions</code>. In the top-right, turn on <strong>Developer mode</strong>.',
       step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
@@ -352,8 +352,8 @@ function initLanding() {
       secondaryText: 'View Source on GitHub'
     },
     edge: {
-      title: 'Microsoft Edge • Manifest V3 (Direct Build)',
-      step2: 'Navigate to <code>edge://extensions</code> and toggle <strong>Developer mode</strong> on the left panel.',
+      title: 'Microsoft Edge',
+      step2: 'Open <code>edge://extensions</code>. Turn on <strong>Developer mode</strong> on the left.',
       step3: 'Click <strong>Load unpacked</strong> and select the unzipped folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
@@ -363,8 +363,8 @@ function initLanding() {
       secondaryText: 'View Source on GitHub'
     },
     opera: {
-      title: 'Opera / Opera GX • Manifest V3 (Direct Build)',
-      step2: 'Navigate to <code>opera://extensions</code> and enable <strong>Developer mode</strong> (top-right).',
+      title: 'Opera',
+      step2: 'Open <code>opera://extensions</code>. Turn on <strong>Developer mode</strong> in the top-right.',
       step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
@@ -374,8 +374,8 @@ function initLanding() {
       secondaryText: 'View Source on GitHub'
     },
     firefox: {
-      title: 'Mozilla Firefox • Temporary Add-on',
-      step2: 'Navigate to <code>about:debugging#/runtime/this-firefox</code> in the Firefox URL bar.',
+      title: 'Firefox',
+      step2: 'Open <code>about:debugging#/runtime/this-firefox</code> in the address bar.',
       step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the extracted folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
@@ -385,7 +385,7 @@ function initLanding() {
       secondaryText: 'View Source on GitHub'
     },
     vscode: {
-      title: 'VS Code & Cursor IDE • Official Marketplace Extension',
+      title: 'VS Code & Cursor',
       step2: 'Press <kbd>Ctrl+Shift+X</kbd> (or <kbd>Cmd+Shift+X</kbd>) inside VS Code / Cursor to open Extensions.',
       step3: 'Search for <strong>Fidel</strong> or type <code>ext install Yihun.fidel-amharic</code> to install instantly.',
       cmd: 'ext install Yihun.fidel-amharic',
