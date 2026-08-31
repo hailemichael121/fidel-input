@@ -30,12 +30,35 @@ function copyBrowserStaticAssets() {
   fs.copyFileSync("src/browser/landing/index.html", "dist/browser/landing.html");
   fs.copyFileSync("src/browser/landing/landing.css", "dist/browser/landing.css");
 
-  // Copy icons
   if (fs.existsSync("media/fidel.png")) {
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-16.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-32.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-48.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-128.png");
+  }
+}
+
+function copyNetlifySite() {
+  ensureDir("dist/site");
+
+  fs.copyFileSync("src/browser/landing/index.html", "dist/site/index.html");
+  fs.copyFileSync("src/browser/landing/landing.css", "dist/site/landing.css");
+  if (fs.existsSync("dist/browser/landing.js")) {
+    fs.copyFileSync("dist/browser/landing.js", "dist/site/landing.js");
+  }
+  if (fs.existsSync("dist/browser/landing.js.map")) {
+    fs.copyFileSync("dist/browser/landing.js.map", "dist/site/landing.js.map");
+  }
+
+  fs.copyFileSync("src/browser/options/options.html", "dist/site/options.html");
+  fs.copyFileSync("src/browser/options/options.css", "dist/site/options.css");
+  if (fs.existsSync("dist/browser/options.js")) {
+    fs.copyFileSync("dist/browser/options.js", "dist/site/options.js");
+  }
+
+  const zipPath = "fidel-browser-extension.zip";
+  if (fs.existsSync(zipPath)) {
+    fs.copyFileSync(zipPath, "dist/site/fidel-browser-extension.zip");
   }
 }
 
@@ -132,6 +155,7 @@ async function buildAll() {
         esbuild.context(browserLandingOptions),
       ]);
       await Promise.all(ctxs.map((ctx) => ctx.watch()));
+      copyNetlifySite();
       console.log("Fidel [Browser]: watching for changes...");
     } else {
       await Promise.all([
@@ -141,6 +165,7 @@ async function buildAll() {
         esbuild.build(browserOptionsPageOptions),
         esbuild.build(browserLandingOptions),
       ]);
+      copyNetlifySite();
       console.log("Fidel [Browser]: build complete.");
     }
   }
