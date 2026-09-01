@@ -1,14 +1,26 @@
 import { BrowserStorageAdapter } from '../storage/storageAdapter';
-import type { BrowserMessage, FidelBrowserSettings } from '../storage/types';
+import { DEFAULT_SETTINGS, type BrowserMessage, type FidelBrowserSettings } from '../storage/types';
 import { SessionManager } from './sessionManager';
 import { isStandardEditable, StandardInputHandler, applyNativeValue } from './standardInput';
 import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDocsTarget } from './contentEditable';
 
-(async function initFidelContentScript() {
-  if ((window as unknown as { __FIDEL_LOADED__?: boolean }).__FIDEL_LOADED__) return;
-  (window as unknown as { __FIDEL_LOADED__?: boolean }).__FIDEL_LOADED__ = true;
+function extensionId(): string | null {
+  try {
+    return chrome.runtime?.id ?? null;
+  } catch {
+    return null;
+  }
+}
 
-  let settings = await BrowserStorageAdapter.getSettings();
+(function initFidelContentScript() {
+  const runtimeId = extensionId();
+  if (!runtimeId) return;
+
+  const root = window as unknown as { __FIDEL_RUNTIME_ID__?: string };
+  if (root.__FIDEL_RUNTIME_ID__ === runtimeId) return;
+  root.__FIDEL_RUNTIME_ID__ = runtimeId;
+
+  let settings: FidelBrowserSettings = { ...DEFAULT_SETTINGS };
   const sessionManager = new SessionManager(settings);
   const standardInput = new StandardInputHandler(sessionManager, settings);
   const contentEditable = new ContentEditableHandler(sessionManager, settings);
@@ -20,9 +32,18 @@ import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDoc
     contentEditable.updateSettings(newSettings);
   }
 
+  function refreshSettings() {
+    BrowserStorageAdapter.getSettings().then(updateAllSettings).catch(() => undefined);
+  }
+
+  refreshSettings();
   BrowserStorageAdapter.onSettingsChange(updateAllSettings);
 
-  chrome.runtime.onMessage.addListener((message: BrowserMessage) => {
+  chrome.runtime.onMessage.addListener((message: BrowserMessage, _sender, sendResponse) => {
+    if (message.type === 'PING') {
+      sendResponse({ ok: true });
+      return;
+    }
     if (message.type === 'STATE_UPDATE') {
       updateAllSettings(message.state);
     } else if (message.type === 'TRANSLITERATE_TEXT') {
@@ -44,10 +65,36 @@ import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDoc
     }
   });
 
-  /**
-   * Recursively drill down into Shadow Roots to find the true focused leaf element
-   * (e.g. Gemini rich-textarea, web components, etc.)
-   */
+  function keepAlive() {
+    try {
+      chrome.runtime.sendMessage({ type: 'PING' }, () => {
+        void chrome.runtime.lastError;
+      });
+    } catch {
+      // Background is waking or context is restarting
+    }
+  }
+
+  keepAlive();
+  window.setInterval(keepAlive, 20000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      keepAlive();
+      refreshSettings();
+    }
+  }, true);
+
+  window.addEventListener('pageshow', () => {
+    keepAlive();
+    refreshSettings();
+  });
+
+  window.addEventListener('focus', () => {
+    keepAlive();
+    refreshSettings();
+  });
+
   function getDeepActiveElement(): Element | null {
     let active = document.activeElement;
     while (active && active.shadowRoot && active.shadowRoot.activeElement) {
@@ -56,9 +103,6 @@ import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDoc
     return active;
   }
 
-  /**
-   * Resolves the target element from event composedPath or shadow DOM
-   */
   function getEventTarget(e: Event): Element | null {
     const path = e.composedPath ? e.composedPath() : [];
     for (const item of path) {
@@ -77,23 +121,24 @@ import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDoc
     return getDeepActiveElement();
   }
 
-  // Global keydown event listener in capture phase
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    // 1. In-page shortcut fallback for Alt+A or Alt+Shift+A to toggle Fidel input mode
+  function onKeyDown(e: KeyboardEvent) {
     if ((e.altKey && (e.key === 'a' || e.key === 'A') && !e.ctrlKey && !e.metaKey) ||
         (e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a'))) {
       e.preventDefault();
       e.stopPropagation();
-      chrome.runtime.sendMessage({ type: 'TOGGLE_ENABLED' }, (updated) => {
-        if (updated) updateAllSettings(updated);
-      });
+      try {
+        chrome.runtime.sendMessage({ type: 'TOGGLE_ENABLED' }, (updated) => {
+          if (updated) updateAllSettings(updated);
+        });
+      } catch {
+        // Background waking
+      }
       return;
     }
 
     const rawTarget = getEventTarget(e);
     if (!rawTarget) return;
 
-    // Resolve target element (handling Google Workspace, AI portals, Search boxes, and active element)
     let target = rawTarget;
     if (!isStandardEditable(target) && !findContentEditable(target)) {
       if (isGoogleDocs()) {
@@ -117,9 +162,10 @@ import { findContentEditable, ContentEditableHandler, isGoogleDocs, getGoogleDoc
         contentEditable.handleKeyDown(e, richContainer);
       }
     }
-  }, true);
+  }
 
-  // Reset composition session when clicking or blurring
+  window.addEventListener('keydown', onKeyDown, true);
+
   window.addEventListener('blur', (e: FocusEvent) => {
     const target = getEventTarget(e);
     if (target) sessionManager.resetSession(target);

@@ -30,4 +30,5 @@ export type BrowserMessage =
   | { type: 'TOGGLE_ENABLED' }
   | { type: 'SET_ENABLED'; enabled: boolean }
   | { type: 'UPDATE_SETTINGS'; settings: Partial<FidelBrowserSettings> }
-  | { type: 'TRANSLITERATE_TEXT'; text: string };
+  | { type: 'TRANSLITERATE_TEXT'; text: string }
+  | { type: 'PING' };

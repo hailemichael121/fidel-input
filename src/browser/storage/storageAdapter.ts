@@ -3,25 +3,55 @@ import { DEFAULT_SETTINGS, type FidelBrowserSettings } from './types';
 export class BrowserStorageAdapter {
   private static STORAGE_KEY = 'fidel_browser_settings';
 
+  private static withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => resolve(fallback), ms);
+      promise.then((value) => {
+        clearTimeout(timer);
+        resolve(value);
+      }).catch(() => {
+        clearTimeout(timer);
+        resolve(fallback);
+      });
+    });
+  }
+
+  private static readArea(area: 'local' | 'sync'): Promise<Partial<FidelBrowserSettings> | null> {
+    if (typeof chrome === 'undefined' || !chrome.storage?.[area]) {
+      return Promise.resolve(null);
+    }
+
+    return new Promise((resolve) => {
+      try {
+        chrome.storage[area].get([this.STORAGE_KEY], (result) => {
+          if (chrome.runtime.lastError) {
+            resolve(null);
+            return;
+          }
+          resolve((result?.[this.STORAGE_KEY] as Partial<FidelBrowserSettings>) || null);
+        });
+      } catch {
+        resolve(null);
+      }
+    });
+  }
+
   static async getSettings(): Promise<FidelBrowserSettings> {
     if (typeof chrome === 'undefined' || !chrome.storage) {
       return DEFAULT_SETTINGS;
     }
 
-    return new Promise((resolve) => {
-      chrome.storage.sync.get([this.STORAGE_KEY], (result) => {
-        if (chrome.runtime.lastError || !result[this.STORAGE_KEY]) {
-          // Fallback to local storage if sync fails
-          chrome.storage.local.get([this.STORAGE_KEY], (localResult) => {
-            const localData = (localResult?.[this.STORAGE_KEY] as Partial<FidelBrowserSettings>) || {};
-            resolve({ ...DEFAULT_SETTINGS, ...localData });
-          });
-        } else {
-          const syncData = (result?.[this.STORAGE_KEY] as Partial<FidelBrowserSettings>) || {};
-          resolve({ ...DEFAULT_SETTINGS, ...syncData });
-        }
-      });
-    });
+    const localData = await this.withTimeout(this.readArea('local'), 400, null);
+    if (localData) {
+      return { ...DEFAULT_SETTINGS, ...localData };
+    }
+
+    const syncData = await this.withTimeout(this.readArea('sync'), 400, null);
+    if (syncData) {
+      return { ...DEFAULT_SETTINGS, ...syncData };
+    }
+
+    return DEFAULT_SETTINGS;
   }
 
   static async saveSettings(settings: Partial<FidelBrowserSettings>): Promise<FidelBrowserSettings> {
@@ -30,13 +60,24 @@ export class BrowserStorageAdapter {
 
     if (typeof chrome !== 'undefined' && chrome.storage) {
       await new Promise<void>((resolve) => {
-        chrome.storage.sync.set({ [this.STORAGE_KEY]: updated }, () => {
-          if (chrome.runtime.lastError) {
-            chrome.storage.local.set({ [this.STORAGE_KEY]: updated }, () => resolve());
-          } else {
-            chrome.storage.local.set({ [this.STORAGE_KEY]: updated }, () => resolve());
-          }
-        });
+        const done = () => resolve();
+        const timer = setTimeout(done, 600);
+        try {
+          chrome.storage.local.set({ [this.STORAGE_KEY]: updated }, () => {
+            try {
+              chrome.storage.sync.set({ [this.STORAGE_KEY]: updated }, () => {
+                clearTimeout(timer);
+                done();
+              });
+            } catch {
+              clearTimeout(timer);
+              done();
+            }
+          });
+        } catch {
+          clearTimeout(timer);
+          done();
+        }
       });
     }
 

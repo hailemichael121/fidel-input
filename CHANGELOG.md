@@ -4,6 +4,14 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-09-01
+
+### Fixed
+- **Firefox install**: Manifest V3 now declares both `background.service_worker` (Chrome) and `background.scripts` (Firefox), so temporary add-on loading no longer fails with “background.service_worker is currently disabled.”
+- **Open tabs after install**: Fidel injects into already-open http(s) pages on install, startup, and tab focus, so you do not need to refresh Claude, Gemini, or other sites to type Amharic.
+- **Idle / network recovery**: Content script starts without waiting on sync storage, pings the background worker, and re-attaches after a sleeping tab or dropped connection.
+- **Toolbar badge**: Green **ፊ** while Fidel is on; no **OFF** badge when it is off.
+
 ## [0.4.0] - 2026-08-23
 
 ### Added & Enhanced

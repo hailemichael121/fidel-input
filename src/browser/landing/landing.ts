@@ -376,7 +376,7 @@ function initLanding() {
     firefox: {
       title: 'Firefox',
       step2: 'Open <code>about:debugging#/runtime/this-firefox</code> in the address bar.',
-      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the extracted folder.',
+      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the unzipped folder (not a random worker in the list).',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
       primaryLink: 'fidel-browser-extension.zip',

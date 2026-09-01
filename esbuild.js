@@ -80,7 +80,7 @@ const browserBackgroundOptions = {
   entryPoints: ["src/browser/background/serviceWorker.ts"],
   bundle: true,
   outfile: "dist/browser/background.js",
-  format: "esm",
+  format: "iife",
   platform: "browser",
   target: "es2022",
   sourcemap: true,

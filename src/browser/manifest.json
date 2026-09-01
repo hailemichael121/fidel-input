@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Fidel — Amharic Phonetic Input (ፊደል)",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Fast, real-time Amharic keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration for the web.",
   "icons": {
     "16": "icons/icon-16.png",
@@ -21,7 +21,7 @@
   },
   "background": {
     "service_worker": "background.js",
-    "type": "module"
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
@@ -40,8 +40,19 @@
   "permissions": [
     "storage",
     "activeTab",
-    "contextMenus"
+    "contextMenus",
+    "scripting",
+    "tabs"
   ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "fidel-input@hailemichael121",
+      "strict_min_version": "109.0"
+    }
+  },
   "commands": {
     "toggle-fidel": {
       "suggested_key": {
