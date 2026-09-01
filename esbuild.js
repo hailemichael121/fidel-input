@@ -35,6 +35,10 @@ function copyBrowserStaticAssets() {
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-32.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-48.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-128.png");
+    fs.copyFileSync("media/fidel.png", "dist/browser/favicon.png");
+  }
+  if (fs.existsSync("media/fidel.svg")) {
+    fs.copyFileSync("media/fidel.svg", "dist/browser/favicon.svg");
   }
 }
 
@@ -54,6 +58,13 @@ function copyNetlifySite() {
   fs.copyFileSync("src/browser/options/options.css", "dist/site/options.css");
   if (fs.existsSync("dist/browser/options.js")) {
     fs.copyFileSync("dist/browser/options.js", "dist/site/options.js");
+  }
+
+  if (fs.existsSync("media/fidel.svg")) {
+    fs.copyFileSync("media/fidel.svg", "dist/site/favicon.svg");
+  }
+  if (fs.existsSync("media/fidel.png")) {
+    fs.copyFileSync("media/fidel.png", "dist/site/favicon.png");
   }
 
   const zipPath = "fidel-browser-extension.zip";
