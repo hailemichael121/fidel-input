@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/Hailemichael121/fidel-input/issues"
   },
-  "homepage": "https://github.com/Hailemichael121/fidel-input#readme",
+  "homepage": "https://fidel-x.netlify.app/",
   "engines": {
     "vscode": "^1.125.0"
   },

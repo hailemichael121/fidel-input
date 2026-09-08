@@ -129,6 +129,12 @@ body::before {
   flex-direction: column;
 }
 
+.brand-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+}
+
 .app-name {
   font-size: 14px;
   font-weight: 800;

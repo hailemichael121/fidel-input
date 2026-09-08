@@ -75,8 +75,6 @@ fidel-input/
 │   ├── extension.cjs            # Bundled VS Code extension
 │   └── browser/                 # Unpacked Chrome/Edge/Firefox extension
 │
-├── fidel-browser-extension.zip  # Packaged Chrome Web Store ZIP
-├── fidel-amharic-0.3.2.vsix     # Packaged VS Code / Cursor VSIX release
 └── esbuild.js                   # Dual-target compiler (VS Code + Browser)
 ```
 │

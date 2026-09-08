@@ -332,55 +332,55 @@ function initLanding() {
     chrome: {
       title: 'Google Chrome',
       step2: 'Open <code>chrome://extensions</code> in the address bar. In the top-right, turn on <strong>Developer mode</strong>. Chrome will not let you load Fidel until this is on.',
-      step3: 'Click <strong>Load unpacked</strong> and select the unzipped folder.',
+      step3: 'Click <strong>Load unpacked</strong> and select the extension folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
-      primaryLink: 'fidel-browser-extension.zip',
-      primaryText: 'Download Latest Build (.zip)',
+      primaryLink: 'https://github.com/Hailemichael121/fidel-input/releases',
+      primaryText: 'Get Extension on GitHub Releases',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
     brave: {
       title: 'Brave',
       step2: 'Open <code>brave://extensions</code>. In the top-right, turn on <strong>Developer mode</strong>.',
-      step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
+      step3: 'Click <strong>Load unpacked</strong> and choose the extension folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
-      primaryLink: 'fidel-browser-extension.zip',
-      primaryText: 'Download Latest Build (.zip)',
+      primaryLink: 'https://github.com/Hailemichael121/fidel-input/releases',
+      primaryText: 'Get Extension on GitHub Releases',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
     edge: {
       title: 'Microsoft Edge',
       step2: 'Open <code>edge://extensions</code>. Turn on <strong>Developer mode</strong> on the left.',
-      step3: 'Click <strong>Load unpacked</strong> and select the unzipped folder.',
+      step3: 'Click <strong>Load unpacked</strong> and select the extension folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
-      primaryLink: 'fidel-browser-extension.zip',
-      primaryText: 'Download Latest Build (.zip)',
+      primaryLink: 'https://github.com/Hailemichael121/fidel-input/releases',
+      primaryText: 'Get Extension on GitHub Releases',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
     opera: {
       title: 'Opera',
       step2: 'Open <code>opera://extensions</code>. Turn on <strong>Developer mode</strong> in the top-right.',
-      step3: 'Click <strong>Load unpacked</strong> and choose the unzipped folder.',
+      step3: 'Click <strong>Load unpacked</strong> and choose the extension folder.',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
-      primaryLink: 'fidel-browser-extension.zip',
-      primaryText: 'Download Latest Build (.zip)',
+      primaryLink: 'https://github.com/Hailemichael121/fidel-input/releases',
+      primaryText: 'Get Extension on GitHub Releases',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
     firefox: {
       title: 'Firefox',
       step2: 'Open <code>about:debugging#/runtime/this-firefox</code> in the address bar.',
-      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the unzipped folder (not a random worker in the list).',
+      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the extension folder (not a random worker in the list).',
       cmd: 'bun install && bun run package:browser',
       fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run package:browser',
-      primaryLink: 'fidel-browser-extension.zip',
-      primaryText: 'Download Latest Build (.zip)',
+      primaryLink: 'https://github.com/Hailemichael121/fidel-input/releases',
+      primaryText: 'Get Extension on GitHub Releases',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
@@ -413,13 +413,9 @@ function initLanding() {
       if (instCmdBtn) instCmdBtn.setAttribute('data-copy', config.fullCmd);
       if (instPrimaryBtn) {
         instPrimaryBtn.href = config.primaryLink;
-        if (config.primaryLink.endsWith('.zip')) {
-          instPrimaryBtn.setAttribute('download', '');
-          instPrimaryBtn.removeAttribute('target');
-        } else {
-          instPrimaryBtn.removeAttribute('download');
-          instPrimaryBtn.setAttribute('target', '_blank');
-        }
+        instPrimaryBtn.removeAttribute('download');
+        instPrimaryBtn.setAttribute('target', '_blank');
+        instPrimaryBtn.setAttribute('rel', 'noopener noreferrer');
       }
       if (instPrimaryText) instPrimaryText.textContent = config.primaryText;
       if (instSecondaryBtn) {

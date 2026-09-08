@@ -187,6 +187,6 @@ fidel-input/
 ### Phase 6: Cross-Browser Packaging & Store Releases
 - **Goal**: Publish to Chrome Web Store, Microsoft Edge Add-ons, and Firefox Add-ons.
 - **Deliverables**:
-  1. Automated ZIP packaging script (`bun run package:browser`).
+  1. Automated extension packaging script (`bun run package:browser`).
   2. Firefox Manifest V2/V3 compatibility check (`web-ext`).
   3. Store promotional assets, icons (16px, 32px, 48px, 128px), and screenshots.

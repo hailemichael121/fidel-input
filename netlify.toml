@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build:browser && cd dist/browser && zip -r ../site/fidel-browser-extension.zip ."
+  command = "npm run build:browser"
   publish = "dist/site"
 
 [build.environment]

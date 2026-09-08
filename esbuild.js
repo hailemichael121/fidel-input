@@ -66,11 +66,6 @@ function copyNetlifySite() {
   if (fs.existsSync("media/fidel.png")) {
     fs.copyFileSync("media/fidel.png", "dist/site/favicon.png");
   }
-
-  const zipPath = "fidel-browser-extension.zip";
-  if (fs.existsSync(zipPath)) {
-    fs.copyFileSync(zipPath, "dist/site/fidel-browser-extension.zip");
-  }
 }
 
 // 1. VS Code Extension Build Options

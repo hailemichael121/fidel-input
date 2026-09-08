@@ -5,10 +5,24 @@
 </p>
 
 <p align="center">
-  <strong>Fast, real-time Amharic Keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration engine for Visual Studio Code & Cursor.</strong>
+  <strong>Fast, real-time Amharic Keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration engine for Visual Studio Code, Cursor, and Web Browsers.</strong>
 </p>
 
 <p align="center">
+  <a href="https://fidel-x.netlify.app/"><strong>🌐 Official Website & Live Web Demo (fidel-x.netlify.app)</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://fidel-x.netlify.app/"><img src="https://img.shields.io/badge/Official%20Website-fidel--x.netlify.app-00DC82?style=flat&logo=netlify&logoColor=white" alt="Official Website" /></a>
+  <a href="https://github.com/Hailemichael121/fidel-input/releases"><img src="https://img.shields.io/github/v/release/Hailemichael121/fidel-input?color=blue&label=Latest%20Release" alt="Latest Release" /></a>
+  <a href="https://github.com/Hailemichael121/fidel-input/releases"><img src="https://img.shields.io/badge/Browser%20Extension-GitHub%20Releases-blue?logo=googlechrome&logoColor=white" alt="Browser Extension" /></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=Yihun.fidel-amharic"><img src="https://img.shields.io/visual-studio-marketplace/v/Yihun.fidel-amharic?color=purple&label=VS%20Code" alt="VS Code Marketplace" /></a>
+  <a href="https://open-vsx.org/extension/Yihun/fidel-amharic"><img src="https://img.shields.io/open-vsx/v/Yihun/fidel-amharic?color=orange&label=Open%20VSX" alt="Open VSX" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" /></a>
+</p>
+
+<p align="center">
+  <a href="https://fidel-x.netlify.app/">Official Website</a> &bull;
   <a href="#quick-start">Quick Start</a> &bull;
   <a href="#keyboard-shortcuts--commands">Shortcuts</a> &bull;
   <a href="#feature-guide--how-it-works">Feature Guide</a> &bull;
@@ -327,12 +341,14 @@ Extension settings can be configured in VS Code `settings.json`:
 
 Fidel is also available as a standalone Manifest V3 browser extension to type fluent Amharic across ChatGPT, Claude, Gemini, Gmail, Notion, Slack, Discord, Telegram, Twitter/X, and any web form.
 
+* 🌐 **Official Website & Live Web Demo**: [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/)
+* 🚀 **Download Extension & Releases**: [Hailemichael121/fidel-input/releases](https://github.com/Hailemichael121/fidel-input/releases)
+
 ### Installing in Chromium Browsers (Developer Mode):
-1. Download or package **`fidel-browser-extension.zip`** (or build via `bun run package:browser`).
-2. Extract the ZIP archive into a local folder.
-3. In Chrome, Brave, Edge, or Opera, navigate to `chrome://extensions`.
-4. Turn on the **Developer mode** toggle in the top-right corner.
-5. Click **Load unpacked** and select the extracted extension folder.
+1. Download the extension package from [Official GitHub Releases](https://github.com/Hailemichael121/fidel-input/releases) (or build locally via `bun run build:browser`).
+2. In Chrome, Brave, Edge, or Opera, navigate to `chrome://extensions`.
+3. Turn on the **Developer mode** toggle in the top-right corner.
+4. Click **Load unpacked** and select the extension folder (`dist/browser`).
 
 * **Toggle Shortcut**: **`Alt + A`** (or **`Alt + Shift + A`**) toggles Fidel on any web page.
 * **Website Exclusion / Bypass List**: Configure websites (like `github.com` or `figma.com`) where Fidel automatically stays in Latin mode.
@@ -362,9 +378,11 @@ bun test
 
 **Fidel Input** is created, owned, and maintained by **Yihun Shekuri**.
 
+* **Official Website**: [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/)
 * **Author**: Yihun Shekuri
 * **GitHub Profile**: [@Hailemichael121](https://github.com/Hailemichael121)
 * **Repository**: [Hailemichael121/fidel-input](https://github.com/Hailemichael121/fidel-input)
+* **Releases**: [Hailemichael121/fidel-input/releases](https://github.com/Hailemichael121/fidel-input/releases)
 
 ---
 

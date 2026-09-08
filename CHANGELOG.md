@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.4.2] - 2026-09-01
 
+### Added
+- **Official Website & Live Web Demo**: Live web showcase, interactive typing sandbox, and documentation deployed at [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/).
+
 ### Fixed
 - **Firefox install**: Manifest V3 now declares both `background.service_worker` (Chrome) and `background.scripts` (Firefox), so temporary add-on loading no longer fails with “background.service_worker is currently disabled.”
 - **Open tabs after install**: Fidel injects into already-open http(s) pages on install, startup, and tab focus, so you do not need to refresh Claude, Gemini, or other sites to type Amharic.
@@ -19,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Universal Portal & Modern Editor Support**: Deep Shadow DOM traversal and composedPath target discovery supporting ChatGPT, Claude, Gemini, Perplexity, Gmail, Notion, Slack, Discord, Telegram, WhatsApp Web, and standard web forms.
 - **Ethiopic Calligraphic Watermark**: Subtle `"ፊደል"` and `"ፊ"` watermark background art across both Options and Landing pages in dark and light modes.
 - **Platform Compatibility & Behavior Guide**: Clear, transparent matrix detailing live native transliteration support and Google Docs Canvas explanations.
-- **Standalone Direct Distribution Package**: Built-in support for direct ZIP loading (`fidel-browser-extension.zip`) in Chromium developer mode.
+- **Standalone Direct Distribution Package**: Built-in support for direct unpacked extension loading in Chromium developer mode.
 
 ## [0.3.2] - 2026-08-23
 
