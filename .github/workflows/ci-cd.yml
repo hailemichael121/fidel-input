@@ -1,0 +1,123 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Check, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Type Check TypeScript
+        run: bun run check
+
+      - name: Run Unit Test Suite (70+ Tests)
+        run: bun test
+
+      - name: Build Production VS Code & Browser Bundles
+        run: bun run build && bun run build:browser
+
+      - name: Package VSIX Release
+        run: npx @vscode/vsce package --no-dependencies
+
+      - name: Upload Release Artifacts (VSIX)
+        uses: actions/upload-artifact@v4
+        with:
+          name: fidel-releases
+          path: "*.vsix"
+          retention-days: 14
+
+  github_release:
+    name: Publish GitHub Release
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Built Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: fidel-releases
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            ### 🌐 Official Website & Live Web Demo
+            - **Official Website**: [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/)
+
+            ### 📦 Release Assets
+            - `*.vsix`: Visual Studio Code & Cursor extension package.
+
+            ### 🌐 Browser extension
+            Build from source (`bun install && bun run build:browser`) and load the `dist/browser` folder as an unpacked extension in your browser.
+          files: "*.vsix"
+
+  publish_ovsx:
+    name: Publish to Open VSX (Cursor / VSCodium)
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Build Production Bundle
+        run: bun run build
+
+      - name: Package VSIX Archive
+        run: npx @vscode/vsce package --no-dependencies
+
+      - name: Publish to Open VSX
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -n "$OVSX_PAT" ]; then
+            VSIX_FILE=$(ls *.vsix | head -n 1)
+            echo "Publishing $VSIX_FILE to Open VSX..."
+            npx ovsx publish "$VSIX_FILE" -p "$OVSX_PAT"
+          else
+            echo "OVSX_PAT secret is not configured in repository secrets. Skipping Open VSX publish."
+          fi

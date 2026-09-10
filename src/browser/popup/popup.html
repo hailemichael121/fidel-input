@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidel Amharic Input</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-shell">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand-cluster">
+        <div class="logo-mark">
+          <svg viewBox="0 0 512 512" fill="none" class="brand-svg">
+            <rect width="512" height="512" rx="110" fill="#000000" stroke="#33333e" stroke-width="16" />
+            <path d="M186 410 L326 410" stroke="#ffffff" stroke-width="14" stroke-linecap="round" />
+            <g transform="translate(111.61, 372) scale(0.34626, -0.34626)">
+              <path d="M547 722Q553 707 557.0 689.5Q561 672 561 646Q561 579 520.0 523.0Q479 467 388 403Q422 379 452.0 347.0Q482 315 501.0 273.5Q520 232 520 179Q520 142 509.0 112.0Q498 82 479 60H505Q568 60 602.0 90.5Q636 121 636 177Q636 204 625.0 214.0Q614 224 590 224V277L774 290Q780 278 785.0 257.0Q790 236 790 213Q790 115 716.0 57.5Q642 0 513 0H203Q130 0 87.0 37.5Q44 75 44 150Q44 209 70.0 252.0Q96 295 140.5 331.0Q185 367 239 405Q324 464 356.0 509.0Q388 554 388 599Q388 658 337 658V710ZM266 323Q241 305 223.0 269.0Q205 233 205 185Q205 119 226.5 90.5Q248 62 282 62Q314 62 333.5 89.5Q353 117 353 166Q353 220 326.0 262.5Q299 305 266 323Z" fill="#ffffff" />
+            </g>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <a href="https://fidel-x.netlify.app/" target="_blank" class="brand-title-link" title="Visit Official Website (fidel-x.netlify.app)">
+            <span class="app-name">Fidel <span class="badge-fidel">ፊደል</span></span>
+          </a>
+          <span class="app-version">v0.4.2</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button type="button" id="popup-theme-toggle" class="btn-theme-mini" title="Toggle Light/Dark Theme">
+          <svg class="icon-theme-mini icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="icon-theme-mini icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+
+        <label class="switch-control" title="Toggle Fidel Input (Alt+A or Alt+Shift+A)">
+          <input type="checkbox" id="toggle-enabled" checked>
+          <span class="switch-track">
+            <span class="switch-thumb"></span>
+          </span>
+        </label>
+      </div>
+    </header>
+
+    <!-- Status Strip -->
+    <div class="status-strip" id="status-banner">
+      <div class="status-indicator">
+        <span class="status-pulse"></span>
+        <span id="status-label" class="status-label">Active &bull; Amharic Mode</span>
+      </div>
+      <div class="shortcut-pill" title="Toggle Shortcut: Alt+A or Alt+Shift+A">
+        <svg class="icon-svg-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
+        <span>Alt+A</span>
+      </div>
+    </div>
+
+    <!-- Live Transliteration Sandbox -->
+    <div class="panel-section">
+      <div class="section-heading">
+        <span class="section-title">Quick Transliteration</span>
+        <span class="section-sub">Live phonetic typing</span>
+      </div>
+      
+      <div class="transliteration-box">
+        <div class="input-layer">
+          <input type="text" id="quick-input" placeholder="Type Latin (e.g. selam yihun)..." spellcheck="false" autocomplete="off" autofocus>
+        </div>
+        <div class="output-layer">
+          <div id="quick-output" class="output-text font-ethiopic">ሰላም ይሁን</div>
+          <button id="btn-copy" class="btn-copy-action" title="Copy to clipboard" aria-label="Copy to clipboard">
+            <svg class="icon-svg icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <svg class="icon-svg icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Settings Toggles with Custom Switches -->
+    <div class="panel-section">
+      <div class="toggle-grid">
+        <label class="grid-toggle-item">
+          <div class="item-info">
+            <span class="item-title">Ethiopic Numerals</span>
+            <span class="item-sub">1, 2, 3 &rarr; ፩, ፪, ፫</span>
+          </div>
+          <div class="mini-switch">
+            <input type="checkbox" id="opt-numbers">
+            <span class="mini-track"><span class="mini-thumb"></span></span>
+          </div>
+        </label>
+
+        <label class="grid-toggle-item">
+          <div class="item-info">
+            <span class="item-title">Ethiopic Punctuation</span>
+            <span class="item-sub">:: , ; ? &rarr; ። ፣ ፤ ፧</span>
+          </div>
+          <div class="mini-switch">
+            <input type="checkbox" id="opt-punctuation">
+            <span class="mini-track"><span class="mini-thumb"></span></span>
+          </div>
+        </label>
+
+        <label class="grid-toggle-item">
+          <div class="item-info">
+            <span class="item-title">Smart Correction</span>
+            <span class="item-sub">Normalizes spelling typos</span>
+          </div>
+          <div class="mini-switch">
+            <input type="checkbox" id="opt-corrector">
+            <span class="mini-track"><span class="mini-thumb"></span></span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <footer class="popup-footer">
+      <a href="options.html" target="_blank" class="nav-button">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Settings & Dictionary</span>
+      </a>
+
+      <a href="landing.html" target="_blank" class="nav-button" title="Interactive Cheatsheet & Documentation">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>Guide & Cheatsheet</span>
+      </a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

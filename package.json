@@ -1,0 +1,341 @@
+{
+  "name": "fidel-amharic",
+  "displayName": "Amharic Keyboard (ፊደል) — Fidel Phonetic Input & Geez Transliteration",
+  "description": "Fast, real-time Amharic keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration for VS Code & Cursor.",
+  "version": "0.4.2",
+  "publisher": "Yihun",
+  "author": {
+    "name": "Yihun Shekuri",
+    "url": "https://github.com/Hailemichael121"
+  },
+  "icon": "media/fidel.png",
+  "galleryBanner": {
+    "color": "#161b22",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hailemichael121/fidel-input"
+  },
+  "bugs": {
+    "url": "https://github.com/Hailemichael121/fidel-input/issues"
+  },
+  "homepage": "https://fidel-x.netlify.app/",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Keymaps",
+    "Languages",
+    "Other"
+  ],
+  "keywords": [
+    "amharic",
+    "amharic keyboard",
+    "amharic typing",
+    "fidel",
+    "fidel input",
+    "ethiopic",
+    "geez",
+    "ge'ez",
+    "ethiopia",
+    "tigrinya",
+    "ፊደል",
+    "አማርኛ",
+    "ግዕዝ",
+    "ime",
+    "input method",
+    "phonetic keyboard",
+    "transliteration",
+    "keyboard",
+    "amharic font",
+    "sera"
+  ],
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "fidel.toggleInput",
+        "title": "Fidel: Toggle Amharic Input",
+        "icon": "$(keyboard)"
+      },
+      {
+        "command": "fidel.toggleBypass",
+        "title": "Fidel: Toggle Skip Transliteration (Latin Bypass)",
+        "icon": "$(pass-filled)"
+      },
+      {
+        "command": "fidel.enableInput",
+        "title": "Fidel: Enable Amharic Input"
+      },
+      {
+        "command": "fidel.disableInput",
+        "title": "Fidel: Disable Amharic Input"
+      },
+      {
+        "command": "fidel.convertSelection",
+        "title": "Fidel: Convert Selection to Ethiopic",
+        "icon": "$(symbol-string)"
+      },
+      {
+        "command": "fidel.addDictionaryEntry",
+        "title": "Fidel: Add Personal Dictionary Entry",
+        "icon": "$(add)"
+      },
+      {
+        "command": "fidel.removeDictionaryEntry",
+        "title": "Fidel: Remove Personal Dictionary Entry",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "fidel.openDictionary",
+        "title": "Fidel: Open Personal Dictionary Settings",
+        "icon": "$(book)"
+      },
+      {
+        "command": "fidel.toggleSmartCorrection",
+        "title": "Fidel: Toggle Smart Phonetic Correction",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "fidel.showSuggestions",
+        "title": "Fidel: Show Homophone Candidate Suggestions",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "fidel.restartEngine",
+        "title": "Fidel: Restart Extension & Reload Engine",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "fidel.resetComposition",
+        "title": "Fidel: Reset Composition Buffer",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "fidel.applyAlternateComposition",
+        "title": "Fidel: Apply Alternate Syllable Interpretation"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "fidel.toggleInput",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "fidel.toggleBypass",
+        "key": "alt+x",
+        "mac": "cmd+alt+x",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
+        "command": "fidel.toggleBypass",
+        "key": "ctrl+alt+b",
+        "mac": "cmd+alt+b",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
+        "command": "fidel.convertSelection",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "fidel.disableInput",
+        "key": "escape",
+        "when": "editorTextFocus && fidel.inputEnabled"
+      },
+      {
+        "command": "fidel.deleteLeft",
+        "key": "backspace",
+        "mac": "backspace",
+        "when": "editorTextFocus && fidel.inputEnabled && fidel.hasComposition"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "fidel.toggleInput"
+        },
+        {
+          "command": "fidel.toggleBypass"
+        },
+        {
+          "command": "fidel.enableInput"
+        },
+        {
+          "command": "fidel.disableInput"
+        },
+        {
+          "command": "fidel.restartEngine"
+        },
+        {
+          "command": "fidel.resetComposition"
+        },
+        {
+          "command": "fidel.convertSelection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "fidel.addDictionaryEntry"
+        },
+        {
+          "command": "fidel.removeDictionaryEntry"
+        },
+        {
+          "command": "fidel.openDictionary"
+        },
+        {
+          "command": "fidel.toggleSmartCorrection"
+        },
+        {
+          "command": "fidel.showSuggestions"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "fidel.convertSelection",
+          "group": "modification",
+          "when": "editorHasSelection"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "fidel.restartEngine",
+          "group": "navigation@1",
+          "when": "view == fidelView"
+        },
+        {
+          "command": "fidel.toggleInput",
+          "group": "navigation@2",
+          "when": "view == fidelView"
+        },
+        {
+          "command": "fidel.openDictionary",
+          "group": "navigation@3",
+          "when": "view == fidelView"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "fidel.restartEngine",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fidel",
+          "title": "Fidel",
+          "icon": "media/activity-bar.svg"
+        }
+      ]
+    },
+    "views": {
+      "fidel": [
+        {
+          "id": "fidelView",
+          "name": "Fidel Input",
+          "type": "tree"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Fidel Input",
+      "properties": {
+        "fidel.enableByDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Amharic input when VS Code starts."
+        },
+        "fidel.enableEscapePrefix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Type a backtick (`) before any character to skip transliteration and output literal Latin text."
+        },
+        "fidel.convertPunctuation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Convert supported Latin punctuation to Ethiopic punctuation (e.g. \",\" → \"፤\", \".\" → \"።\")."
+        },
+        "fidel.convertNumbers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Convert Arabic digits (1, 2, 3, etc.) to Ethiopic numerals (፩, ፪, ፫, etc.)."
+        },
+        "fidel.autoDisableOnEnter": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically disable Amharic input after pressing Enter."
+        },
+        "fidel.dictionary": {
+          "type": "object",
+          "default": {},
+          "description": "Personal dictionary mappings from Latin phonetic words to Ethiopic script (e.g. \"myword\": \"ሚያቃልል\")."
+        },
+        "fidel.smartCorrection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable smart phonetic normalization for non-standard or double-consonant spellings (e.g. \"selamm\" → \"ሰላም\")."
+        },
+        "fidel.suggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Offer candidate suggestion overlays for homophones and alternative phonetic forms directly under cursor."
+        },
+        "fidel.defaultSyllableMerging": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "standalone"
+          ],
+          "default": "merge",
+          "description": "When a typed sequence is ambiguous between merging into one syllable (e.g. 't'+'e' -> ተ) and staying as two separate letters (e.g. 't'+'e' -> ትእ), choose which interpretation is applied automatically."
+        },
+        "fidel.compositionBoundaryChar": {
+          "type": "string",
+          "default": "-",
+          "description": "Explicit syllable boundary character that commits the current syllable without inserting the character (e.g. 't' + '-' + 'e' -> ትእ)."
+        },
+        "fidel.compositionMergeChar": {
+          "type": "string",
+          "default": "+",
+          "description": "Explicit syllable merge character that forces the next character to merge into a single syllable even when standalone mode is active (e.g. 't' + '+' + 'e' -> ተ)."
+        },
+        "fidel.enableHoverDisambiguation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show hover tooltip on recently composed ambiguous syllables to swap between merged and standalone interpretations."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc --noEmit && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "check": "tsc --noEmit",
+    "build": "bun run compile",
+    "build:vscode": "tsc --noEmit && node esbuild.js --target=vscode",
+    "build:browser": "tsc --noEmit && node esbuild.js --target=browser",
+    "watch:browser": "node esbuild.js --target=browser --watch",
+    "watch:vscode": "node esbuild.js --target=vscode --watch",
+    "package:browser": "bun run build:browser",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.2.7",
+    "@types/node": "^26.2.0",
+    "@types/vscode": "^1.125.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "type": "module"
+}
