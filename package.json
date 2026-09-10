@@ -2,7 +2,7 @@
   "name": "fidel-amharic",
   "displayName": "Amharic Keyboard (ፊደል) — Fidel Phonetic Input & Geez Transliteration",
   "description": "Fast, real-time Amharic keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration for VS Code & Cursor.",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "publisher": "Yihun",
   "author": {
     "name": "Yihun Shekuri",
