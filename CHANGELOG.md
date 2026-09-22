@@ -4,6 +4,11 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 2026-09-22
+
+### Fixed
+- **Antigravity IDE compatibility**: Lowered the VS Code engine requirement to `^1.85.0`, matching the stable APIs Fidel uses and allowing installation in Antigravity IDE and other VS Code forks while preserving compatibility with VS Code, Cursor, and Open VSX-based editors.
+
 ## [0.4.2] - 2026-09-01
 
 ### Added

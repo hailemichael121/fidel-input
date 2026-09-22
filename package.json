@@ -2,7 +2,7 @@
   "name": "fidel-amharic",
   "displayName": "Amharic Keyboard (ፊደል) — Fidel Phonetic Input & Geez Transliteration",
   "description": "Fast, real-time Amharic keyboard, Fidel phonetic typing (ፊደል), and Ethiopic / Geez transliteration for VS Code & Cursor.",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "publisher": "Yihun",
   "author": {
     "name": "Yihun Shekuri",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://fidel-x.netlify.app/",
   "engines": {
-    "vscode": "^1.125.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
     "Keymaps",
@@ -333,7 +333,7 @@
   "devDependencies": {
     "@types/chrome": "^0.2.7",
     "@types/node": "^26.2.0",
-    "@types/vscode": "^1.125.0",
+    "@types/vscode": "^1.85.0",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
   },

@@ -40,6 +40,10 @@
 
 ---
 
+## VS Code-family Editors
+
+Fidel supports Visual Studio Code, Cursor, Open VSX-based editors, and Antigravity IDE (also known as Antigravity).
+
 ## Visual Demonstration & Media
 
 <p align="center">
