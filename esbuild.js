@@ -30,11 +30,16 @@ function copyBrowserStaticAssets() {
   fs.copyFileSync("src/browser/landing/index.html", "dist/browser/landing.html");
   fs.copyFileSync("src/browser/landing/landing.css", "dist/browser/landing.css");
 
+  for (const size of [16, 32, 48, 128]) {
+    const sized = `src/browser/icons/icon-${size}.png`;
+    const dest = `dist/browser/icons/icon-${size}.png`;
+    if (fs.existsSync(sized)) {
+      fs.copyFileSync(sized, dest);
+    } else if (fs.existsSync("media/fidel.png")) {
+      fs.copyFileSync("media/fidel.png", dest);
+    }
+  }
   if (fs.existsSync("media/fidel.png")) {
-    fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-16.png");
-    fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-32.png");
-    fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-48.png");
-    fs.copyFileSync("media/fidel.png", "dist/browser/icons/icon-128.png");
     fs.copyFileSync("media/fidel.png", "dist/browser/favicon.png");
   }
   if (fs.existsSync("media/fidel.svg")) {

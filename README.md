@@ -42,7 +42,31 @@
 
 ## VS Code-family Editors
 
-Fidel supports Visual Studio Code, Cursor, Open VSX-based editors, and Antigravity IDE (also known as Antigravity).
+Fidel supports Visual Studio Code, Cursor, VSCodium, Antigravity IDE (also known as Antigravity), and other Open VSX-based editors.
+
+### Installing in Antigravity IDE
+
+Antigravity IDE installs extensions from **[Open VSX](https://open-vsx.org/extension/Yihun/fidel-amharic)**, so install Fidel from there:
+
+1. Open the Extensions sidebar (**`Ctrl + Shift + X`** / **`Cmd + Shift + X`**).
+2. Search for **`Yihun.fidel-amharic`** and click **Install**.
+3. Press **`Ctrl + Alt + A`** (**`Cmd + Alt + A`**) in an editor to start typing Amharic.
+
+If Antigravity cannot find Fidel, download `Yihun.fidel-amharic-*.vsix` from [Open VSX](https://open-vsx.org/extension/Yihun/fidel-amharic) or [GitHub Releases](https://github.com/Hailemichael121/fidel-input/releases) and run **Extensions: Install from VSIX...** from the Command Palette.
+
+### Troubleshooting: "not compatible with the current version of Antigravity IDE"
+
+This error comes from the **legacy `Yihun.fidel-input` listing**, which is deprecated and superseded. It was published with `"engines": { "vscode": "^1.125.0" }`, so any editor built on an older VS Code base — including Antigravity IDE — refuses to install it.
+
+**Fidel is published under one current identifier: `Yihun.fidel-amharic`.** To clear the error:
+
+1. Open the Extensions sidebar and search for **`Yihun.fidel-input`**.
+2. Choose **Uninstall** (or remove `Yihun.fidel-input` from any imported extensions / recommendations list).
+3. Reload the window, then install **`Yihun.fidel-amharic`**.
+
+### Supported editor versions
+
+Fidel declares `"engines": { "vscode": ">=1.85.0" }`. Because the range is **open-ended**, installs are never blocked by an editor's own version number — including forks that report a `2.x` base — so Fidel installs and runs on current and future VS Code forks (Antigravity IDE, Cursor, VSCodium, Windsurf, and other Open VSX-based editors). Fidel only uses long-stable VS Code APIs.
 
 ## Visual Demonstration & Media
 

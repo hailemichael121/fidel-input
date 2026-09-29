@@ -173,7 +173,7 @@ function initLanding() {
   // 3. Render 33 Families Matrix Table with Click-to-Copy Notice
   function renderMatrix(filter = '') {
     if (!matrixTbody) return;
-    matrixTbody.innerHTML = '';
+    matrixTbody.replaceChildren();
     const q = filter.trim().toLowerCase();
 
     README_SYLLABARY_DATA.forEach((row) => {
@@ -181,25 +181,23 @@ function initLanding() {
       if (q && !fullText.includes(q)) return;
 
       const tr = document.createElement('tr');
-      const orderCells = row.orders.map((order) => {
-        const parts = order.split(' ');
-        const glyph = parts[0];
-        const ph = parts.slice(1).join(' ');
-        if (glyph === '—') {
-          return `<td><span class="matrix-dash">—</span></td>`;
-        }
-        return `<td><button type="button" class="matrix-char-cell" data-char="${glyph}" title="Click to copy ${glyph}">
-          <span class="cell-glyph">${glyph}</span>
-          <span class="cell-ph">${ph}</span>
-          <span class="cell-toast">Copied! ✓</span>
-        </button></td>`;
-      }).join('');
 
-      tr.innerHTML = `
-        <td class="family-name-cell"><strong>${row.name}</strong></td>
-        <td class="family-trigger-cell"><code>${escapeHtml(row.triggers)}</code></td>
-        ${orderCells}
-      `;
+      const nameCell = document.createElement('td');
+      nameCell.className = 'family-name-cell';
+      const nameStrong = document.createElement('strong');
+      nameStrong.textContent = row.name;
+      nameCell.appendChild(nameStrong);
+
+      const triggerCell = document.createElement('td');
+      triggerCell.className = 'family-trigger-cell';
+      const triggerCode = document.createElement('code');
+      triggerCode.textContent = row.triggers;
+      triggerCell.appendChild(triggerCode);
+
+      tr.append(nameCell, triggerCell);
+      for (const order of row.orders) {
+        tr.appendChild(matrixOrderCell(order));
+      }
       matrixTbody.appendChild(tr);
     });
 
@@ -227,14 +225,50 @@ function initLanding() {
     });
   }
 
-  function escapeHtml(str: string): string {
-    return str.replace(/[&<>"']/g, (m) => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[m] || m));
+  function matrixOrderCell(order: string): HTMLTableCellElement {
+    const parts = order.split(' ');
+    const glyph = parts[0] ?? '';
+    const ph = parts.slice(1).join(' ');
+    const td = document.createElement('td');
+    if (glyph === '—') {
+      const dash = document.createElement('span');
+      dash.className = 'matrix-dash';
+      dash.textContent = '—';
+      td.appendChild(dash);
+      return td;
+    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'matrix-char-cell';
+    button.dataset.char = glyph;
+    button.title = `Click to copy ${glyph}`;
+    const glyphSpan = document.createElement('span');
+    glyphSpan.className = 'cell-glyph';
+    glyphSpan.textContent = glyph;
+    const phSpan = document.createElement('span');
+    phSpan.className = 'cell-ph';
+    phSpan.textContent = ph;
+    const toast = document.createElement('span');
+    toast.className = 'cell-toast';
+    toast.textContent = 'Copied! ✓';
+    button.append(glyphSpan, phSpan, toast);
+    td.appendChild(button);
+    return td;
+  }
+
+  function fillRichText(el: HTMLElement, template: string): void {
+    el.replaceChildren();
+    const re = /<(code|strong|kbd)>(.*?)<\/\1>/g;
+    let last = 0;
+    let match: RegExpExecArray | null;
+    while ((match = re.exec(template))) {
+      if (match.index > last) el.append(template.slice(last, match.index));
+      const node = document.createElement(match[1]!);
+      node.textContent = match[2] ?? '';
+      el.append(node);
+      last = match.index + match[0].length;
+    }
+    if (last < template.length) el.append(template.slice(last));
   }
 
   matrixSearch?.addEventListener('input', () => {
@@ -407,8 +441,8 @@ function initLanding() {
       btn.classList.add('active');
 
       if (instBrowserTitle) instBrowserTitle.textContent = config.title;
-      if (instStep2) instStep2.innerHTML = config.step2;
-      if (instStep3) instStep3.innerHTML = config.step3;
+      if (instStep2) fillRichText(instStep2, config.step2);
+      if (instStep3) fillRichText(instStep3, config.step3);
       if (instCmdCode) instCmdCode.textContent = config.cmd;
       if (instCmdBtn) instCmdBtn.setAttribute('data-copy', config.fullCmd);
       if (instPrimaryBtn) {

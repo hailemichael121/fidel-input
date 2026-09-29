@@ -4,6 +4,17 @@ All notable changes to the **Fidel Input (ፊደል)** extension will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.6] - 2026-09-22
+
+### Changed
+- **Open-ended VS Code engine range**: `engines.vscode` is now `>=1.85.0` (previously `^1.85.0`). The caret range refused to install on any editor reporting a `2.x` base — such as newer Antigravity IDE builds — even though Fidel only uses long-stable VS Code APIs. The open-ended range removes that class of install failure for every VS Code fork.
+- **Single supported identifier**: Fidel is published only as `Yihun.fidel-amharic`. The legacy `Yihun.fidel-input` listing (declared `^1.125.0`) is deprecated and cannot install on Antigravity IDE 1.107.0, which is the source of the “not compatible with the current version” error.
+- **Marketplace metadata**: extension description and keywords now name Antigravity IDE, Cursor, VSCodium, and Windsurf so the current listing ranks above the deprecated one in editor search.
+
+### Added
+- **Antigravity IDE install & troubleshooting guide** in the README, including how to clear the legacy `Yihun.fidel-input` install error.
+- **Firefox Add-ons package**: the browser manifest now declares that Fidel collects no remote data, requires Firefox 140 (Android 142), and ships correctly sized icons. The options page and cheatsheet build their tables in the DOM instead of assigning `innerHTML`.
+
 ## [0.4.5] - 2026-09-22
 
 ### Fixed

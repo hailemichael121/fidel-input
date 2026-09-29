@@ -118,11 +118,14 @@ async function initOptions() {
     }
 
     testOutput.textContent = lastState.rendered || '...';
+    if (!testBreakdown) return;
+    const code = document.createElement('code');
     if (raw.length > 0) {
-      testBreakdown.innerHTML = `<code>"${escapeHtml(raw)}" &rarr; ${escapeHtml(lastState.rendered)}</code>`;
+      code.append(`"${raw}"`, ' → ', lastState.rendered);
     } else {
-      testBreakdown.innerHTML = `<code>Live phoneme decomposition preview</code>`;
+      code.textContent = 'Live phoneme decomposition preview';
     }
+    testBreakdown.replaceChildren(code);
   }
 
   testInput?.addEventListener('input', updateTestTyping);
@@ -159,28 +162,48 @@ async function initOptions() {
   // Dictionary Management
   function renderDictionaryTable(filter = '') {
     if (!dictRows) return;
-    dictRows.innerHTML = '';
+    dictRows.replaceChildren();
     const entries = Object.entries(currentSettings.dictionary || {});
     const filtered = entries.filter(([k, v]) => 
       k.toLowerCase().includes(filter.toLowerCase()) || v.includes(filter)
     );
 
     if (filtered.length === 0) {
-      dictRows.innerHTML = `<tr><td colspan="3" class="table-empty">${filter ? 'No matching dictionary items.' : 'No custom mappings registered.'}</td></tr>`;
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 3;
+      td.className = 'table-empty';
+      td.textContent = filter ? 'No matching dictionary items.' : 'No custom mappings registered.';
+      tr.appendChild(td);
+      dictRows.appendChild(tr);
       return;
     }
 
     filtered.forEach(([key, val]) => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><code>${escapeHtml(key)}</code></td>
-        <td><strong class="font-ethiopic">${escapeHtml(val)}</strong></td>
-        <td class="td-actions">
-          <button type="button" class="btn-del" data-key="${escapeHtml(key)}" title="Delete entry">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
-        </td>
-      `;
+
+      const keyCell = document.createElement('td');
+      const keyCode = document.createElement('code');
+      keyCode.textContent = key;
+      keyCell.appendChild(keyCode);
+
+      const valCell = document.createElement('td');
+      const valStrong = document.createElement('strong');
+      valStrong.className = 'font-ethiopic';
+      valStrong.textContent = val;
+      valCell.appendChild(valStrong);
+
+      const actionCell = document.createElement('td');
+      actionCell.className = 'td-actions';
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn-del';
+      delBtn.dataset.key = key;
+      delBtn.title = 'Delete entry';
+      delBtn.appendChild(trashIcon());
+      actionCell.appendChild(delBtn);
+
+      tr.append(keyCell, valCell, actionCell);
       dictRows.appendChild(tr);
     });
 
@@ -254,7 +277,7 @@ async function initOptions() {
   // 33 Families Syllabary Renderer with Click-to-Copy Notice
   function renderSyllabary(filter = '') {
     if (!syllabaryTbody) return;
-    syllabaryTbody.innerHTML = '';
+    syllabaryTbody.replaceChildren();
     const q = filter.trim().toLowerCase();
 
     README_SYLLABARY_DATA.forEach((row) => {
@@ -262,25 +285,23 @@ async function initOptions() {
       if (q && !fullText.includes(q)) return;
 
       const tr = document.createElement('tr');
-      const orderCells = row.orders.map((order) => {
-        const parts = order.split(' ');
-        const glyph = parts[0];
-        const ph = parts.slice(1).join(' ');
-        if (glyph === '—') {
-          return `<td><span class="matrix-dash">—</span></td>`;
-        }
-        return `<td><button type="button" class="syllabary-cell" data-char="${glyph}" title="Click to copy ${glyph}">
-          <span class="cell-glyph">${glyph}</span>
-          <span class="cell-ph">${ph}</span>
-          <span class="cell-toast">Copied! ✓</span>
-        </button></td>`;
-      }).join('');
 
-      tr.innerHTML = `
-        <td class="family-name-cell"><strong>${row.name}</strong></td>
-        <td class="family-trigger-cell"><code>${escapeHtml(row.triggers)}</code></td>
-        ${orderCells}
-      `;
+      const nameCell = document.createElement('td');
+      nameCell.className = 'family-name-cell';
+      const nameStrong = document.createElement('strong');
+      nameStrong.textContent = row.name;
+      nameCell.appendChild(nameStrong);
+
+      const triggerCell = document.createElement('td');
+      triggerCell.className = 'family-trigger-cell';
+      const triggerCode = document.createElement('code');
+      triggerCode.textContent = row.triggers;
+      triggerCell.appendChild(triggerCode);
+
+      tr.append(nameCell, triggerCell);
+      for (const order of row.orders) {
+        tr.appendChild(syllabaryOrderCell(order));
+      }
       syllabaryTbody.appendChild(tr);
     });
 
@@ -343,14 +364,50 @@ async function initOptions() {
     }, 2500);
   }
 
-  function escapeHtml(str: string): string {
-    return str.replace(/[&<>"']/g, (m) => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[m] || m));
+  function trashIcon(): SVGElement {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'btn-icon');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', '3 6 5 6 21 6');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2');
+    svg.append(polyline, path);
+    return svg;
+  }
+
+  function syllabaryOrderCell(order: string): HTMLTableCellElement {
+    const parts = order.split(' ');
+    const glyph = parts[0] ?? '';
+    const ph = parts.slice(1).join(' ');
+    const td = document.createElement('td');
+    if (glyph === '—') {
+      const dash = document.createElement('span');
+      dash.className = 'matrix-dash';
+      dash.textContent = '—';
+      td.appendChild(dash);
+      return td;
+    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'syllabary-cell';
+    button.dataset.char = glyph;
+    button.title = `Click to copy ${glyph}`;
+    const glyphSpan = document.createElement('span');
+    glyphSpan.className = 'cell-glyph';
+    glyphSpan.textContent = glyph;
+    const phSpan = document.createElement('span');
+    phSpan.className = 'cell-ph';
+    phSpan.textContent = ph;
+    const toast = document.createElement('span');
+    toast.className = 'cell-toast';
+    toast.textContent = 'Copied! ✓';
+    button.append(glyphSpan, phSpan, toast);
+    td.appendChild(button);
+    return td;
   }
 
   // Initial populate
