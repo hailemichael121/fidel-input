@@ -44,6 +44,18 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
     bypassItem.tooltip = "Temporarily skip Ethiopic transliteration to type raw Latin text (Alt+X / Ctrl+Alt+B)";
     bypassItem.iconPath = new vscode.ThemeIcon(bypassed ? "pass-filled" : "pass");
 
+    const voiceItem = new vscode.TreeItem(
+      "Voice Dictation: Mic & Scribe",
+      vscode.TreeItemCollapsibleState.None
+    );
+    voiceItem.command = {
+      command: "fidel.voice.spike",
+      title: "Open Voice Dictation (Mic Test)",
+    };
+    voiceItem.tooltip =
+      "Amharic speech → Ge'ez dictation (Phase 0 spike): test the microphone, stream to Addis Scribe";
+    voiceItem.iconPath = new vscode.ThemeIcon("mic");
+
     const restartItem = new vscode.TreeItem(
       "Restart Engine / Reload Extension",
       vscode.TreeItemCollapsibleState.None
@@ -121,7 +133,7 @@ export class FidelViewProvider implements vscode.TreeDataProvider<vscode.TreeIte
     dictItem.tooltip = "Configure custom word mappings in settings.json";
     dictItem.iconPath = new vscode.ThemeIcon("book");
 
-    return [statusItem, bypassItem, restartItem, convertItem, punctItem, numItem, suggItem, smartItem, dictItem];
+    return [statusItem, bypassItem, voiceItem, restartItem, convertItem, punctItem, numItem, suggItem, smartItem, dictItem];
   }
 
   refresh(): void {

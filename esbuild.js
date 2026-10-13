@@ -86,6 +86,18 @@ const vscodeOptions = {
   minify: false,
 };
 
+// 1b. VS Code voice-spike webview (Phase 0) — runs inside the webview iframe
+const vscodeSpikeWebviewOptions = {
+  entryPoints: ["src/vscode/voice/spikeWebview.ts"],
+  bundle: true,
+  outfile: "dist/voiceSpike.js",
+  format: "iife",
+  platform: "browser",
+  target: "es2022",
+  sourcemap: true,
+  minify: false,
+};
+
 // 2. Browser Extension Build Options
 const browserBackgroundOptions = {
   entryPoints: ["src/browser/background/serviceWorker.ts"],
@@ -145,11 +157,14 @@ const browserLandingOptions = {
 async function buildAll() {
   if (target === "all" || target === "vscode") {
     if (watch) {
-      const ctx = await esbuild.context(vscodeOptions);
-      await ctx.watch();
+      const ctxs = await Promise.all([
+        esbuild.context(vscodeOptions),
+        esbuild.context(vscodeSpikeWebviewOptions),
+      ]);
+      await Promise.all(ctxs.map((ctx) => ctx.watch()));
       console.log("Fidel [VS Code]: watching for changes...");
     } else {
-      await esbuild.build(vscodeOptions);
+      await Promise.all([esbuild.build(vscodeOptions), esbuild.build(vscodeSpikeWebviewOptions)]);
       console.log("Fidel [VS Code]: build complete.");
     }
   }

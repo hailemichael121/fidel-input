@@ -5,6 +5,7 @@ import { registerFidelCommands } from "./vscode/commands.js";
 import { FidelViewProvider } from "./vscode/activityBar.js";
 import { FidelCompletionProvider } from "./vscode/completionProvider.js";
 import { AmbiguitySpanTracker, AmbiguityHoverProvider, TrackedAmbiguitySpan, toVsCodeRange } from "./vscode/hoverProvider.js";
+import { registerVoiceSpike } from "./vscode/voice/spikePanel.js";
 
 let enabled = false;
 let bypassed = false;
@@ -63,6 +64,9 @@ export function activate(context: vscode.ExtensionContext): void {
       interceptor.resetComposition();
     }
   );
+
+  // Phase 0 ASR spike (docs/asr-integration-plan.md) — removed after Phase 1 lands.
+  registerVoiceSpike(context);
 
   const treeView = vscode.window.createTreeView("fidelView", {
     treeDataProvider: viewProvider,

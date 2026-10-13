@@ -124,6 +124,11 @@
       {
         "command": "fidel.applyAlternateComposition",
         "title": "Fidel: Apply Alternate Syllable Interpretation"
+      },
+      {
+        "command": "fidel.voice.spike",
+        "title": "Fidel: Voice Spike — Mic & Scribe Test",
+        "icon": "$(mic)"
       }
     ],
     "keybindings": [
@@ -201,6 +206,9 @@
         },
         {
           "command": "fidel.showSuggestions"
+        },
+        {
+          "command": "fidel.voice.spike"
         }
       ],
       "editor/context": [
