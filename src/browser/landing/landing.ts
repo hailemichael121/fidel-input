@@ -344,8 +344,10 @@ function initLanding() {
   // 7. Interactive Multi-Browser Install Switcher
   const browserTabBtns = document.querySelectorAll('.browser-tab-btn');
   const instBrowserTitle = document.getElementById('inst-browser-title');
+  const instStep1 = document.getElementById('inst-step-1');
   const instStep2 = document.getElementById('inst-step-2');
   const instStep3 = document.getElementById('inst-step-3');
+  const instCommandBox = document.querySelector('.code-snippet-box');
   const instCmdCode = document.getElementById('inst-cmd-code');
   const instCmdBtn = document.getElementById('inst-cmd-btn');
   const instPrimaryBtn = document.getElementById('inst-primary-btn') as HTMLAnchorElement;
@@ -354,6 +356,7 @@ function initLanding() {
 
   const BROWSER_CONFIGS: Record<string, {
     title: string;
+    step1: string;
     step2: string;
     step3: string;
     cmd: string;
@@ -365,6 +368,7 @@ function initLanding() {
   }> = {
     chrome: {
       title: 'Google Chrome',
+      step1: 'Clone the repository and run <code>bun run build:browser</code> to produce the <code>dist/browser</code> folder.',
       step2: 'Open <code>chrome://extensions</code> in the address bar. In the top-right, turn on <strong>Developer mode</strong>. Chrome will not let you load Fidel until this is on.',
       step3: 'Click <strong>Load unpacked</strong> and select the extension folder.',
       cmd: 'bun install && bun run build:browser',
@@ -376,6 +380,7 @@ function initLanding() {
     },
     brave: {
       title: 'Brave',
+      step1: 'Clone the repository and run <code>bun run build:browser</code> to produce the <code>dist/browser</code> folder.',
       step2: 'Open <code>brave://extensions</code>. In the top-right, turn on <strong>Developer mode</strong>.',
       step3: 'Click <strong>Load unpacked</strong> and choose the extension folder.',
       cmd: 'bun install && bun run build:browser',
@@ -387,6 +392,7 @@ function initLanding() {
     },
     edge: {
       title: 'Microsoft Edge',
+      step1: 'Clone the repository and run <code>bun run build:browser</code> to produce the <code>dist/browser</code> folder.',
       step2: 'Open <code>edge://extensions</code>. Turn on <strong>Developer mode</strong> on the left.',
       step3: 'Click <strong>Load unpacked</strong> and select the extension folder.',
       cmd: 'bun install && bun run build:browser',
@@ -398,6 +404,7 @@ function initLanding() {
     },
     opera: {
       title: 'Opera',
+      step1: 'Clone the repository and run <code>bun run build:browser</code> to produce the <code>dist/browser</code> folder.',
       step2: 'Open <code>opera://extensions</code>. Turn on <strong>Developer mode</strong> in the top-right.',
       step3: 'Click <strong>Load unpacked</strong> and choose the extension folder.',
       cmd: 'bun install && bun run build:browser',
@@ -409,17 +416,19 @@ function initLanding() {
     },
     firefox: {
       title: 'Firefox',
-      step2: 'Open <code>about:debugging#/runtime/this-firefox</code> in the address bar.',
-      step3: 'Click <strong>Load Temporary Add-on...</strong> and select <code>manifest.json</code> from the extension folder (not a random worker in the list).',
-      cmd: 'bun install && bun run build:browser',
-      fullCmd: 'git clone https://github.com/Hailemichael121/fidel-input.git && cd fidel-input && bun install && bun run build:browser',
-      primaryLink: 'https://github.com/Hailemichael121/fidel-input#web-browser-extension-chrome-edge-brave-firefox',
-      primaryText: 'Build from Source on GitHub',
+      step1: 'Install Fidel directly from the <strong>Mozilla Add-ons</strong> store. No build or developer mode is required.',
+      step2: 'On the add-on page, click <strong>Add to Firefox</strong> and approve the requested permissions.',
+      step3: 'Fidel is installed and ready to use. Press <strong>Alt+A</strong> on a web page to toggle Amharic input.',
+      cmd: '',
+      fullCmd: '',
+      primaryLink: 'https://addons.mozilla.org/addon/fidel-amharic/',
+      primaryText: 'Add to Firefox',
       secondaryLink: 'https://github.com/Hailemichael121/fidel-input',
       secondaryText: 'View Source on GitHub'
     },
     vscode: {
       title: 'VS Code & Cursor',
+      step1: 'Install Fidel from the VS Code Marketplace or Open VSX.',
       step2: 'Press <kbd>Ctrl+Shift+X</kbd> (or <kbd>Cmd+Shift+X</kbd>) inside VS Code / Cursor to open Extensions.',
       step3: 'Search for <strong>Fidel</strong> or type <code>ext install Yihun.fidel-amharic</code> to install instantly.',
       cmd: 'ext install Yihun.fidel-amharic',
@@ -441,10 +450,14 @@ function initLanding() {
       btn.classList.add('active');
 
       if (instBrowserTitle) instBrowserTitle.textContent = config.title;
+      if (instStep1) fillRichText(instStep1, config.step1);
       if (instStep2) fillRichText(instStep2, config.step2);
       if (instStep3) fillRichText(instStep3, config.step3);
       if (instCmdCode) instCmdCode.textContent = config.cmd;
       if (instCmdBtn) instCmdBtn.setAttribute('data-copy', config.fullCmd);
+      if (instCommandBox instanceof HTMLElement) {
+        instCommandBox.style.display = config.cmd ? '' : 'none';
+      }
       if (instPrimaryBtn) {
         instPrimaryBtn.href = config.primaryLink;
         instPrimaryBtn.removeAttribute('download');

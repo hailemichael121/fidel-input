@@ -72,7 +72,7 @@ jobs:
         with:
           body: |
             ### 🌐 Official Website & Live Web Demo
-            - **Official Website**: [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/)
+            - **Official Website**: [https://fidelx.pro.et](https://fidelx.pro.et)
 
             ### 📦 Release Assets
             - `*.vsix`: Visual Studio Code & Cursor extension package.

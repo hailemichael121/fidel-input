@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.4.2] - 2026-09-01
 
 ### Added
-- **Official Website & Live Web Demo**: Live web showcase, interactive typing sandbox, and documentation deployed at [https://fidel-x.netlify.app/](https://fidel-x.netlify.app/).
+- **Official Website & Live Web Demo**: Live web showcase, interactive typing sandbox, and documentation at [https://fidelx.pro.et](https://fidelx.pro.et).
 
 ### Fixed
 - **Firefox install**: Manifest V3 now declares both `background.service_worker` (Chrome) and `background.scripts` (Firefox), so temporary add-on loading no longer fails with “background.service_worker is currently disabled.”
